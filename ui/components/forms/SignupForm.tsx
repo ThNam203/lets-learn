@@ -81,7 +81,7 @@ export default function SignUpForm() {
         password,
         role: isTeacher ? "TEACHER" : "STUDENT",
       };
-      fetch(GLOBAL.API_URL + "/v1/auth/signup", {
+      fetch(GLOBAL.API_URL + "/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
