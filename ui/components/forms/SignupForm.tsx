@@ -6,12 +6,10 @@ import { IconEyeOff } from "@/components/icons/eye-off";
 import { IconPasswordOutline } from "@/components/icons/password";
 import { IconUserOutline } from "@/components/icons/user";
 import GLOBAL from "@/global";
-import { useState } from "react";
-import * as React from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Checkbox } from "@/lib/shadcn/checkbox";
+import * as React from "react";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -46,9 +44,9 @@ export default function SignUpForm() {
     if (!username) {
       newErrors.username = "Username is required";
     } else if (username.length < 6) {
-      newErrors.username = "Username must be >= 6 characters";
+      newErrors.username = "Username must be at least 6 characters";
     } else if (username.length > 20) {
-      newErrors.username = "Username must be <= 20 characters";
+      newErrors.username = "Username must be less than 20 characters";
     }
 
     if (!password) {
@@ -77,19 +75,25 @@ export default function SignUpForm() {
 
     if (validate()) {
       // TODO: create a universal function to call api
+      let reqData = {
+        email,
+        username,
+        password,
+        role: isTeacher ? "TEACHER" : "STUDENT",
+      };
       fetch(GLOBAL.API_URL + "/v1/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, username, password, isTeacher }),
+        body: JSON.stringify(reqData),
       })
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
         })
         .catch((err) => {
-          console.error(err);
+          toast.error(err);
         });
     }
   };
