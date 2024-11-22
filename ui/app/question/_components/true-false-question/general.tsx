@@ -15,9 +15,6 @@ export type TrueFalseQuestionGeneralForm = {
   questionText: string;
   questionStatus: QuestionStatus;
   defaultMark: number;
-  correctAnswer: boolean;
-  feedbackOfTrue: string;
-  feedbackOfFalse: string;
 };
 
 interface Props {
@@ -26,15 +23,7 @@ interface Props {
 }
 
 const TrueFalseQuestionGeneralSetting = ({ formData, onChange }: Props) => {
-  const {
-    questionName,
-    questionText,
-    questionStatus,
-    defaultMark,
-    correctAnswer,
-    feedbackOfTrue,
-    feedbackOfFalse,
-  } = formData;
+  const { questionName, questionText, questionStatus, defaultMark } = formData;
   const form = useFormContext<TrueFalseQuestionForm>();
   const { register } = form;
   const {
@@ -125,41 +114,6 @@ const TrueFalseQuestionGeneralSetting = ({ formData, onChange }: Props) => {
             {errors.defaultMark.message}
           </p>
         )}
-      </RowSetting>
-      <RowSetting title="Correct answer">
-        <Combobox
-          showSearch={false}
-          initialValue={correctAnswer ? "True" : "False"}
-          options={correctAnswerOptions}
-          onChange={(value) =>
-            handleComboboxChange("correctAnswer", value === "True")
-          }
-          className="w-40"
-          popoverClassName="w-40"
-        >
-          <Button variant="outline" className="w-full justify-between">
-            {correctAnswer ? "True" : "False"}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </Combobox>
-      </RowSetting>
-      <RowSetting
-        title="Feedback for the response 'True'"
-        className="items-start"
-      >
-        <TinyEditor
-          onChange={(data) => handleEditorChange("feedbackOfTrue", data)}
-          initValue={feedbackOfTrue}
-        />
-      </RowSetting>
-      <RowSetting
-        title="Feedback for the response 'False'"
-        className="items-start"
-      >
-        <TinyEditor
-          onChange={(data) => handleEditorChange("feedbackOfFalse", data)}
-          initValue={feedbackOfFalse}
-        />
       </RowSetting>
     </div>
   );

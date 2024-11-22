@@ -28,11 +28,11 @@ export default function LogInPage() {
           <hr className="bg-gray-400 h-[2px] flex-1" />
         </div>
         <LogInForm />
-        <p className="text-end text-sm opacity-80 mt-4">
+        <p className="text-end text-sm mt-4 text-gray-500">
           Dont&#39;t have an account?
           <a
             href="/signup"
-            className="ml-2 text-blue-400 font-bold hover:text-blue-600"
+            className="ml-2 text-blue-600 font-bold hover:text-blue-500"
           >
             Sign up
           </a>

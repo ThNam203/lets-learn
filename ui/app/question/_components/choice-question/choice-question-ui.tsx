@@ -169,7 +169,7 @@ const ChoiceQuestionUI = ({ question, onSubmitQuestion }: Props) => {
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <h1 className="font-bold text-2xl text-orange-600">
-          Adding a Multiple or Single choice question
+          {question ? "Editing" : "Adding"} a Multiple or Single choice question
         </h1>
         <CollapsibleList titles={titles} initShowContent={initShowContent}>
           {collapsibleContent}

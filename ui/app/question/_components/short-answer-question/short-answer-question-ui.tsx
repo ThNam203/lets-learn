@@ -165,7 +165,7 @@ const ShortAnswerQuestionUI = ({ question, onSubmitQuestion }: Props) => {
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <h1 className="font-bold text-2xl text-orange-600">
-          Adding a Short answer question
+          {question ? "Editing" : "Adding"} a Short answer question
         </h1>
         <CollapsibleList titles={titles} initShowContent={initShowContent}>
           {collapsibleContent}

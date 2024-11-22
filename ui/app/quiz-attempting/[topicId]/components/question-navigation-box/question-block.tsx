@@ -20,15 +20,18 @@ const QuestionBlock = ({
     <div
       className={cn(
         "relative w-8 h-8 rounded-md overflow-hidden flex items-center justify-center bg-slate-100 text-slate-400 hover:bg-slate-200 transition-all duration-200 cursor-pointer",
+        questionResult !== QuestionResult.NOT_SHOW && "bg-white",
         questionResult === QuestionResult.NOT_SHOW &&
           hasAnswered &&
           "bg-cyan-500 text-white hover:bg-cyan-600",
         questionResult === QuestionResult.FULL_MARK &&
-          "bg-green-500 text-white hover:bg-green-600",
-        questionResult === QuestionResult.ZERO_MARK &&
-          "bg-red-500 text-white hover:bg-red-600",
-        questionResult === QuestionResult.PARTIAL_MARK &&
-          "bg-yellow-500 text-white hover:bg-yellow-600"
+          "border-1 border-green-500 text-green-500 hover:bg-green-50",
+        (questionResult === QuestionResult.ZERO_MARK ||
+          questionResult === QuestionResult.PARTIAL_MARK) &&
+          "border-1 border-red-500 text-red-500 hover:bg-red-50",
+        questionResult !== QuestionResult.NOT_SHOW &&
+          !hasAnswered &&
+          "border-1 border-yellow-500 text-yellow-500 hover:bg-yellow-50"
       )}
       onClick={onClick}
     >

@@ -6,6 +6,9 @@ export const defaultGeneralSetting: TrueFalseQuestionGeneralForm = {
   questionText: "",
   questionStatus: QuestionStatus.READY,
   defaultMark: 1,
+};
+
+export const defaultAnswerSetting = {
   correctAnswer: true,
   feedbackOfTrue: "",
   feedbackOfFalse: "",

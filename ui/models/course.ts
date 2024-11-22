@@ -16,11 +16,10 @@ export type Course = {
   description: string | null;
   imageUrl: string | null;
   price: number | null;
-  categoryId: string | null;
+  category: string | null;
   level: number | string | null;
   studentIds: number[];
   sections: Section[];
-  resources: AttachedFile[];
   isPublished: boolean;
 };
 

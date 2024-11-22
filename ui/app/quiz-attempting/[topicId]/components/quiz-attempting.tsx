@@ -50,8 +50,8 @@ const QuizAttempting = ({
   const { startTimer, stopTimer, timer, status: timerStatus } = useTimer({});
   const quizResponseData = quizResponse.data as QuizResponseData;
   const { answers: studentAnswers } = quizResponseData;
-  const { data: quizData, timeLimit } = quiz;
-  const { questions } = quizData as QuizData;
+  const { data: quizData } = quiz;
+  const { questions, timeLimit } = quizData as QuizData;
   const totalQuestions = questions.length;
   const {
     status: countdownStatus,
@@ -277,11 +277,7 @@ const QuizAttempting = ({
               variant={isMissingAnswer ? "warning" : "success"}
               title={dialogTitle}
               content={
-                <span>
-                  {
-                    "Once you submit your answers, you won’t be able to change them. Are you sure you want to finish the attempt?"
-                  }
-                </span>
+                <span>{"Are you sure you want to submit your quiz?"}</span>
               }
               onYes={handleConfirmFinishAttempt}
               onCancel={handleCancelFinishAttempt}
