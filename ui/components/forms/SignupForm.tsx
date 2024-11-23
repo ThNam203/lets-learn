@@ -7,6 +7,7 @@ import { IconPasswordOutline } from "@/components/icons/password";
 import { IconUserOutline } from "@/components/icons/user";
 import GLOBAL from "@/global";
 import { Checkbox } from "@/lib/shadcn/checkbox";
+import { signup } from "@/services/auth";
 import * as React from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -69,6 +70,13 @@ export default function SignUpForm() {
     );
   };
 
+  const handleSuccess = (data: any) => {
+    toast.success(data);
+  };
+  const handleFail = (err: any) => {
+    toast.error(err);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -81,21 +89,7 @@ export default function SignUpForm() {
         password,
         role: isTeacher ? "TEACHER" : "STUDENT",
       };
-      fetch(GLOBAL.API_URL + "/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify(reqData),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          toast.error(err);
-        });
+      signup(reqData, handleSuccess, handleFail);
     }
   };
 

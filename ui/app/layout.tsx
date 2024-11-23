@@ -1,12 +1,11 @@
+import ConfettiProvider from "@/lib/react-confetti/confetti-provider";
 import ToastProvider from "@/lib/react-toastify/toast-provider";
+import { cn } from "@/lib/utils";
+import "dotenv/config";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Nunito } from "next/font/google";
+import { Inter, Nunito } from "next/font/google";
 import ReduxProvider from "../redux/provider";
 import "./globals.css";
-import ConfettiProvider from "@/lib/react-confetti/confetti-provider";
-import "dotenv/config";
-import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });

@@ -4,8 +4,9 @@ import { IconEmail } from "@/components/icons/email";
 import { IconEye } from "@/components/icons/eye";
 import { IconEyeOff } from "@/components/icons/eye-off";
 import { IconPasswordOutline } from "@/components/icons/password";
-import GLOBAL from "@/global";
+import { login } from "@/services/auth";
 import { Spinner } from "@nextui-org/spinner";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -39,25 +40,24 @@ export default function LogInForm() {
     return !newErrors.email && !newErrors.password;
   };
 
+  const handleSuccess = (data: any) => {
+    setIsLoading(false);
+    toast.success(data);
+    redirect("/home");
+  };
+  const handleFail = (err: any) => {
+    toast.error(err);
+    setIsLoading(false);
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
-    setIsLoading(true);
-
+    let reqData = { email, password };
     if (validate()) {
       // TODO: create a universal function to call api
-      fetch(GLOBAL.API_URL + "/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      })
-        .catch((err) => {
-          toast.error(err.message);
-        })
-        .finally(() => setIsLoading(false));
+      setIsLoading(true);
+      login(reqData, handleSuccess, handleFail);
     }
   };
 
