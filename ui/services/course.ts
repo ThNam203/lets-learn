@@ -1,4 +1,5 @@
-import { post } from "@/lib/httpHandle";
+import { get, post } from "@/lib/httpHandle";
+import { Role, User } from "@/models/user";
 
 export const createCourse = (
   data: any,
@@ -16,4 +17,25 @@ export const createCourse = (
   };
 
   post("/course", reqData, onSuccess, onFail);
+};
+
+export const getTeacherCourses = (
+  user: User,
+  onSuccess: (data: any) => void,
+  onFail: (err?: any) => void
+) => {
+  console.log(user);
+  if (user.role !== Role.TEACHER) return;
+  console.log(user);
+
+  const url = `/course?userId=${user.id}`;
+  get(url, onSuccess, onFail);
+};
+
+export const getCourse = (
+  id: string,
+  onSuccess: (data: any) => void,
+  onFail: (err?: any) => void
+) => {
+  get(`/course/${id}`, onSuccess, onFail);
 };

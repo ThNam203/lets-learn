@@ -6,11 +6,14 @@ import { IconEyeOff } from "@/components/icons/eye-off";
 import { IconPasswordOutline } from "@/components/icons/password";
 import { login } from "@/services/auth";
 import { Spinner } from "@nextui-org/spinner";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 export default function LogInForm() {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hidingPassword, setHidingPassword] = useState(true);
@@ -40,12 +43,11 @@ export default function LogInForm() {
     return !newErrors.email && !newErrors.password;
   };
 
-  const handleSuccess = (data: any) => {
+  const handleLoginSuccess = (data: any) => {
     setIsLoading(false);
-    toast.success(data);
-    redirect("/home");
+    router.push("/home");
   };
-  const handleFail = (err: any) => {
+  const handleLoginFail = (err: any) => {
     toast.error(err);
     setIsLoading(false);
   };
@@ -57,7 +59,7 @@ export default function LogInForm() {
     if (validate()) {
       // TODO: create a universal function to call api
       setIsLoading(true);
-      login(reqData, handleSuccess, handleFail);
+      login(reqData, handleLoginSuccess, handleLoginFail);
     }
   };
 

@@ -14,7 +14,6 @@ interface Props {
   sections: Section[];
   className?: string;
   contentClassName?: string;
-  onAddNewSection?: () => void;
   onItemTrigger?: (value: string) => void;
   onEdit?: (id: string) => void;
   onSave?: (id: string) => void;
@@ -24,7 +23,6 @@ const SectionList = ({
   initShowContent,
   className,
   contentClassName,
-  onAddNewSection,
   onItemTrigger,
   onEdit,
   onSave,
@@ -53,23 +51,25 @@ const SectionList = ({
 
   return (
     <div className="w-full">
-      <div className="w-full flex justify-end">
-        <Button
-          type="button"
-          variant="link"
-          onClick={collapseAll}
-          className="p-0"
-        >
-          Collapse all
-        </Button>
-      </div>
+      {sections.length > 0 && (
+        <div className="w-full flex justify-end">
+          <Button
+            type="button"
+            variant="link"
+            onClick={collapseAll}
+            className="p-0"
+          >
+            Collapse all
+          </Button>
+        </div>
+      )}
       <Accordion
         value={showContent}
         type="multiple"
         className={cn("w-full flex flex-col gap-4", className)}
       >
         {sections.map((section, index) => {
-          const { title, id, desc, topics } = section;
+          const { title, id, description, topics } = section;
           const isEditting = sectionEditting.includes(section.id);
           return (
             <SectionLayout
@@ -84,7 +84,7 @@ const SectionList = ({
               onSave={() => handleSave(id)}
             >
               <SectionContent
-                desc={desc}
+                desc={description}
                 topics={topics}
                 isEditting={isEditting}
               />
@@ -92,16 +92,6 @@ const SectionList = ({
           );
         })}
       </Accordion>
-      <div className="mt-4 w-full flex flex-row items-center justify-center gap-2">
-        <Button
-          variant="default"
-          className="bg-indigo-700"
-          onClick={onAddNewSection}
-        >
-          <Plus size={20} className="text-white" />
-          <span>New section</span>
-        </Button>
-      </div>
     </div>
   );
 };

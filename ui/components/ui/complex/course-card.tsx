@@ -1,13 +1,16 @@
 "use client";
+import { Course } from "@/models/course";
 import { MoreVertical } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-interface Props {}
-const CourseCard = () => {
+interface Props {
+  course: Course;
+}
+const CourseCard = ({ course }: Props) => {
   const router = useRouter();
   const handleCardClick = () => {
-    router.push("/course/1");
+    router.push(`/course/${course.id}`);
   };
   return (
     <div
@@ -23,12 +26,12 @@ const CourseCard = () => {
       />
       <div className="p-4">
         <div className="flex flex-row items-center justify-between ">
-          <h6 className="group-hover:text-indigo-600">
-            Introduce to Astronomy
-          </h6>
+          <h6 className="group-hover:text-indigo-600">{course.title}</h6>
           <MoreVertical />
         </div>
-        <p className="text-gray-500 group-hover:text-indigo-600">Astronomy</p>
+        <p className="text-gray-500 group-hover:text-indigo-600">
+          {course.category}
+        </p>
       </div>
     </div>
   );

@@ -2,46 +2,105 @@
 import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import PageLayoutWithTab from "@/components/ui/util-layout/page-layout-with-tab";
 import { fakeCourses } from "@/fake-data/course";
-import { fakeSections } from "@/fake-data/section";
+import { Course, Section } from "@/models/course";
 import { useAppDispatch } from "@/redux/hooks";
 import { setBreadcrumb } from "@/redux/slices/breadcrumb";
+import { getCourse } from "@/services/course";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import CourseBackground from "./components/course-background";
 import SectionList from "./components/section/section-list";
-import { Section } from "@/models/course";
+import { createSection } from "@/services/section";
+import { Button } from "@/lib/shadcn/button";
+import { Plus } from "lucide-react";
+import { Spinner } from "@nextui-org/spinner";
 
-export default function CoursePage() {
-  const [sections, setSections] = useState(fakeSections);
+interface Props {
+  params: {
+    courseId: string;
+  };
+}
+export default function CoursePage({ params }: Props) {
+  const { courseId } = params;
+  const dispatch = useAppDispatch();
+  const [course, setCourse] = useState<Course>();
+  const [isLoading, setIsLoading] = useState(false);
+  const sections = course?.sections || [];
 
   const breadcrumbItems: BreadcrumbItem[] = [
     {
       label: "Home",
       href: "/home",
     },
-    //Change the label base on course name
-    { label: "Introduct to Astronomy", href: "/course/1" },
   ];
-  const dispatch = useAppDispatch();
-  const TABS = ["Course", "Activities", "People"];
+
+  const handleGetCourseSuccess = (data: any) => {
+    setCourse(data);
+    const updatedBreadcrumbItems = [...breadcrumbItems];
+    updatedBreadcrumbItems.push({
+      label: data.title,
+      href: `/course/${data.id}`,
+    });
+    dispatch(setBreadcrumb(updatedBreadcrumbItems));
+  };
+  const handleGetCourseFail = (error: any) => {
+    toast.error(error || "Failed to get course info");
+  };
+
   useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumbItems));
-  }, []);
+    // fetch course data
+    getCourse(courseId, handleGetCourseSuccess, handleGetCourseFail);
+  }, [courseId]);
+
+  const handleCreateSectionSuccess = (data: Section) => {
+    if (!course) return;
+
+    const updatedCourse: Course = {
+      ...course,
+      sections: [...course.sections, data],
+    };
+    setCourse(updatedCourse);
+    setIsLoading(false);
+  };
+  const handleCreateSectionFail = (error: any) => {
+    toast.error(error || "Failed to create section");
+    setIsLoading(false);
+  };
 
   const handleAddNewSection = () => {
+    if (!course) return;
     const newSection: Section = {
-      id: `${sections.length + 1}`,
-      courseId: "1",
+      id: "",
+      courseId: course.id,
       title: `Section ${sections.length + 1}`,
-      desc: "This is a new section",
+      description: "Description for this section here",
+      position: sections.length + 1,
       topics: [],
     };
-    setSections((prev) => [...prev, newSection]);
+    setIsLoading(true);
+    createSection(
+      newSection,
+      handleCreateSectionSuccess,
+      handleCreateSectionFail
+    );
   };
+  const TABS = ["Course", "Activities", "People"];
 
   return (
     <PageLayoutWithTab tabs={TABS}>
       <CourseBackground course={fakeCourses[0]} />
-      <SectionList sections={sections} onAddNewSection={handleAddNewSection} />
+      <SectionList sections={sections} />
+      <div className="mt-4 w-full flex flex-row items-center justify-center gap-2">
+        <Button
+          variant="default"
+          className="bg-indigo-700"
+          onClick={handleAddNewSection}
+        >
+          {isLoading && <Spinner className="text-white" />}
+          {!isLoading && <Plus size={20} className="text-white" />}
+          <span>New section</span>
+        </Button>
+      </div>
     </PageLayoutWithTab>
   );
 }

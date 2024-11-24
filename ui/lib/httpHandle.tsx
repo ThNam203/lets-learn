@@ -11,15 +11,18 @@ export const get = async (
 ) => {
   const res = await fetch(GLOBAL.API_URL + uri, {
     headers: HEADER,
+    credentials: "include",
   });
   if (!res.ok) {
     onFail(res.statusText);
     return;
   }
-  await res
-    .json()
-    .then(onSuccess)
-    .catch(() => onFail("Failed to parse data"));
+
+  const handleParseDataError = () => {
+    onFail("Failed to parse data");
+    onSuccess({});
+  };
+  await res.json().then(onSuccess).catch(handleParseDataError);
 };
 
 export const post = async (
@@ -39,8 +42,10 @@ export const post = async (
     onFail(res.statusText);
     return;
   }
-  await res
-    .json()
-    .then(onSuccess)
-    .catch(() => onFail("Failed to parse data"));
+  const handleParseDataError = () => {
+    onFail("Failed to parse data");
+    onSuccess({});
+  };
+
+  await res.json().then(onSuccess).catch(handleParseDataError);
 };

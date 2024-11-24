@@ -67,9 +67,15 @@ export default function CreateCoursePage() {
     setValue(key, e.target.value);
   };
 
-  const handleSuccess = () => {
+  const handleSuccess = (data: any) => {
+    if (!data.id) {
+      toast.error("Lost course id");
+      return;
+    }
+
+    const url = `/course/${data.id}`;
+    router.push(url);
     dispatch(openConfetti());
-    router.push("/course");
   };
   const handleFail = () => {
     toast.error("Failed to create course");
