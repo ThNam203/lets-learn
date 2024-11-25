@@ -26,4 +26,8 @@ const iconMap: TopicMap = {
   page: ScrollText,
 };
 
-export { colorMap, iconMap };
+const isValidType = (type: string): boolean => {
+  return type in iconMap;
+};
+
+export { colorMap, iconMap, isValidType };

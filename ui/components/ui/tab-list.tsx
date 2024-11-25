@@ -24,7 +24,7 @@ const TabList = ({
   return (
     <div
       className={cn(
-        "px-5 flex flex-row items-center border-b-[0.5px]",
+        "px-5 flex flex-row items-center border-b-[1px]",
         variant === "default" && "border-gray-400",
         variant === "white-text" && "border-white",
         className

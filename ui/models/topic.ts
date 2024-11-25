@@ -9,12 +9,12 @@ interface BaseTopic {
 }
 
 export enum TopicType {
-  LINK = "link",
-  MEETING = "meeting",
   ASSIGNMENT = "assignment",
   FILE = "file",
-  QUIZ = "quiz",
+  LINK = "link",
+  MEETING = "meeting",
   PAGE = "page",
+  QUIZ = "quiz",
 }
 
 export interface QuizTopic extends BaseTopic {

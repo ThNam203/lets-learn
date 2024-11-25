@@ -14,10 +14,8 @@ const Tab = ({ title, isSelected, variant = "default", onClick }: Props) => {
         "w-fit h-[40px] flex items-center px-4 border-b-2 border-transparent transition-all duration-300 font-semibold cursor-pointer",
         !isSelected &&
           variant === "default" &&
-          "text-gray-500 hover:text-indigo-800",
-        isSelected &&
-          variant === "default" &&
-          "border-indigo-700 text-indigo-700",
+          "text-gray-500 hover:text-blue-700",
+        isSelected && variant === "default" && "border-blue-700 text-blue-700",
         !isSelected &&
           variant === "white-text" &&
           "text-white/60 hover:text-white/90",

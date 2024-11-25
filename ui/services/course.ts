@@ -1,4 +1,4 @@
-import { get, post } from "@/lib/httpHandle";
+import { GET, POST } from "@/lib/http-handle/http-handle";
 import { Role, User } from "@/models/user";
 
 export const createCourse = (
@@ -16,7 +16,7 @@ export const createCourse = (
     isPublished: data.isPublished,
   };
 
-  post("/course", reqData, onSuccess, onFail);
+  POST("/course", reqData, onSuccess, onFail);
 };
 
 export const getTeacherCourses = (
@@ -24,12 +24,10 @@ export const getTeacherCourses = (
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  console.log(user);
   if (user.role !== Role.TEACHER) return;
-  console.log(user);
 
   const url = `/course?userId=${user.id}`;
-  get(url, onSuccess, onFail);
+  GET(url, onSuccess, onFail);
 };
 
 export const getCourse = (
@@ -37,5 +35,5 @@ export const getCourse = (
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  get(`/course/${id}`, onSuccess, onFail);
+  GET(`/course/${id}`, onSuccess, onFail);
 };

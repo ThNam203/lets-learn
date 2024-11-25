@@ -111,12 +111,10 @@ export default function SectionLayout({
             <Trash2
               size={20}
               className="cursor-pointer text-red-500 hover:text-red-600 duration-200"
-              onClick={handleSave}
             />
             <RefreshCcw
               size={20}
               className="cursor-pointer text-gray-500 hover:text-gray-600 duration-200"
-              onClick={handleSave}
             />
             <Check
               size={20}

@@ -1,8 +1,8 @@
-import { get } from "@/lib/httpHandle";
+import { GET } from "@/lib/http-handle/http-handle";
 
 export const getMyInfo = (
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  get("/user/me", onSuccess, onFail);
+  GET("/user/me", onSuccess, onFail);
 };

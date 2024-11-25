@@ -84,12 +84,16 @@ export default function CoursePage({ params }: Props) {
       handleCreateSectionFail
     );
   };
+  const handleSaveSection = () => (section: Section) => {
+    console.log("save section", section);
+  };
+
   const TABS = ["Course", "Activities", "People"];
 
   return (
     <PageLayoutWithTab tabs={TABS}>
       <CourseBackground course={fakeCourses[0]} />
-      <SectionList sections={sections} />
+      <SectionList sections={sections} onSave={handleSaveSection} />
       <div className="mt-4 w-full flex flex-row items-center justify-center gap-2">
         <Button
           variant="default"

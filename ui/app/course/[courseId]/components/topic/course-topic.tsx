@@ -6,7 +6,7 @@ import { Topic, TopicMap } from "@/models/topic";
 import { ChevronsUpDown, Trash2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import TopicFileExtension from "./topic-file-extension";
-import { colorMap, iconMap } from "./topic-map";
+import { colorMap, iconMap, isValidType } from "./topic-map";
 import { Input } from "@/lib/shadcn/input";
 
 interface Props {
@@ -107,6 +107,8 @@ const CourseTopic = ({ topic, isEditing = false }: Props) => {
   //else show the title
   let topicTitle = title;
   if (type === "file" && title === "") topicTitle = topic.file.data.name;
+
+  if (!isValidType(type)) return null;
 
   return (
     <div

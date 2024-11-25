@@ -16,7 +16,7 @@ interface Props {
   contentClassName?: string;
   onItemTrigger?: (value: string) => void;
   onEdit?: (id: string) => void;
-  onSave?: (id: string) => void;
+  onSave?: (section: Section) => void;
 }
 const SectionList = ({
   sections,
@@ -44,9 +44,10 @@ const SectionList = ({
     if (onEdit) onEdit(id);
     setSectionEditting([...sectionEditting, id]);
   };
-  const handleSave = (id: string) => {
-    if (onSave) onSave(id);
-    setSectionEditting(sectionEditting.filter((item) => item !== id));
+  const handleSave = (section: Section) => () => {
+    // if (onSave) onSave(section);
+    // remove id from sectionEditting
+    setSectionEditting(sectionEditting.filter((item) => item !== section.id));
   };
 
   return (
@@ -71,6 +72,7 @@ const SectionList = ({
         {sections.map((section, index) => {
           const { title, id, description, topics } = section;
           const isEditting = sectionEditting.includes(section.id);
+
           return (
             <SectionLayout
               key={index}
@@ -81,11 +83,11 @@ const SectionList = ({
               onTrigger={handleTriggerClick}
               className={contentClassName}
               onEdit={() => handleEdit(id)}
-              onSave={() => handleSave(id)}
+              onSave={handleSave(section)}
             >
               <SectionContent
                 desc={description}
-                topics={topics}
+                topics={topics ?? []}
                 isEditting={isEditting}
               />
             </SectionLayout>

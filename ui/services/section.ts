@@ -1,4 +1,4 @@
-import { post } from "@/lib/httpHandle";
+import { POST } from "@/lib/http-handle/http-handle";
 import { Section } from "@/models/course";
 
 export const createSection = (
@@ -14,5 +14,22 @@ export const createSection = (
     courseId,
   };
 
-  post("/section", reqData, onSuccess, onFail);
+  POST("/section", reqData, onSuccess, onFail);
+};
+
+export const updateSection = (
+  data: Section,
+  onSuccess: (data: Section) => void,
+  onFail: (err?: any) => void
+) => {
+  const { id, position, title, description, courseId, topics } = data;
+  let reqData = {
+    position,
+    title,
+    description,
+    courseId,
+    topics,
+  };
+
+  POST(`/section/${id}`, reqData, onSuccess, onFail);
 };
