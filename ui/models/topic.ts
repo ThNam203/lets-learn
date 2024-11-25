@@ -1,5 +1,5 @@
-import { Chapter } from "./chapter";
 import { AttachedFile } from "./course";
+import { Test } from "./test";
 
 interface BaseTopic {
   id: string;
@@ -19,6 +19,7 @@ export enum TopicType {
 
 export interface QuizTopic extends BaseTopic {
   type: TopicType.QUIZ;
+  data: Test;
 }
 export interface AssignmentTopic extends BaseTopic {
   type: TopicType.ASSIGNMENT;

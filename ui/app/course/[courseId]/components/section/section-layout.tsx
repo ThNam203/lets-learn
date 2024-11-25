@@ -18,9 +18,11 @@ interface Props {
   className?: string;
   canEdit?: boolean;
   isEditing?: boolean;
+  onTitleChange?: (value: string) => void;
   onTrigger?: (value: string) => void;
   onEdit?: () => void;
   onSave?: () => void;
+  onRefresh?: () => void;
 }
 export default function SectionLayout({
   title,
@@ -30,9 +32,11 @@ export default function SectionLayout({
   children,
   showContent,
   className,
+  onTitleChange,
   onTrigger,
   onEdit,
   onSave,
+  onRefresh,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const isSectionOpen = showContent.includes(value);
@@ -51,11 +55,20 @@ export default function SectionLayout({
     e.stopPropagation();
     if (onSave) onSave();
   };
+  const handleTitleChange = (e: any) => {
+    if (onTitleChange) onTitleChange(e.target.value);
+  };
   useEffect(() => {
     if (isEditing) {
       inputRef.current?.focus();
     }
   }, [isEditing]);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.value = title;
+    }
+  }, [title]);
 
   return (
     <AccordionItem
@@ -94,6 +107,7 @@ export default function SectionLayout({
                 variant="no-border"
                 className="text-indigo-800 font-bold text-xl"
                 onClick={(e) => e.stopPropagation()}
+                onChange={handleTitleChange}
               />
             )}
           </div>
@@ -115,6 +129,7 @@ export default function SectionLayout({
             <RefreshCcw
               size={20}
               className="cursor-pointer text-gray-500 hover:text-gray-600 duration-200"
+              onClick={onRefresh}
             />
             <Check
               size={20}

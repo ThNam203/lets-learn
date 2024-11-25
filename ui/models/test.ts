@@ -7,8 +7,6 @@ export enum TestType {
 }
 
 export interface Test {
-  id: string;
-  name: string;
   description: string;
   type: TestType;
   open: {
@@ -30,7 +28,7 @@ export type QuizData = {
   };
   gradeToPass: number;
   gradingMethod: GradingMethod;
-  attemptAllowed: string;
+  attemptAllowed: "Unlimited" | number;
   questions: Question[];
 };
 

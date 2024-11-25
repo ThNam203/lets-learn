@@ -34,8 +34,8 @@ export const makeRequest = async (
     } catch {
       handleParseDataError();
     }
-  } catch (error: any) {
-    handleFetchError(error.message);
+  } catch {
+    handleFetchError();
   }
 };
 

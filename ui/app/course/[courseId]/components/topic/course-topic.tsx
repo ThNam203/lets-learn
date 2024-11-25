@@ -151,10 +151,6 @@ const CourseTopic = ({ topic, isEditing = false }: Props) => {
             size={18}
             className="text-red-500 cursor-pointer hover:text-red-600 duration-200"
           />
-          <ChevronsUpDown
-            size={18}
-            className="text-gray-500 cursor-pointer hover:text-gray-600 duration-200"
-          />
         </div>
       )}
     </div>

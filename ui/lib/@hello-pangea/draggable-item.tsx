@@ -1,17 +1,18 @@
-import { Button } from "@/lib/shadcn/button";
 import { cn } from "@/lib/utils";
-import { Chapter } from "@/models/chapter";
 import { DraggableProvided } from "@hello-pangea/dnd";
-import { Grip, Pen } from "lucide-react";
+import { ChevronsUpDown, Grip } from "lucide-react";
+import { ReactNode } from "react";
 
 interface Props {
+  provided: DraggableProvided;
+  moveIcon?: ReactNode;
   className?: string;
   controlButtonClassName?: string;
-  provided: DraggableProvided;
   children?: React.ReactNode;
 }
 const DraggableItem = ({
   provided,
+  moveIcon,
   className,
   children,
   controlButtonClassName,
@@ -19,7 +20,7 @@ const DraggableItem = ({
   return (
     <div
       className={cn(
-        "w-full flex flex-row items-center bg-indigo-100 rounded-md overflow-hidden",
+        "w-full flex flex-row items-center overflow-hidden",
         className
       )}
       ref={provided.innerRef}
@@ -29,7 +30,9 @@ const DraggableItem = ({
         {...provided.dragHandleProps}
         className={cn("p-2", controlButtonClassName)}
       >
-        <Grip size={20} className="cursor-pointer" />
+        <div className="cursor-pointer">
+          {moveIcon ? moveIcon : <ChevronsUpDown size={20} />}
+        </div>
       </div>
 
       {children}

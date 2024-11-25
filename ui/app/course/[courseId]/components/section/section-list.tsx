@@ -4,16 +4,18 @@ import { Accordion } from "@/lib/shadcn/accordion";
 import { Button } from "@/lib/shadcn/button";
 import { cn } from "@/lib/utils";
 import { Section } from "@/models/course";
+import { Topic, TopicType } from "@/models/topic";
 import { useEffect, useState } from "react";
 import SectionContent from "./section-content";
 import SectionLayout from "./section-layout";
-import { Plus } from "lucide-react";
+import { initQuizTopic } from "./static/init-quiz-topic";
 
 interface Props {
   initShowContent?: string[];
   sections: Section[];
   className?: string;
   contentClassName?: string;
+  onSectionChange: (section: Section) => void;
   onItemTrigger?: (value: string) => void;
   onEdit?: (id: string) => void;
   onSave?: (section: Section) => void;
@@ -23,6 +25,7 @@ const SectionList = ({
   initShowContent,
   className,
   contentClassName,
+  onSectionChange,
   onItemTrigger,
   onEdit,
   onSave,
@@ -31,10 +34,27 @@ const SectionList = ({
     useCollapsibleList();
 
   const [sectionEditting, setSectionEditting] = useState<string[]>([]);
+  const [sectionToRefresh, setSectionToRefresh] = useState<Section[]>(sections);
 
   useEffect(() => {
     if (initShowContent) setShowContent(initShowContent);
   }, []);
+
+  const toggleEdit = (id: string) => {
+    if (sectionEditting.includes(id)) {
+      setSectionEditting(sectionEditting.filter((item) => item !== id));
+    } else {
+      setSectionEditting([...sectionEditting, id]);
+    }
+  };
+  const handleSectionChange =
+    (section: Section, key: keyof Section) => (value: string) => {
+      const updatedSection: Section = {
+        ...section,
+        [key]: value,
+      };
+      onSectionChange(updatedSection);
+    };
 
   const handleTriggerClick = (value: string) => {
     if (onItemTrigger) onItemTrigger(value);
@@ -44,10 +64,44 @@ const SectionList = ({
     if (onEdit) onEdit(id);
     setSectionEditting([...sectionEditting, id]);
   };
-  const handleSave = (section: Section) => () => {
-    // if (onSave) onSave(section);
+  const handleSaveSection = (section: Section) => () => {
+    if (onSave) onSave(section);
     // remove id from sectionEditting
-    setSectionEditting(sectionEditting.filter((item) => item !== section.id));
+    toggleEdit(section.id);
+  };
+  const handleRefreshSection = (sectionId: string) => () => {
+    const toRefresh = sectionToRefresh.find((s) => s.id === sectionId);
+    console.log("toRefresh", toRefresh);
+    if (toRefresh) onSectionChange(toRefresh);
+  };
+  const handleCreateTopic = (section: Section) => (type: TopicType) => {
+    switch (type) {
+      case TopicType.QUIZ: {
+        const newSection: Section = {
+          ...section,
+          topics: [...section.topics, initQuizTopic],
+        };
+        onSectionChange(newSection);
+        break;
+      }
+
+      case TopicType.MEETING:
+        break;
+      case TopicType.ASSIGNMENT:
+        break;
+      case TopicType.FILE:
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleReorderedTopic = (section: Section) => (data: Topic[]) => {
+    const newSection: Section = {
+      ...section,
+      topics: data,
+    };
+    onSectionChange(newSection);
   };
 
   return (
@@ -76,19 +130,27 @@ const SectionList = ({
           return (
             <SectionLayout
               key={index}
-              title={title}
               value={id}
+              title={title}
+              onTitleChange={handleSectionChange(section, "title")}
               isEditing={isEditting}
               showContent={showContent}
               onTrigger={handleTriggerClick}
-              className={contentClassName}
               onEdit={() => handleEdit(id)}
-              onSave={handleSave(section)}
+              onSave={handleSaveSection(section)}
+              onRefresh={handleRefreshSection(id)}
+              className={contentClassName}
             >
               <SectionContent
                 desc={description}
                 topics={topics ?? []}
                 isEditting={isEditting}
+                onCreateTopic={handleCreateTopic(section)}
+                onReorderedTopic={handleReorderedTopic(section)}
+                onDescriptionChange={handleSectionChange(
+                  section,
+                  "description"
+                )}
               />
             </SectionLayout>
           );

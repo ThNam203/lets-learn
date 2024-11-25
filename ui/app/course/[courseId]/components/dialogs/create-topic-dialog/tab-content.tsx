@@ -1,12 +1,14 @@
 import React from "react";
-import { Tab } from "./statis-data";
+import { Tab } from "./static-data";
 import { TopicType } from "@/models/topic";
 import TopicItem from "./topic-item";
 import { colorMap, iconMap } from "../../topic/topic-map";
 import { useTab } from "@/hooks/useTab";
 
-interface Props {}
-export default function TabContent({}: Props) {
+interface Props {
+  onSelect?: (type: TopicType) => void;
+}
+export default function TabContent({ onSelect }: Props) {
   const tabContext = useTab<Tab>();
   const { selectedTab } = tabContext;
   const allTopicTypes = Object.values(TopicType);
@@ -17,23 +19,27 @@ export default function TabContent({}: Props) {
   ];
 
   const resourceTopicTypes = [TopicType.FILE, TopicType.LINK, TopicType.PAGE];
+  const handleSelect = (type: TopicType) => () => {
+    if (onSelect) onSelect(type);
+  };
 
   return (
     <div className="flex flex-row w-full gap-3">
       {allTopicTypes.map((type, index) => {
         const Icon = iconMap[type];
         const iconColor = colorMap[type];
-        let isBlur = false;
+        let isHidden = false;
         if (selectedTab === Tab.ACTIVITIES)
-          isBlur = !activityTopicTypes.includes(type);
+          isHidden = !activityTopicTypes.includes(type);
         if (selectedTab === Tab.RESOURCES)
-          isBlur = !resourceTopicTypes.includes(type);
+          isHidden = !resourceTopicTypes.includes(type);
         return (
           <TopicItem
             key={index}
             title={type}
             icon={<Icon className={iconColor} />}
-            blur={isBlur}
+            hidden={isHidden}
+            onClick={handleSelect(type)}
           />
         );
       })}

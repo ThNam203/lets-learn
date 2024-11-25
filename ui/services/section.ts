@@ -1,4 +1,4 @@
-import { POST } from "@/lib/http-handle/http-handle";
+import { POST, PUT } from "@/lib/http-handle/http-handle";
 import { Section } from "@/models/course";
 
 export const createSection = (
@@ -31,5 +31,5 @@ export const updateSection = (
     topics,
   };
 
-  POST(`/section/${id}`, reqData, onSuccess, onFail);
+  PUT(`/section/${id}`, reqData, onSuccess, onFail);
 };

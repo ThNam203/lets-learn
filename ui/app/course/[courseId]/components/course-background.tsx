@@ -30,8 +30,8 @@ export default function CourseBackground({ course }: Props) {
         )}
       >
         <div>
-          <h2>Introduce to Astronomy</h2>
-          <h5 className="font-normal">Astronomy</h5>
+          <h2>{course.title}</h2>
+          <h5 className="font-normal">{course.category}</h5>
         </div>
         <div className="h-full flex flex-row gap-4 items-center">
           <span>{course.id}</span>

@@ -14,18 +14,25 @@ interface Props<T> {
   data: T[];
   onReordered?: (newData: T[]) => void;
   renderItem: (item: T, index: number) => ReactNode;
+  moveIcon?: ReactNode;
   containerClassName?: string;
   itemClassName?: string;
   controlButtonClassName?: string;
 }
-const DraggableContainer = <T,>({
+
+interface Identifiable {
+  id: string;
+}
+
+export default function DraggableContainer<T extends Identifiable>({
   data,
   onReordered,
   renderItem,
+  moveIcon,
   containerClassName,
   controlButtonClassName,
   itemClassName,
-}: Props<T>) => {
+}: Props<T>) {
   const handleDragEnd = (result: DropResult) => {
     const dragIndex = result.source.index;
     const dropIndex = result.destination?.index;
@@ -47,16 +54,13 @@ const DraggableContainer = <T,>({
             <div {...provided.droppableProps} ref={provided.innerRef}>
               <div className="flex flex-col gap-2">
                 {data.map((item, index) => (
-                  <Draggable
-                    key={index}
-                    draggableId={index.toString()}
-                    index={index}
-                  >
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
                     {(provided) => (
                       <DraggableItem
                         provided={provided}
                         className={itemClassName}
                         controlButtonClassName={controlButtonClassName}
+                        moveIcon={moveIcon}
                       >
                         {renderItem(item, index)}
                       </DraggableItem>
@@ -71,6 +75,4 @@ const DraggableContainer = <T,>({
       </DragDropContext>
     </div>
   );
-};
-
-export default DraggableContainer;
+}

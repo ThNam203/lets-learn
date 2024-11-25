@@ -3,8 +3,8 @@ export const ErrorHandle = (onFail: (err?: any) => void) => {
     onFail(message);
   };
 
-  const handleFetchError = (message = "Failed to fetch data") => {
-    onFail(message);
+  const handleFetchError = () => {
+    onFail("Server error, please try again later");
   };
 
   const handleResponseError = (res: Response) => {
