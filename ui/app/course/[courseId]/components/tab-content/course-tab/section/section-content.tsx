@@ -4,8 +4,8 @@ import { Topic, TopicType } from "@/models/topic";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import CreateTopicDialog from "../dialogs/create-topic-dialog/create-topic-dialog";
-import CourseTopic from "../topic/course-topic";
 import SectionDescription from "./section-description";
+import CourseTopic from "../topic/course-topic";
 
 interface Props {
   desc: string | null;
@@ -13,17 +13,23 @@ interface Props {
   isEditting?: boolean;
   onDescriptionChange?: (value: string) => void;
   onCreateTopic?: (type: TopicType) => void;
+  onDeleteTopic?: (id: string) => void;
   onReorderedTopic?: (data: Topic[]) => void;
 }
 export default function SectionContent({
   desc,
   topics,
   isEditting,
+  onDeleteTopic,
   onDescriptionChange,
   onCreateTopic,
   onReorderedTopic,
 }: Props) {
   const [openCreateTopicDialog, setOpenCreateTopicDialog] = useState(false);
+  const handleDeleteTopic = (id: string) => () => {
+    console.log("delete topic", id);
+    if (onDeleteTopic) onDeleteTopic(id);
+  };
 
   return (
     <div className="w-full space-y-5">
@@ -40,7 +46,12 @@ export default function SectionContent({
             data={topics}
             onReordered={onReorderedTopic}
             renderItem={(topic, index) => (
-              <CourseTopic key={index} topic={topic} isEditing={isEditting} />
+              <CourseTopic
+                key={index}
+                topic={topic}
+                isEditing={isEditting}
+                onDelete={handleDeleteTopic(topic.id)}
+              />
             )}
           />
         )}

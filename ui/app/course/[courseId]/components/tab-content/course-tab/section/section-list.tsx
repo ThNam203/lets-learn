@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import SectionContent from "./section-content";
 import SectionLayout from "./section-layout";
 import { initQuizTopic } from "./static/init-quiz-topic";
+import { updateSection } from "@/services/section";
+import { toast } from "react-toastify";
 
 interface Props {
   initShowContent?: string[];
@@ -64,10 +66,18 @@ const SectionList = ({
     if (onEdit) onEdit(id);
     setSectionEditting([...sectionEditting, id]);
   };
+
+  const handleSaveSectionSuccess = (data: any) => {
+    console.log("data", data);
+  };
+  const handleSaveSectionFail = (err: any) => {
+    toast.error(err);
+  };
   const handleSaveSection = (section: Section) => () => {
     if (onSave) onSave(section);
     // remove id from sectionEditting
     toggleEdit(section.id);
+    updateSection(section, handleSaveSectionSuccess, handleSaveSectionFail);
   };
   const handleRefreshSection = (sectionId: string) => () => {
     const toRefresh = sectionToRefresh.find((s) => s.id === sectionId);
@@ -101,6 +111,15 @@ const SectionList = ({
       ...section,
       topics: data,
     };
+    onSectionChange(newSection);
+  };
+
+  const handleDeleteTopic = (section: Section) => (id: string) => {
+    const newSection: Section = {
+      ...section,
+      topics: section.topics.filter((topic) => topic.id !== id),
+    };
+    console.log("newSection", newSection);
     onSectionChange(newSection);
   };
 
@@ -147,6 +166,7 @@ const SectionList = ({
                 isEditting={isEditting}
                 onCreateTopic={handleCreateTopic(section)}
                 onReorderedTopic={handleReorderedTopic(section)}
+                onDeleteTopic={handleDeleteTopic(section)}
                 onDescriptionChange={handleSectionChange(
                   section,
                   "description"

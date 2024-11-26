@@ -13,13 +13,13 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/lib/shadcn/popover";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 interface Props {
   name?: string;
   initialValue?: string | null;
   options: string[];
-  OptionUI?: React.ComponentType<any>;
+  renderItem?: (item: string, index: number) => ReactNode;
   onChange?: (value: string) => void;
   onMultipleChange?: (value: string[]) => void;
   children: React.ReactNode;
@@ -34,7 +34,7 @@ export function Combobox({
   name,
   initialValue,
   options,
-  OptionUI,
+  renderItem,
   onChange,
   onMultipleChange,
   children,
@@ -127,8 +127,8 @@ export function Combobox({
                     />
                     <div className="w-full flex flex-col">
                       <div className="text-sm font-semibold">
-                        {OptionUI ? (
-                          <OptionUI>{option}</OptionUI>
+                        {renderItem ? (
+                          renderItem(option, index)
                         ) : (
                           <span>{option}</span>
                         )}

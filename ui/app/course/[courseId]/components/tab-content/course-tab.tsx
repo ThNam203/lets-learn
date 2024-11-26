@@ -1,14 +1,13 @@
 "use client";
-import { fakeCourses } from "@/fake-data/course";
+import { Button } from "@/lib/shadcn/button";
 import { Course, Section } from "@/models/course";
 import { createSection, updateSection } from "@/services/section";
-import { toast } from "react-toastify";
-import CourseBackground from "../course-background";
-import SectionList from "../section/section-list";
-import { Button } from "@/lib/shadcn/button";
-import { useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
 import { Plus } from "lucide-react";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import CourseBackground from "../course-background";
+import SectionList from "./course-tab/section/section-list";
 
 interface Props {
   course: Course;

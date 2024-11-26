@@ -1,17 +1,16 @@
 "use client";
+import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
-import { fakeAssignment, fakeQuizTest } from "@/fake-data/test";
+import { fakeAssignment } from "@/fake-data/test";
 import { Test } from "@/models/test";
+import { iconMap } from "@/models/topic";
 import { TabProvider } from "@/provider/tab-provider";
+import { useAppDispatch } from "@/redux/hooks";
+import { setBreadcrumb } from "@/redux/slices/breadcrumb";
 import { useEffect, useState } from "react";
-import { iconMap } from "../../components/topic/topic-map";
 import { Tab } from "./components/static-data";
 import TabContent from "./components/tab-content/tab-content";
-import { useAppDispatch } from "@/redux/hooks";
-import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
-import { setBreadcrumb } from "@/redux/slices/breadcrumb";
-import { StudentResponse } from "@/models/student-response";
 
 interface Props {
   params: {
@@ -37,7 +36,7 @@ export default function TopicQuiz({ params }: Props) {
         href: `/course/${courseId}`,
       },
       {
-        label: assignment.name,
+        label: "Assignment",
         href: `/course/${courseId}/assignment/${topicId}`,
       },
     ];
@@ -71,7 +70,7 @@ export default function TopicQuiz({ params }: Props) {
           <div className="w-full space-y-8">
             <div className="w-full px-5 flex flex-row gap-4">
               <Icon size={32} />
-              <h3>{assignment.name}</h3>
+              <h3>Assignment</h3>
             </div>
             <TabList
               tabs={tabs}

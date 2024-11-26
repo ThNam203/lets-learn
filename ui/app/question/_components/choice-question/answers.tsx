@@ -173,7 +173,7 @@ const AnswerRowSetting = ({
           showSearch={false}
           initialValue={gradePercentOptions[0]}
           options={gradePercentOptions}
-          OptionUI={OptionUI}
+          renderItem={(item) => <OptionUI>{item}</OptionUI>}
           onChange={(value) => onGradePercentChange(parseInt(value))}
           className="w-40"
           popoverClassName="w-40"

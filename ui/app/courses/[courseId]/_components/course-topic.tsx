@@ -76,18 +76,21 @@ const CourseTopic = ({ topic }: Props) => {
     router.push(`${path}/quiz/${topic.id}`);
   };
 
+  const handlePageAction = () => {
+    router.push(`${path}/page/${topic.id}`);
+  };
+
   const actionMap: TopicMap = {
     link: handleLinkAction,
     meeting: handleMeetingAction,
-    learning: handleLearningAction,
     assignment: handleAssignmentAction,
-    choice: handleChoiceAction,
     file: {
       document: handleDocumentFileAction,
       audio: handleAudioFileAction,
       video: handleVideoFileAction,
     },
     quiz: handleQuizAction,
+    page: handlePageAction,
   };
 
   const handleTopicClick = () => {

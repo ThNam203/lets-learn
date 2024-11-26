@@ -45,7 +45,9 @@ export default function LogInForm() {
 
   const handleLoginSuccess = (data: any) => {
     setIsLoading(false);
-    router.push("/home");
+    toast.success(data.message);
+    router.prefetch("/home");
+    router.replace("/home");
   };
   const handleLoginFail = (err: any) => {
     toast.error(err);

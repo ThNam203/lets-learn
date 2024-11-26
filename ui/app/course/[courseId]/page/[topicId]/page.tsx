@@ -3,13 +3,11 @@ import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
 import { fakePage } from "@/fake-data/page";
 import { Page } from "@/models/page";
+import { iconMap } from "@/models/topic";
 import { TabProvider } from "@/provider/tab-provider";
-import { ScrollText } from "lucide-react";
 import { useState } from "react";
 import { Tab } from "./components/static-data";
 import TabContent from "./components/tab-content/tab-content";
-import { iconMap } from "../../components/topic/topic-map";
-import { TopicType } from "@/models/topic";
 
 export default function TopicPage() {
   const [page, setPage] = useState<Page>(fakePage);

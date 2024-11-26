@@ -2,19 +2,20 @@
 import { Button } from "@/lib/shadcn/button";
 import { cn } from "@/lib/utils";
 
+import { Input } from "@/lib/shadcn/input";
 import { Topic, TopicMap } from "@/models/topic";
-import { ChevronsUpDown, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import TopicFileExtension from "./topic-file-extension";
-import { colorMap, iconMap, isValidType } from "./topic-map";
-import { Input } from "@/lib/shadcn/input";
+import { colorMap, iconMap, isValidType } from "@/models/topic";
 
 interface Props {
   topic: Topic;
   isEditing?: boolean;
+  onDelete?: () => void;
 }
 
-const CourseTopic = ({ topic, isEditing = false }: Props) => {
+const CourseTopic = ({ topic, isEditing = false, onDelete }: Props) => {
   const router = useRouter();
   const path = usePathname();
   const { title, type } = topic;
@@ -150,6 +151,7 @@ const CourseTopic = ({ topic, isEditing = false }: Props) => {
           <Trash2
             size={18}
             className="text-red-500 cursor-pointer hover:text-red-600 duration-200"
+            onClick={onDelete}
           />
         </div>
       )}

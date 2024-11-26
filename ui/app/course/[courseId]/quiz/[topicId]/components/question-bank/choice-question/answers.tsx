@@ -7,8 +7,8 @@ import { QuestionChoice } from "@/models/question";
 import { ChevronsUpDown, CirclePlus, Trash } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { gradePercentOptions } from "../../static-data";
-import { ChoiceQuestionForm } from "../../tab-content/tab-in-tab/choice-question-tab";
 import { useEffect } from "react";
+import { ChoiceQuestionForm } from "@/app/question/_components/choice-question/choice-question-ui";
 
 export type ChoiceQuestionAnswerForm = {
   choices: QuestionChoice[];
@@ -173,7 +173,7 @@ const AnswerRowSetting = ({
           showSearch={false}
           initialValue={gradePercentOptions[0]}
           options={gradePercentOptions}
-          OptionUI={OptionUI}
+          renderItem={(item) => <OptionUI>{item}</OptionUI>}
           onChange={(value) => onGradePercentChange(parseInt(value))}
           className="w-40"
           popoverClassName="w-40"

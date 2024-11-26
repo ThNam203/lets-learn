@@ -8,8 +8,8 @@ import { nanoid } from "@reduxjs/toolkit";
 import { ChevronsUpDown, CirclePlus, Trash } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { gradePercentOptions } from "../../static-data";
-import { ShortAnswerQuestionForm } from "../../tab-content/tab-in-tab/short-answer-question-tab";
 import { useEffect } from "react";
+import { ShortAnswerQuestionForm } from "@/app/question/_components/short-answer-question/short-answer-question-ui";
 
 type ShortAnswer = {
   text: string;
@@ -199,7 +199,7 @@ const AnswerRowSetting = ({
             showSearch={false}
             initialValue={gradePercentOptions[0]}
             options={gradePercentOptions}
-            OptionUI={OptionUI}
+            renderItem={(item) => <OptionUI>{item}</OptionUI>}
             onChange={(value) => onGradePercentChange(parseInt(value))}
             className="w-40"
             popoverClassName="w-40"

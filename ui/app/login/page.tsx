@@ -1,5 +1,5 @@
 import OAuthLoginBtn from "@/components/buttons/OAuthLoginBtn";
-import LogInForm from "@/components/forms/LoginForm";
+import LogInForm from "@/app/login/_components/LoginForm";
 import { IconFacebook } from "@/components/icons/facebook";
 import { IconGoogle } from "@/components/icons/google";
 

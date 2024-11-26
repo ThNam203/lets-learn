@@ -5,12 +5,12 @@ import { fakeQuizTest } from "@/fake-data/test";
 import { Test } from "@/models/test";
 import { TabProvider } from "@/provider/tab-provider";
 import { useEffect, useState } from "react";
-import { iconMap } from "../../components/topic/topic-map";
 import { Tab } from "./components/static-data";
 import TabContent from "./components/tab-content/tab-content";
 import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import { useAppDispatch } from "@/redux/hooks";
 import { setBreadcrumb } from "@/redux/slices/breadcrumb";
+import { iconMap } from "@/models/topic";
 
 interface Props {
   params: {
@@ -36,7 +36,7 @@ export default function TopicQuiz({ params }: Props) {
         href: `/course/${courseId}`,
       },
       {
-        label: quiz.name,
+        label: "Quiz",
         href: `/course/${courseId}/quiz/${topicId}`,
       },
     ];
@@ -66,7 +66,7 @@ export default function TopicQuiz({ params }: Props) {
           <div className="w-full space-y-8">
             <div className="w-full px-5 flex flex-row gap-4">
               <Icon size={32} />
-              <h3>{quiz.name}</h3>
+              <h3>Quiz</h3>
             </div>
             <TabList
               tabs={tabs}
