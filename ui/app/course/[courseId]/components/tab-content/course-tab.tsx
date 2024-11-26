@@ -6,7 +6,7 @@ import { Spinner } from "@nextui-org/spinner";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import CourseBackground from "../course-background";
+import CourseBackground from "./course-tab/course-background";
 import SectionList from "./course-tab/section/section-list";
 
 interface Props {
@@ -23,7 +23,6 @@ export default function CourseTab({ course, onCourseChange }: Props) {
       s.id === section.id ? section : s
     );
     const updatedCourse: Course = { ...course, sections: updatedSections };
-    console.log("updated course", updatedCourse);
     if (onCourseChange) onCourseChange(updatedCourse);
   };
 
@@ -71,7 +70,7 @@ export default function CourseTab({ course, onCourseChange }: Props) {
   };
   return (
     <div>
-      <CourseBackground course={course} />
+      <CourseBackground course={course} onCourseChange={onCourseChange} />
       <SectionList
         sections={sections}
         onSectionChange={handleSectionChange}

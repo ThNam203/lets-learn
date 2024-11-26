@@ -46,8 +46,8 @@ export default function LogInForm() {
   const handleLoginSuccess = (data: any) => {
     setIsLoading(false);
     toast.success(data.message);
-    router.prefetch("/home");
     router.replace("/home");
+    window.location.reload();
   };
   const handleLoginFail = (err: any) => {
     toast.error(err);
@@ -115,10 +115,10 @@ export default function LogInForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full rounded-md flex justify-center items-center bg-blue-600 hover:bg-blue-500 text-white h-[50px] border-transparent border mt-4 font-semibold"
+        className="w-full rounded-md flex justify-center gap-2 items-center bg-blue-600 hover:bg-blue-500 text-white h-[50px] border-transparent border mt-4 font-semibold"
       >
-        LOG IN
-        {isLoading && <Spinner className="ml-2" />}
+        {isLoading && <Spinner size="sm" color="white" />}
+        {!isLoading && "Log in"}
       </button>
     </form>
   );

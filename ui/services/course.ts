@@ -1,4 +1,5 @@
-import { GET, POST } from "@/lib/http-handle/http-handle";
+import { GET, POST, PUT } from "@/lib/http-handle/http-handle";
+import { Course } from "@/models/course";
 import { Role, User } from "@/models/user";
 
 export const createCourse = (
@@ -36,4 +37,22 @@ export const getCourse = (
   onFail: (err?: any) => void
 ) => {
   GET(`/course/${id}`, onSuccess, onFail);
+};
+
+export const updateCourse = (
+  data: Course,
+  onSuccess: (data: any) => void,
+  onFail: (err?: any) => void
+) => {
+  const { id, title, price, category, level, isPublished, imageUrl } = data;
+  let reqData = {
+    title,
+    price,
+    category,
+    level,
+    isPublished,
+    imageUrl,
+  };
+
+  PUT(`/course/${id}`, reqData, onSuccess, onFail);
 };

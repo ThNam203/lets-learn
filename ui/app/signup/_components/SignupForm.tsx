@@ -5,14 +5,15 @@ import { IconEye } from "@/components/icons/eye";
 import { IconEyeOff } from "@/components/icons/eye-off";
 import { IconPasswordOutline } from "@/components/icons/password";
 import { IconUserOutline } from "@/components/icons/user";
-import GLOBAL from "@/global";
 import { Checkbox } from "@/lib/shadcn/checkbox";
 import { signup } from "@/services/auth";
+import { Spinner } from "@nextui-org/spinner";
 import * as React from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function SignUpForm() {
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -71,10 +72,12 @@ export default function SignUpForm() {
   };
 
   const handleSuccess = (data: any) => {
-    toast.success(data);
+    toast.success(data.message);
+    setIsLoading(false);
   };
   const handleFail = (err: any) => {
     toast.error(err);
+    setIsLoading(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -89,6 +92,7 @@ export default function SignUpForm() {
         password,
         role: isTeacher ? "TEACHER" : "STUDENT",
       };
+      setIsLoading(true);
       signup(reqData, handleSuccess, handleFail);
     }
   };
@@ -215,7 +219,8 @@ export default function SignUpForm() {
         type="submit"
         className="w-full rounded-md flex justify-center items-center bg-blue-600 hover:bg-blue-500 text-white h-[50px] border-transparent border mt-4 font-semibold"
       >
-        SIGN UP
+        {isLoading && <Spinner size="sm" color="white" />}
+        {!isLoading && "Sign up"}
       </button>
     </form>
   );

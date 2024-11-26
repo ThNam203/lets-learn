@@ -3,19 +3,17 @@ import CollapsibleList from "@/app/course/[courseId]/components/collapsible/coll
 import { useDebounceFunction } from "@/hooks/useDebounce";
 import { Button } from "@/lib/shadcn/button";
 import { Course } from "@/models/course";
-import { Test } from "@/models/test";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z, ZodType } from "zod";
-import GradeSetting, {
+import DangerZoneSetting, {
   DangerZoneSettingForm,
 } from "./setting-items/danger-zone";
 import GeneralSetting, { GeneralSettingForm } from "./setting-items/general";
-import TimingSetting, { TimingSettingForm } from "./setting-items/timing";
 import { defaultDangerZoneSetting, defaultGeneralSetting } from "./static-data";
-import DangerZoneSetting from "./setting-items/danger-zone";
+import { Spinner } from "@nextui-org/spinner";
 
 const generalSettingSchema: ZodType<GeneralSettingForm> = z.object({
   name: z.string().min(1, "Name is required"),
@@ -42,8 +40,9 @@ const schema: ZodType<CourseSettingForm> = z.object({
 interface Props {
   course: Course;
   onSubmitCourseSetting?: (data: Course) => void;
+  isLoading?: boolean;
 }
-const SettingList = ({ course, onSubmitCourseSetting }: Props) => {
+const SettingList = ({ course, onSubmitCourseSetting, isLoading }: Props) => {
   const handleGetGeneralSetting = (course: Course) => {
     const { title, category, level, price } = course;
     const generalSetting: GeneralSettingForm = {
@@ -140,7 +139,8 @@ const SettingList = ({ course, onSubmitCourseSetting }: Props) => {
         </CollapsibleList>
         <div className="w-full flex flex-row justify-center">
           <Button type="submit" disabled={!isSettingChange} variant="default">
-            Save
+            {isLoading && <Spinner color="white" size="sm" />}
+            {!isLoading && "Save"}
           </Button>
         </div>
       </form>

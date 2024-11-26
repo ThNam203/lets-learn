@@ -9,15 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-indigo-700 text-indigo-50 hover:bg-indigo-800",
-        destructive: "bg-red-500 text-indigo-50 hover:bg-red-500/90",
+        default: "bg-blue-700 text-blue-50 hover:bg-blue-800",
+        destructive: "bg-red-500 text-blue-50 hover:bg-red-500/90",
         outline:
-          "border border-indigo-500 bg-white hover:bg-indigo-100 text-indigo-800",
-        secondary: "bg-indigo-100 text-indigo-950 hover:bg-indigo-200",
-        ghost: "hover:bg-indigo-100 hover:text-indigo-950",
-        link: "text-indigo-700 underline-offset-4 hover:underline",
-        indigo:
-          "bg-indigo-50 text-indigo-950 hover:bg-indigo-950 hover:text-white",
+          "border border-blue-500 bg-white hover:bg-blue-100 text-blue-800",
+        secondary: "bg-blue-100 text-blue-950 hover:bg-blue-200",
+        ghost: "hover:bg-blue-100 text-blue-800 hover:text-blue-900",
+        link: "text-blue-700 underline-offset-4 hover:underline",
+        blue: "bg-blue-50 text-blue-950 hover:bg-blue-950 hover:text-white",
         cyan: "bg-cyan-500 text-white hover:bg-cyan-600",
         success: "bg-green-500 text-white hover:bg-green-600",
       },
