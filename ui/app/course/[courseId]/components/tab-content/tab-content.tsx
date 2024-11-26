@@ -4,6 +4,7 @@ import { Tab } from "../static/tabs";
 import CourseTab from "./course-tab";
 import { Course } from "@/models/course";
 import ActivitiesTab from "./activities-tab";
+import SettingsTab from "./settings-tab";
 
 interface Props {
   course: Course;
@@ -23,7 +24,7 @@ export default function TabContent({ course, onCourseChange }: Props) {
     case Tab.GRADES:
       return <div>Settings</div>;
     case Tab.SETTINGS:
-      return <div>Settings</div>;
+      return <SettingsTab course={course} onCourseChange={onCourseChange} />;
     default:
       return <div>Overview</div>;
   }

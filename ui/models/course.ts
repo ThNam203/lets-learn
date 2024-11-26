@@ -15,9 +15,9 @@ export type Course = {
   title: string;
   description: string | null;
   imageUrl: string | null;
-  price: number | null;
-  category: string | null;
-  level: number | string | null;
+  price: number;
+  category: string;
+  level: string;
   studentIds: number[];
   sections: Section[];
   isPublished: boolean;
