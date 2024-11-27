@@ -1,7 +1,6 @@
 "use client";
-import { fakeQuizTest } from "@/fake-data/quiz";
 import { fakeUser } from "@/fake-data/user";
-import { QuizData, Test } from "@/models/quiz";
+import { QuizData } from "@/models/quiz";
 import {
   QuizAnswer,
   QuizResponseData,
@@ -11,10 +10,12 @@ import {
 import { nanoid } from "@reduxjs/toolkit";
 import { useState } from "react";
 import QuizAttempting from "./components/quiz-attempting";
+import { QuizTopic } from "@/models/topic";
+import { fakeQuiz } from "@/fake-data/quiz";
 
 export default function QuizAttemptingPage() {
   const thisUser = fakeUser;
-  const [quiz, setQuiz] = useState<Test>(fakeQuizTest);
+  const [quiz, setQuiz] = useState<QuizTopic>(fakeQuiz);
   const getNewQuizResponse = () => {
     const startTime = new Date().toISOString();
     const { questions } = quiz.data as QuizData;
@@ -32,7 +33,7 @@ export default function QuizAttemptingPage() {
     const newQuizResponse: StudentResponse = {
       id: nanoid(),
       student: thisUser,
-      test: quiz,
+      topicId: quiz.id,
       data: quizResponseData,
     };
     return newQuizResponse;

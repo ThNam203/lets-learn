@@ -4,7 +4,7 @@ import { GradeSettingForm } from "./setting-items/grade";
 import { TimingSettingForm } from "./setting-items/timing";
 
 export const defaultGeneralSetting: GeneralSettingForm = {
-  name: "Quiz 1",
+  title: "Quiz 1",
   description: "This is a quiz",
 };
 

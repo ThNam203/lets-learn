@@ -1,16 +1,17 @@
 import Banner from "@/components/ui/banner";
 import { cn } from "@/lib/utils";
 import { Question } from "@/models/question";
-import { QuizData, Test } from "@/models/quiz";
+import { QuizData } from "@/models/quiz";
 import { StudentResponse } from "@/models/student-response";
 import { format } from "date-fns";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import QuestionList from "../question/question-list";
 import { QuestionType, TabInTab } from "../static-data";
 import { QuizOpenCloseState } from "./_components/static-data";
+import { QuizTopic } from "@/models/topic";
 
 interface Props {
-  quiz: Test;
+  quiz: QuizTopic;
   questionsBank: Question[];
   quizResponses: StudentResponse[];
   onReorderedQuestion?: (data: Question[]) => void;
@@ -27,17 +28,26 @@ const TabQuestion = ({
   onReorderedQuestion,
   onAddQuestionsFromBank,
 }: Props) => {
-  const { open, close } = quiz;
-  const { questions } = quiz.data as QuizData;
+  const { questions, close, open } = quiz.data;
 
   const quizOpenCloseState: QuizOpenCloseState = useMemo(() => {
-    const timeOpen = Math.floor(new Date(open.value).getTime() / 1000);
-    const timeClose = Math.floor(new Date(close.value).getTime() / 1000);
+    const timeOpen = open ? Math.floor(new Date(open).getTime() / 1000) : null;
+    const timeClose = close
+      ? Math.floor(new Date(close).getTime() / 1000)
+      : null;
     const currentTime = Math.floor(new Date().getTime() / 1000);
 
-    if (timeOpen > currentTime) return QuizOpenCloseState.NOT_OPEN;
-    if (timeClose < currentTime) return QuizOpenCloseState.ENDED;
-    return QuizOpenCloseState.OPEN;
+    if (timeOpen && timeClose) {
+      if (timeOpen > currentTime) return QuizOpenCloseState.NOT_OPEN;
+      if (timeClose < currentTime) return QuizOpenCloseState.ENDED;
+      return QuizOpenCloseState.OPEN;
+    } else if (!timeOpen && timeClose) {
+      if (timeClose < currentTime) return QuizOpenCloseState.ENDED;
+      return QuizOpenCloseState.OPEN;
+    } else if (!timeClose && timeOpen) {
+      if (timeOpen > currentTime) return QuizOpenCloseState.NOT_OPEN;
+      return QuizOpenCloseState.OPEN;
+    } else return QuizOpenCloseState.OPEN;
   }, [open, close]);
   const formatTime = (time: string) => {
     const date = new Date(time);
@@ -48,11 +58,11 @@ const TabQuestion = ({
   const quizOpenCloseStateString = useMemo(() => {
     switch (quizOpenCloseState) {
       case QuizOpenCloseState.OPEN:
-        return "The quiz is opening now";
+        return "This quiz is opening now";
       case QuizOpenCloseState.ENDED:
-        return "The quiz ended on " + formatTime(close.value);
+        return "This quiz ended" + (close ? ` at ${formatTime(close)}` : "");
       case QuizOpenCloseState.NOT_OPEN:
-        return "The quiz will open on " + formatTime(open.value);
+        return "This quiz will open at " + (open ? formatTime(open) : "");
     }
   }, [quizOpenCloseState, open, close]);
 

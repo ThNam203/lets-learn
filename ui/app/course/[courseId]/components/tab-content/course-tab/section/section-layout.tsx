@@ -7,42 +7,42 @@ import {
 } from "@/lib/shadcn/accordion";
 import { Input } from "@/lib/shadcn/input";
 import { cn } from "@/lib/utils";
+import { Section } from "@/models/course";
 import { Check, ChevronRight, Pen, RefreshCcw, Trash2 } from "lucide-react";
 import { ReactNode, useEffect, useRef } from "react";
 
 interface Props {
-  value: string;
-  title: string;
+  section: Section;
   showContent: string[];
   children: ReactNode;
   className?: string;
   canEdit?: boolean;
   isEditing?: boolean;
-  onTitleChange?: (value: string) => void;
+  onSectionChange?: (section: Section) => void;
   onTrigger?: (value: string) => void;
   onEdit?: () => void;
   onSave?: () => void;
   onRefresh?: () => void;
 }
 export default function SectionLayout({
-  title,
-  value,
+  section,
   canEdit = true,
   isEditing = false,
   children,
   showContent,
   className,
-  onTitleChange,
+  onSectionChange,
   onTrigger,
   onEdit,
   onSave,
   onRefresh,
 }: Props) {
+  const { id, title } = section;
   const inputRef = useRef<HTMLInputElement>(null);
-  const isSectionOpen = showContent.includes(value);
+  const isSectionOpen = showContent.includes(id);
   const handleTrigger = () => {
     if (isEditing && isSectionOpen) return;
-    if (onTrigger) onTrigger(value);
+    if (onTrigger) onTrigger(id);
   };
   const handleContentClick = (e: any) => {
     e.stopPropagation();
@@ -56,7 +56,7 @@ export default function SectionLayout({
     if (onSave) onSave();
   };
   const handleTitleChange = (e: any) => {
-    if (onTitleChange) onTitleChange(e.target.value);
+    if (onSectionChange) onSectionChange({ ...section, title: e.target.value });
   };
   useEffect(() => {
     if (isEditing) {
@@ -72,7 +72,7 @@ export default function SectionLayout({
 
   return (
     <AccordionItem
-      value={value}
+      value={id}
       className={cn(
         "w-full rounded-lg px-6 border-[0.5px] border-gray-300 duration-200",
         isEditing && "border-gray-400 shadow-md",

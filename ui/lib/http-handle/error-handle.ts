@@ -11,7 +11,7 @@ export const ErrorHandle = (onFail: (err?: any) => void) => {
     const errorMessages: Record<number, string> = {
       400: "Bad request",
       401: "Unauthorized",
-      403: "Forbidden",
+      403: "Please login to continue",
       404: "Not found",
       500: "Internal server error",
     };

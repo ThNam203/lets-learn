@@ -1,5 +1,6 @@
 import { POST, PUT } from "@/lib/http-handle/http-handle";
 import { Section } from "@/models/course";
+import { convertTopicToRequestData } from "./adapters/topic";
 
 export const createSection = (
   data: any,
@@ -22,16 +23,18 @@ export const updateSection = (
   onSuccess: (data: Section) => void,
   onFail: (err?: any) => void
 ) => {
-  console.log("data", data);
+  console.log("save in service");
   const { id, position, title, description, courseId, topics } = data;
 
   let reqData = {
+    id,
     position,
     title,
     description,
     courseId,
-    topics,
+    topics: topics.map((topic) => convertTopicToRequestData(topic)),
   };
+  console.log("reqData", reqData);
 
   PUT(`/section/${id}`, reqData, onSuccess, onFail);
 };

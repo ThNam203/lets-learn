@@ -57,7 +57,6 @@ function DataTableViewOptions<TData>({
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
                 .map((column, index) => {
-                  console.log(column.id);
                   const headerContent =
                     columnHeaders !== undefined
                       ? columnHeaders[column.id as keyof typeof columnHeaders]

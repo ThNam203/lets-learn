@@ -1,35 +1,21 @@
-import { GradingMethod, Test, TestType, TimeLimitType } from "@/models/quiz";
-import { Topic, TopicType } from "@/models/topic";
+import { GradingMethod, TimeLimitType } from "@/models/quiz";
+import { QuizTopic, TopicType } from "@/models/topic";
 
-const current = new Date();
-const nextWeek = new Date(current.getTime() + 7 * 24 * 60 * 60 * 1000);
-const initQuizTest: Test = {
-  type: TestType.QUIZ,
-  description: "This is quiz description, change it to your own",
-  open: {
-    enabled: false,
-    value: current.toISOString(),
-  },
-  close: {
-    enabled: false,
-    value: nextWeek.toISOString(),
-  },
+export const initQuiz: QuizTopic = {
+  id: "",
+  sectionId: "",
+  title: "Quiz",
+  type: TopicType.QUIZ,
   data: {
-    timeLimit: {
-      enabled: false,
-      value: 1,
-      unit: TimeLimitType.HOURS,
-    },
+    open: new Date(2024, 11, 10, 10, 30, 0, 0).toISOString(),
+    close: new Date(2024, 11, 10, 14, 30, 0, 0).toISOString(),
+    description:
+      "This quiz contains a variety of questions to test your knowledge. At the end of the quiz you will be given your score with suggestions for improvement.",
+    timeLimit: 1,
+    timeLimitUnit: TimeLimitType.HOURS,
     gradeToPass: 5,
     gradingMethod: GradingMethod.HIGHEST_GRADE,
     attemptAllowed: "Unlimited",
     questions: [],
   },
-};
-export const initQuizTopic: Topic = {
-  id: "",
-  sectionId: "",
-  title: "Quiz",
-  type: TopicType.QUIZ,
-  data: initQuizTest,
 };

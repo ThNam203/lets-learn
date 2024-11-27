@@ -4,7 +4,7 @@ export type QuizData = {
   description: string;
   open: string | null;
   close: string | null;
-  timeLimitValue: number | null;
+  timeLimit: number | null;
   timeLimitUnit: TimeLimitType;
   gradeToPass: number;
   gradingMethod: GradingMethod;

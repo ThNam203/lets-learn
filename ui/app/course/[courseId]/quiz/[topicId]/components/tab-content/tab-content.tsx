@@ -1,30 +1,25 @@
 import { fakeQuestions } from "@/fake-data/question";
 import { useTab } from "@/hooks/useTab";
 import { Question } from "@/models/question";
-import { QuizData, Test } from "@/models/quiz";
+import { QuizData } from "@/models/quiz";
 import { StudentResponse } from "@/models/student-response";
+import { QuizTopic } from "@/models/topic";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-import { Tab, TabInTab } from "../static-data";
-import TabQuiz from "./tab-quiz";
-import TabSetting from "./tab-setting";
+import { Tab } from "../static-data";
 import TabQuestion from "./tab-question";
 import TabQuestionBank from "./tab-question-bank";
+import TabQuiz from "./tab-quiz";
 import TabResults from "./tab-results";
+import TabSetting from "./tab-setting";
 
 interface Props {
   className?: string;
-  quiz: Test;
-  onQuizChange?: (quiz: Test) => void;
-  onQuizModeChange?: (quizMode: boolean) => void;
+  quiz: QuizTopic;
+  onQuizChange?: (quiz: QuizTopic) => void;
 }
 
-const TabContent = ({
-  className,
-  quiz,
-  onQuizChange,
-  onQuizModeChange,
-}: Props) => {
+const TabContent = ({ className, quiz, onQuizChange }: Props) => {
   const tabContext = useTab<string>();
   const { selectedTab } = tabContext;
   const { data } = quiz;

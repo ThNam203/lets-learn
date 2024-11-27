@@ -2,7 +2,7 @@ import CustomDialog from "@/components/ui/custom-dialog";
 import { Button } from "@/lib/shadcn/button";
 import { Question } from "@/models/question";
 import { CirclePlus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import CreateQuestionDialog from "../question-bank/dialog/create-question-dialog";
@@ -15,6 +15,7 @@ interface Props {
 }
 const TabQuestionBank = ({ questions, onQuestionsChange }: Props) => {
   const router = useRouter();
+  const { courseId } = useParams();
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogInfo, setDialogInfo] = useState<{
     title: string;
@@ -30,11 +31,13 @@ const TabQuestionBank = ({ questions, onQuestionsChange }: Props) => {
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
 
   const handleAddQuestion = (type: QuestionType) => {
-    if (type === QuestionType.CHOICE) router.push("/question/choice/create");
+    const prefix = courseId ? `/course/${courseId}` : "";
+    if (type === QuestionType.CHOICE)
+      router.push(prefix + "/question/choice/create");
     else if (type === QuestionType.SHORT_ANSWER)
-      router.push("/question/short-answer/create");
+      router.push(prefix + "/question/short-answer/create");
     else if (type === QuestionType.TRUE_FALSE)
-      router.push("/question/true-false/create");
+      router.push(prefix + "/question/true-false/create");
   };
 
   const handleEditQuestion = (id: string) => {

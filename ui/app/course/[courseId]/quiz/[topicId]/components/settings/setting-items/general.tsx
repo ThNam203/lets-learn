@@ -1,12 +1,12 @@
 "use client";
-import { Button } from "@/lib/shadcn/button";
 import { Input } from "@/lib/shadcn/input";
 import TinyEditor from "@/lib/tinymce/editor";
+import { nanoid } from "@reduxjs/toolkit";
 import { useFormContext } from "react-hook-form";
 import { QuizSettingForm } from "../setting-list";
 
 export type GeneralSettingForm = {
-  name: string;
+  title: string;
   description: string;
 };
 
@@ -21,7 +21,7 @@ const GeneralSetting = ({ formData, onChange }: GeneralSettingProps) => {
   const {
     errors: { generalSettingForm: errors },
   } = form.formState;
-  const { name, description } = formData;
+  const { title, description } = formData;
 
   const handleSettingChange = (data: GeneralSettingForm) => {
     if (onChange) onChange(data);
@@ -33,23 +33,20 @@ const GeneralSetting = ({ formData, onChange }: GeneralSettingProps) => {
     handleSettingChange({ ...formData, [key]: data });
   };
 
+  const titleHtmlFor = nanoid();
   return (
     <div className="w-full flex flex-col p-4 gap-8">
-      <RowSetting
-        title="Assigment name"
-        htmlFor="general-setting-assigmentName"
-      >
+      <RowSetting title="Quiz title" htmlFor={titleHtmlFor}>
         <Input
-          id="general-setting-name"
-          className="flex-1 focus:outline-none"
+          id={titleHtmlFor}
           placeholder="Enter a name"
-          defaultValue={name !== "" ? name : undefined}
-          {...register("generalSettingForm.name")}
-          onChange={(e) => handleInputChange("name", e.target.value)}
+          defaultValue={title !== "" ? title : undefined}
+          {...register("generalSettingForm.title")}
+          onChange={(e) => handleInputChange("title", e.target.value)}
         />
-        {errors?.name && (
+        {errors?.title && (
           <p className="absolute top-full text-red-500 text-xs font-semibold">
-            {errors.name.message}
+            {errors.title.message}
           </p>
         )}
       </RowSetting>

@@ -1,7 +1,6 @@
 "use client";
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
-import { fakeQuizTest } from "@/fake-data/quiz";
 import { TabProvider } from "@/provider/tab-provider";
 import { useEffect, useState } from "react";
 import { Tab } from "./components/static-data";
@@ -10,6 +9,7 @@ import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import { useAppDispatch } from "@/redux/hooks";
 import { setBreadcrumb } from "@/redux/slices/breadcrumb";
 import { iconMap, QuizTopic } from "@/models/topic";
+import { fakeQuiz } from "@/fake-data/quiz";
 
 interface Props {
   params: {
@@ -19,7 +19,7 @@ interface Props {
 }
 export default function TopicQuiz({ params }: Props) {
   const { courseId, topicId } = params;
-  const [quiz, setQuiz] = useState<QuizTopic>(fakeQuizTest);
+  const [quiz, setQuiz] = useState<QuizTopic>(fakeQuiz);
   const [initTab, setInitTab] = useState<string>(Tab.QUIZ);
   const dispatch = useAppDispatch();
 
@@ -48,7 +48,7 @@ export default function TopicQuiz({ params }: Props) {
     if (storageTab) setInitTab(storageTab);
   }, [topicId]);
 
-  const handleQuizChange = (data: Test) => {
+  const handleQuizChange = (data: QuizTopic) => {
     setQuiz(data);
   };
   const handleTabSelected = (tab: string) => {

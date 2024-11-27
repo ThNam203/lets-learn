@@ -1,6 +1,6 @@
 import CustomDialog from "@/components/ui/custom-dialog";
 import { Button } from "@/lib/shadcn/button";
-import { cn, formatDate, getDurationText } from "@/lib/utils";
+import { cn, getDurationText } from "@/lib/utils";
 import {
   getQuizResponseMark,
   getQuizResponseTotalMark,

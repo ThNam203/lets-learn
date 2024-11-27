@@ -4,13 +4,12 @@ import { Accordion } from "@/lib/shadcn/accordion";
 import { Button } from "@/lib/shadcn/button";
 import { cn } from "@/lib/utils";
 import { Section } from "@/models/course";
-import { Topic, TopicType } from "@/models/topic";
+import { QuizTopic, Topic, TopicType } from "@/models/topic";
+import { nanoid } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import SectionContent from "./section-content";
 import SectionLayout from "./section-layout";
-import { initQuizTopic } from "./static/init-quiz-topic";
-import { updateSection } from "@/services/section";
-import { toast } from "react-toastify";
+import { initQuiz } from "./static/init-quiz-topic";
 
 interface Props {
   initShowContent?: string[];
@@ -49,14 +48,6 @@ const SectionList = ({
       setSectionEditting([...sectionEditting, id]);
     }
   };
-  const handleSectionChange =
-    (section: Section, key: keyof Section) => (value: string) => {
-      const updatedSection: Section = {
-        ...section,
-        [key]: value,
-      };
-      onSectionChange(updatedSection);
-    };
 
   const handleTriggerClick = (value: string) => {
     if (onItemTrigger) onItemTrigger(value);
@@ -67,29 +58,26 @@ const SectionList = ({
     setSectionEditting([...sectionEditting, id]);
   };
 
-  const handleSaveSectionSuccess = (data: any) => {
-    console.log("data", data);
-  };
-  const handleSaveSectionFail = (err: any) => {
-    toast.error(err);
-  };
   const handleSaveSection = (section: Section) => () => {
     if (onSave) onSave(section);
     // remove id from sectionEditting
     toggleEdit(section.id);
-    updateSection(section, handleSaveSectionSuccess, handleSaveSectionFail);
   };
   const handleRefreshSection = (sectionId: string) => () => {
     const toRefresh = sectionToRefresh.find((s) => s.id === sectionId);
-    console.log("toRefresh", toRefresh);
     if (toRefresh) onSectionChange(toRefresh);
   };
   const handleCreateTopic = (section: Section) => (type: TopicType) => {
     switch (type) {
       case TopicType.QUIZ: {
+        const newQuiz: QuizTopic = {
+          ...initQuiz,
+          id: nanoid(4), // generate temp id to use in client and it will be removed in service folder when saving to db
+          sectionId: section.id,
+        };
         const newSection: Section = {
           ...section,
-          topics: [...section.topics, initQuizTopic],
+          topics: [...section.topics, newQuiz],
         };
         onSectionChange(newSection);
         break;
@@ -149,11 +137,10 @@ const SectionList = ({
           return (
             <SectionLayout
               key={index}
-              value={id}
-              title={title}
-              onTitleChange={handleSectionChange(section, "title")}
+              section={section}
               isEditing={isEditting}
               showContent={showContent}
+              onSectionChange={onSectionChange}
               onTrigger={handleTriggerClick}
               onEdit={() => handleEdit(id)}
               onSave={handleSaveSection(section)}
@@ -161,16 +148,12 @@ const SectionList = ({
               className={contentClassName}
             >
               <SectionContent
-                desc={description}
-                topics={topics ?? []}
+                section={section}
                 isEditting={isEditting}
+                onSectionChange={onSectionChange}
                 onCreateTopic={handleCreateTopic(section)}
                 onReorderedTopic={handleReorderedTopic(section)}
                 onDeleteTopic={handleDeleteTopic(section)}
-                onDescriptionChange={handleSectionChange(
-                  section,
-                  "description"
-                )}
               />
             </SectionLayout>
           );

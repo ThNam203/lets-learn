@@ -1,13 +1,12 @@
 import { fakeUser } from "@/fake-data/user";
 import { Button } from "@/lib/shadcn/button";
-import { Separator } from "@/lib/shadcn/separator";
-import { cn, getTextFromHtml, getTimeStringByDuration } from "@/lib/utils";
+import EditorDisplay from "@/lib/tinymce/editor-display";
+import { cn, getTimeStringByDuration } from "@/lib/utils";
 import {
   attemptsAllowedOptions,
   getSecondFromTimeLimitType,
   GradingMethod,
   QuizData,
-  Test,
 } from "@/models/quiz";
 import {
   getQuizResponseMark,
@@ -17,17 +16,17 @@ import {
   StudentResponse,
 } from "@/models/student-response";
 import { nanoid } from "@reduxjs/toolkit";
+import { format } from "date-fns";
 import { SearchCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 import { TabInTab } from "../static-data";
 import QuizAttemptResult from "./_components/quiz-attempting-tab/quiz-attempt-result";
-import { format } from "date-fns";
-import EditorDisplay from "@/lib/tinymce/editor-display";
-import { useRouter } from "next/navigation";
+import { QuizTopic } from "@/models/topic";
 
 interface Props {
-  quiz: Test;
+  quiz: QuizTopic;
   quizResponses: StudentResponse[];
   onSelectQuizResponse?: (quizResponse: StudentResponse) => void;
   onQuizResponsesChange?: (quizResponses: StudentResponse[]) => void;
@@ -44,9 +43,18 @@ const TabQuiz = ({
 }: Props) => {
   const router = useRouter();
   const thisUser = fakeUser;
-  const { data, name, description, open, close } = quiz;
-  const { questions, attemptAllowed, gradingMethod, timeLimit } =
-    data as QuizData;
+  const { data, id } = quiz;
+  const {
+    open,
+    close,
+    description,
+    questions,
+    attemptAllowed,
+    gradingMethod,
+    timeLimit,
+    timeLimitUnit,
+  } = data;
+  data as QuizData;
 
   const handlePreviewQuiz = () => {
     router.push(`/quiz-attempting/${quiz.id}`);
@@ -91,7 +99,7 @@ const TabQuiz = ({
     const newQuizResponse: StudentResponse = {
       id: nanoid(),
       student: thisUser,
-      test: quiz,
+      topicId: id,
       data: quizResponseData,
     };
     if (onQuizResponsesChange)
@@ -187,28 +195,33 @@ const TabQuiz = ({
   }, [quizResponses]);
 
   const timeLimitString = useMemo(() => {
-    if (!timeLimit.enabled) return "No time limit";
-    const duration = getSecondFromTimeLimitType(
-      timeLimit.value,
-      timeLimit.unit
-    );
+    if (!timeLimit) return "No time limit";
+    const duration = getSecondFromTimeLimitType(timeLimit, timeLimitUnit);
     return getTimeStringByDuration(duration);
-  }, [timeLimit]);
+  }, [timeLimit, timeLimitUnit]);
 
-  const openTime = format(new Date(open.value), "EEEE, dd MMMM yyyy, h:mm a");
-  const closeTime = format(new Date(close.value), "EEEE, dd MMMM yyyy, h:mm a");
+  const openTime = open
+    ? format(new Date(open), "EEEE, dd MMMM yyyy, h:mm a")
+    : null;
+  const closeTime = close
+    ? format(new Date(close), "EEEE, dd MMMM yyyy, h:mm a")
+    : null;
 
   return (
     <div className={cn(className)}>
       <div className="pb-4 space-y-2 border-b-[0.5px] border-gray-300 text-gray-700">
-        <p>
-          <span className="font-bold">Open: </span>
-          <span className="text-gray-500">{openTime}</span>
-        </p>
-        <p>
-          <span className="font-bold">Close: </span>
-          <span className="text-gray-500">{closeTime}</span>
-        </p>
+        {openTime && (
+          <p>
+            <span className="font-bold">Open: </span>
+            <span className="text-gray-500">{openTime}</span>
+          </p>
+        )}
+        {closeTime && (
+          <p>
+            <span className="font-bold">Close: </span>
+            <span className="text-gray-500">{closeTime}</span>
+          </p>
+        )}
       </div>
       <EditorDisplay className="text-gray-500" htmlString={description} />
       <div className="space-y-4">
@@ -229,7 +242,7 @@ const TabQuiz = ({
           </Button>
         )}
 
-        {timeLimit.enabled && (
+        {timeLimit && (
           <p className="text-sm text-slate-600">
             {`Time limit: ${timeLimitString}`}
           </p>

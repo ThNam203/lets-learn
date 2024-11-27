@@ -6,44 +6,55 @@ import { useState } from "react";
 import CreateTopicDialog from "../dialogs/create-topic-dialog/create-topic-dialog";
 import SectionDescription from "./section-description";
 import CourseTopic from "../topic/course-topic";
+import { Section } from "@/models/course";
 
 interface Props {
-  desc: string | null;
-  topics: Topic[];
+  section: Section;
   isEditting?: boolean;
-  onDescriptionChange?: (value: string) => void;
   onCreateTopic?: (type: TopicType) => void;
   onDeleteTopic?: (id: string) => void;
   onReorderedTopic?: (data: Topic[]) => void;
+  onSectionChange?: (section: Section) => void;
 }
 export default function SectionContent({
-  desc,
-  topics,
+  section,
   isEditting,
   onDeleteTopic,
-  onDescriptionChange,
   onCreateTopic,
   onReorderedTopic,
+  onSectionChange,
 }: Props) {
+  const { topics, description } = section;
   const [openCreateTopicDialog, setOpenCreateTopicDialog] = useState(false);
   const handleDeleteTopic = (id: string) => () => {
     console.log("delete topic", id);
     if (onDeleteTopic) onDeleteTopic(id);
   };
 
+  const handleSectionDescriptionChange = (value: string) => {
+    if (onSectionChange) onSectionChange({ ...section, description: value });
+  };
+
+  const handleTopicTitleChange = (topic: Topic) => (value: string) => {
+    const updatedTopics = topics.map((item) =>
+      item.id === topic.id ? { ...item, title: value } : item
+    );
+    if (onSectionChange) onSectionChange({ ...section, topics: updatedTopics });
+  };
+
   return (
     <div className="w-full space-y-5">
-      {desc && (
+      {description && (
         <SectionDescription
-          desc={desc}
+          desc={description}
           isEditting={isEditting}
-          onChange={onDescriptionChange}
+          onChange={handleSectionDescriptionChange}
         />
       )}
       <div className="flex flex-col">
         {isEditting && (
           <DraggableContainer
-            data={topics}
+            data={topics || []}
             onReordered={onReorderedTopic}
             renderItem={(topic, index) => (
               <CourseTopic
@@ -51,6 +62,7 @@ export default function SectionContent({
                 topic={topic}
                 isEditing={isEditting}
                 onDelete={handleDeleteTopic(topic.id)}
+                onTitleChange={handleTopicTitleChange(topic)}
               />
             )}
           />

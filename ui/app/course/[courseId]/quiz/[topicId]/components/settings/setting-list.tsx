@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/lib/shadcn/button";
-import { GradingMethod, QuizData, Test, TimeLimitType } from "@/models/quiz";
+import { GradingMethod, QuizData, TimeLimitType } from "@/models/quiz";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -16,9 +16,10 @@ import {
 } from "./static-data";
 import CollapsibleList from "@/app/course/[courseId]/components/collapsible/collapsible-list";
 import { useDebounceFunction } from "@/hooks/useDebounce";
+import { QuizTopic } from "@/models/topic";
 
 const generalSettingSchema: ZodType<GeneralSettingForm> = z.object({
-  name: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Title must be at least 1 character"),
   description: z.string(),
 });
 
@@ -60,39 +61,41 @@ const schema: ZodType<QuizSettingForm> = z.object({
 });
 
 interface Props {
-  quiz: Test;
-  onSubmitQuizSetting?: (data: Test) => void;
+  quiz: QuizTopic;
+  onSubmitQuizSetting?: (data: QuizTopic) => void;
 }
 const SettingList = ({ quiz, onSubmitQuizSetting }: Props) => {
-  const handleGetGeneralSetting = (quiz: Test) => {
+  const handleGetGeneralSetting = (quiz: QuizTopic) => {
+    const { title } = quiz;
+    const { description } = quiz.data;
     const generalSetting: GeneralSettingForm = {
-      name: quiz.name,
-      description: quiz.description,
+      title,
+      description,
     };
     return generalSetting;
   };
 
-  const handleGetTimingSetting = (quiz: Test) => {
-    const { timeLimit } = quiz.data as QuizData;
+  const handleGetTimingSetting = (quiz: QuizTopic) => {
+    const { timeLimit, timeLimitUnit, close, open } = quiz.data;
     const timingSetting: TimingSettingForm = {
       open: {
-        enabled: quiz.open.enabled,
-        value: quiz.open.value,
+        enabled: open !== null,
+        value: open || "",
       },
       close: {
-        enabled: quiz.close.enabled,
-        value: quiz.close.value,
+        enabled: close !== null,
+        value: close || "",
       },
       timeLimit: {
-        enabled: timeLimit.enabled,
-        value: timeLimit.value,
-        unit: timeLimit.unit as TimeLimitType,
+        enabled: timeLimit !== null,
+        value: timeLimit || 0,
+        unit: timeLimitUnit as TimeLimitType,
       },
     };
     return timingSetting;
   };
 
-  const handleGetGradeSetting = (quiz: Test) => {
+  const handleGetGradeSetting = (quiz: QuizTopic) => {
     const { data } = quiz;
     const { gradeToPass, gradingMethod, attemptAllowed } = data as QuizData;
     const gradeSetting: GradeSettingForm = {
@@ -137,25 +140,31 @@ const SettingList = ({ quiz, onSubmitQuizSetting }: Props) => {
   );
 
   const handleGetQuizToUpdate = (data: QuizSettingForm) => {
-    const quizToUpdate: Test = {
+    const { generalSettingForm, timingSettingForm, gradeSettingForm } = data;
+    const { title, description } = generalSettingForm;
+    const { attemptAllowed, gradeToPass, gradingMethod } = gradeSettingForm;
+    const { open, close, timeLimit } = timingSettingForm;
+
+    const quizToUpdate: QuizTopic = {
       ...quiz,
-      name: data.generalSettingForm.name,
-      description: data.generalSettingForm.description,
-      open: data.timingSettingForm.open,
-      close: data.timingSettingForm.close,
+      title,
       data: {
         ...quiz.data,
-        timeLimit: data.timingSettingForm.timeLimit,
-        gradeToPass: data.gradeSettingForm.gradeToPass,
-        gradingMethod: data.gradeSettingForm.gradingMethod,
-        attemptAllowed: data.gradeSettingForm.attemptAllowed,
+        open: open.enabled ? open.value : null,
+        close: close.enabled ? close.value : null,
+        description,
+        timeLimit: timeLimit.enabled ? timeLimit.value : null,
+        timeLimitUnit: timeLimit.unit,
+        gradeToPass,
+        gradingMethod,
+        attemptAllowed,
       },
     };
 
     return quizToUpdate;
   };
 
-  const compareQuiz = (quiz1: Test, quiz2: Test) => {
+  const compareQuiz = (quiz1: QuizTopic, quiz2: QuizTopic) => {
     const quiz1JSON = JSON.stringify(quiz1);
     const quiz2JSON = JSON.stringify(quiz2);
     return quiz1JSON === quiz2JSON;

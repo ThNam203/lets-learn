@@ -15,27 +15,23 @@ import useTimer from "@/hooks/useTimer";
 import { Button } from "@/lib/shadcn/button";
 import { Card } from "@/lib/shadcn/card";
 import { cn, scrollTo } from "@/lib/utils";
-import {
-  getSecondFromTimeLimitType,
-  QuizData,
-  Test,
-  TimeLimitType,
-} from "@/models/quiz";
+import { getSecondFromTimeLimitType, TimeLimitType } from "@/models/quiz";
 import {
   QuizAnswer,
   QuizResponseData,
   QuizStatus,
   StudentResponse,
 } from "@/models/student-response";
+import { QuizTopic } from "@/models/topic";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import QuestionDisplay from "./question-display/question-display";
 import QuestionBlock from "./question-navigation-box/question-block";
-import { useRouter } from "next/navigation";
 
 interface Props {
   className?: string;
   quizResponse: StudentResponse;
-  quiz: Test;
+  quiz: QuizTopic;
   onQuizResponseChange?: (quizResponse: StudentResponse) => void;
   onQuizAnswerChange?: (quizAnswer: QuizAnswer) => void;
 }
@@ -50,8 +46,7 @@ const QuizAttempting = ({
   const { startTimer, stopTimer, timer, status: timerStatus } = useTimer({});
   const quizResponseData = quizResponse.data as QuizResponseData;
   const { answers: studentAnswers } = quizResponseData;
-  const { data: quizData } = quiz;
-  const { questions, timeLimit } = quizData as QuizData;
+  const { questions, timeLimit, timeLimitUnit } = quiz.data;
   const totalQuestions = questions.length;
   const {
     status: countdownStatus,
@@ -60,8 +55,8 @@ const QuizAttempting = ({
     stopCountdown,
   } = useCountdown({
     countdown: getSecondFromTimeLimitType(
-      timeLimit.value,
-      timeLimit.unit as TimeLimitType
+      timeLimit || 0,
+      timeLimitUnit as TimeLimitType
     ),
   });
 
@@ -139,7 +134,7 @@ const QuizAttempting = ({
     if (onQuizResponseChange) onQuizResponseChange(startQuizResponse);
 
     // Start timer
-    if (timeLimit.enabled) startCountdown();
+    if (timeLimit) startCountdown();
     else startTimer();
   };
 
@@ -159,7 +154,7 @@ const QuizAttempting = ({
     if (onQuizResponseChange) onQuizResponseChange(finishedQuizResponse);
 
     // Stop timer
-    if (timeLimit.enabled) stopCountdown();
+    if (timeLimit) stopCountdown();
     else stopTimer(new Date(completedTime));
   };
 
@@ -229,7 +224,7 @@ const QuizAttempting = ({
         </Card>
       </div>
       <div className="fixed top-5 right-[350px] z-10">
-        {timeLimit.enabled ? (
+        {timeLimit ? (
           <QuizCountdown countdown={countdownTimer} status={countdownStatus} />
         ) : (
           <QuizTimer timer={timer} status={timerStatus} />

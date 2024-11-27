@@ -24,6 +24,7 @@ export const makeRequest = async (
     });
 
     if (!res.ok) {
+      console.log("res", res);
       handleResponseError(res);
       return;
     }

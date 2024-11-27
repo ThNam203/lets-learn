@@ -1,8 +1,3 @@
-import {
-  QuestionStatus,
-  QuestionType,
-} from "@/app/courses/[courseId]/quiz/[topicId]/_components/static-data";
-
 export type Question = {
   id: string;
   questionName: string;
@@ -17,6 +12,18 @@ export type Question = {
   usage: number;
   data: TrueFalseQuestion | ChoiceQuestion | ShortAnswerQuestion;
 };
+
+export enum QuestionStatus {
+  READY = "Ready",
+  DRAFT = "Draft",
+}
+
+export enum QuestionType {
+  TRUE_FALSE = "True/False",
+  SHORT_ANSWER = "Short Answer",
+  CHOICE = "Choices Answer",
+  ESSAY = "Essay",
+}
 
 export type TrueFalseQuestion = {
   correctAnswer: boolean;

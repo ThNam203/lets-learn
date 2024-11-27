@@ -13,37 +13,25 @@ interface Props {
   topic: Topic;
   isEditing?: boolean;
   onDelete?: () => void;
+  onTitleChange?: (value: string) => void;
 }
 
-const CourseTopic = ({ topic, isEditing = false, onDelete }: Props) => {
+const CourseTopic = ({
+  topic,
+  isEditing = false,
+  onDelete,
+  onTitleChange,
+}: Props) => {
   const router = useRouter();
   const path = usePathname();
   const { title, type } = topic;
 
   const getTopicIcon = (type: keyof TopicMap) => {
-    let icon;
-
-    //logic to get file type from the url
-
-    // let fileType = "document";
-    // if (type === "file") {
-    //   icon = iconMap.file[fileType as keyof TopicMap["file"]];
-    //   icon = iconMap[type];
-    // } else icon = iconMap[type];
-    icon = iconMap[type];
-    return icon;
+    return iconMap[type];
   };
 
   const getTopicColor = (type: keyof TopicMap) => {
-    let color;
-    // if (type === "file") {
-    //   //logic to get file type from the url
-    //   let fileType = "document";
-    //   color = colorMap.file[fileType as keyof TopicMap["file"]];
-    //   color = colorMap[type];
-    // } else color = colorMap[type];
-    color = colorMap[type];
-    return color;
+    return colorMap[type];
   };
 
   const handleLinkAction = () => {
@@ -58,18 +46,6 @@ const CourseTopic = ({ topic, isEditing = false, onDelete }: Props) => {
 
   const handleFileAction = () => {
     //download file
-    router.push(`${path}/file/${topic.id}`);
-  };
-
-  const handleAudioFileAction = () => {
-    //download file
-
-    router.push(`${path}/file/${topic.id}`);
-  };
-
-  const handleVideoFileAction = () => {
-    //download file
-
     router.push(`${path}/file/${topic.id}`);
   };
 
@@ -101,13 +77,17 @@ const CourseTopic = ({ topic, isEditing = false, onDelete }: Props) => {
     action();
   };
 
+  const handleTopicTitleChange = (e: any) => {
+    if (onTitleChange) onTitleChange(e.target.value);
+  };
+
   const Icon = getTopicIcon(type);
   const color = getTopicColor(type);
 
   //check if the title is empty -> show the file name with extension at the end of the title
   //else show the title
   let topicTitle = title;
-  if (type === "file" && title === "") topicTitle = topic.file.data.name;
+  if (type === "file" && title === "") topicTitle = topic.file.name;
 
   if (!isValidType(type)) return null;
 
@@ -130,7 +110,7 @@ const CourseTopic = ({ topic, isEditing = false, onDelete }: Props) => {
             {topicTitle}
             {type === "file" && (
               <TopicFileExtension
-                fileName={topic.file.data.name}
+                fileName={topic.file.name}
                 className="no-underline"
               />
             )}
@@ -143,6 +123,7 @@ const CourseTopic = ({ topic, isEditing = false, onDelete }: Props) => {
             placeholder="Topic title here"
             defaultValue={topicTitle}
             className="w-full text-cyan-500"
+            onChange={handleTopicTitleChange}
           />
         )}
       </div>
