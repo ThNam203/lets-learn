@@ -5,7 +5,7 @@ export const fakeCourses: Course[] = [
   {
     id: "sdalsdjka",
     title: "Introduction to Accounting",
-    categoryId: "1",
+    category: "1",
     sections: fakeSections.filter((section) => section.courseId === "1"),
     description:
       "This is a course that introduces you to the basics of accounting.",
@@ -14,13 +14,12 @@ export const fakeCourses: Course[] = [
     price: 79.99,
     level: "Beginner",
     studentIds: [],
-    resources: [],
     isPublished: true,
   },
   {
     id: "2",
     title: "Introduction to Computer Science",
-    categoryId: "2",
+    category: "2",
     sections: fakeSections.filter((section) => section.courseId === "2"),
     description:
       "This is a course that introduces you to the basics of computer science.",
@@ -29,13 +28,12 @@ export const fakeCourses: Course[] = [
     price: 59.99,
     level: "Beginner",
     studentIds: [],
-    resources: [],
     isPublished: true,
   },
   {
     id: "3",
     title: "Introduction to Engineering",
-    categoryId: "3",
+    category: "3",
     sections: fakeSections.filter((section) => section.courseId === "3"),
     description:
       "This is a course that introduces you to the basics of engineering.",
@@ -44,13 +42,12 @@ export const fakeCourses: Course[] = [
     price: 99.99,
     level: "Beginner",
     studentIds: [],
-    resources: [],
     isPublished: true,
   },
   {
     id: "4",
     title: "Introduction to Filming",
-    categoryId: "4",
+    category: "4",
     sections: fakeSections.filter((section) => section.courseId === "4"),
     description:
       "This is a course that introduces you to the basics of filming.",
@@ -59,13 +56,12 @@ export const fakeCourses: Course[] = [
     price: 12.49,
     level: "Beginner",
     studentIds: [],
-    resources: [],
     isPublished: true,
   },
   {
     id: "5",
     title: "Introduction to Music",
-    categoryId: "5",
+    category: "5",
     sections: fakeSections.filter((section) => section.courseId === "5"),
     description: "This is a course that introduces you to the basics of music.",
     imageUrl:
@@ -73,7 +69,6 @@ export const fakeCourses: Course[] = [
     price: 29.99,
     level: "Beginner",
     studentIds: [],
-    resources: [],
     isPublished: true,
   },
 ];

@@ -1,10 +1,5 @@
 import { Topic } from "./topic";
 
-export type AttachedFile = {
-  data: File;
-  cloudUrl: string;
-};
-
 export type Category = {
   id: string;
   name: string;

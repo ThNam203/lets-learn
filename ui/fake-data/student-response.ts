@@ -1,35 +1,13 @@
-import { ChoiceResponse, StudentResponse } from "@/models/student-response";
-import { fakeUser, fakeUserList } from "./user";
-import { fakeAssignment } from "./test";
-
-export const fakeResponses: ChoiceResponse[] = [
-  {
-    option: "Option 1",
-    studentResponses: ["Student 1", "Student 2", "Student 3"],
-  },
-  {
-    option: "Option 2",
-    studentResponses: ["Student 4", "Student 5"],
-  },
-  {
-    option: "Option 3",
-    studentResponses: ["Student 6"],
-  },
-  {
-    option: "Option 4",
-    studentResponses: ["Student 7", "Student 8"],
-  },
-  {
-    option: "Option 5",
-    studentResponses: ["Student 9"],
-  },
-];
+import { StudentResponse } from "@/models/student-response";
+import { fakeUserList } from "./user";
+import { fakeQuiz } from "./quiz";
+import { fakeAssignment } from "./assignment";
 
 export const fakeStudentResponses: StudentResponse[] = [
   {
     id: "1",
     student: fakeUserList[0],
-    test: fakeAssignment,
+    topicId: fakeQuiz.id,
     data: {
       submittedAt: new Date(2024, 11, 1).toISOString(),
       submitted: {
@@ -40,7 +18,7 @@ export const fakeStudentResponses: StudentResponse[] = [
   {
     id: "2",
     student: fakeUserList[1],
-    test: fakeAssignment,
+    topicId: fakeAssignment.id,
     data: {
       submittedAt: new Date(2024, 10, 1).toISOString(),
       submitted: {
@@ -51,7 +29,7 @@ export const fakeStudentResponses: StudentResponse[] = [
   {
     id: "3",
     student: fakeUserList[2],
-    test: fakeAssignment,
+    topicId: fakeAssignment.id,
     data: {
       submittedAt: new Date(2024, 11, 2).toISOString(),
       submitted: {
@@ -62,7 +40,7 @@ export const fakeStudentResponses: StudentResponse[] = [
   {
     id: "4",
     student: fakeUserList[3],
-    test: fakeAssignment,
+    topicId: fakeAssignment.id,
     data: {
       submittedAt: new Date(2024, 11, 23).toISOString(),
       submitted: {
@@ -88,7 +66,7 @@ export const fakeStudentResponses: StudentResponse[] = [
   {
     id: "5",
     student: fakeUserList[4],
-    test: fakeAssignment,
+    topicId: fakeAssignment.id,
     data: {
       submittedAt: new Date(2024, 11, 10).toISOString(),
       submitted: {
@@ -99,7 +77,7 @@ export const fakeStudentResponses: StudentResponse[] = [
   {
     id: "6",
     student: fakeUserList[5],
-    test: fakeAssignment,
+    topicId: fakeAssignment.id,
     data: {
       submittedAt: new Date(2024, 10, 1).toISOString(),
       submitted: {

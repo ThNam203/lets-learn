@@ -1,20 +1,20 @@
 import { CloudinaryFile } from "./cloudinary-file";
 import { Question } from "./question";
-import { Test } from "./quiz";
 import { User } from "./user";
 
 export type StudentResponse = {
   id: string;
   student: User;
-  test: Test;
-  data: QuizResponseData | AssignmentResponseData | ChoiceResponseData;
+  topicId: string;
+  data: QuizResponseData | AssignmentResponseData;
 };
 
-export enum QuizStatus {
-  FINISHED = "Finished",
-  NOT_FINISHED = "Not finished",
-  NOT_STARTED = "Not started",
-}
+export type QuizResponseData = {
+  status: QuizStatus;
+  startedAt: string;
+  completedAt: string;
+  answers: QuizAnswer[];
+};
 
 // { question: "which is correct ?", answer: "1" -> index of answer, mark: 1 }
 // { question: "which is correct ?", answer: "1001" -> index of answers, mark: 2 }
@@ -25,12 +25,11 @@ export type QuizAnswer = {
   mark: number;
 };
 
-export type QuizResponseData = {
-  status: QuizStatus;
-  startedAt: string;
-  completedAt: string;
-  answers: QuizAnswer[];
-};
+export enum QuizStatus {
+  FINISHED = "Finished",
+  NOT_FINISHED = "Not finished",
+  NOT_STARTED = "Not started",
+}
 
 export type AssignmentResponseData = {
   submittedAt: string | null;
@@ -42,15 +41,6 @@ export type AssignmentOnlineText = {
 };
 export type AssignmentFileUpload = {
   files: CloudinaryFile[];
-};
-
-export type ChoiceResponseData = {
-  data: ChoiceResponse[];
-};
-
-export type ChoiceResponse = {
-  option: string;
-  studentResponses: string[];
 };
 
 export const getQuizResponseMark = (quizResponse: QuizResponseData) => {

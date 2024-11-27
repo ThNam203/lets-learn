@@ -1,7 +1,7 @@
 "use client";
 import TabList from "@/components/ui/tab-list";
 import { fakeCourses } from "@/fake-data/course";
-import { fakeQuizTest } from "@/fake-data/test";
+import { fakeQuizTest } from "@/fake-data/quiz";
 import { fakeTopics } from "@/fake-data/topic";
 import { cn } from "@/lib/utils";
 import { Test } from "@/models/quiz";

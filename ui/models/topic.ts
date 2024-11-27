@@ -6,9 +6,9 @@ import {
   ScrollText,
   Video,
 } from "lucide-react";
-import { AttachedFile } from "./course";
 import { QuizData } from "./quiz";
 import { AssignmentData } from "./assignment";
+import { CloudinaryFile } from "./cloudinary-file";
 
 interface BaseTopic {
   id: string;
@@ -43,7 +43,7 @@ export interface LinkTopic extends BaseTopic {
 
 export interface FileTopic extends BaseTopic {
   type: TopicType.FILE;
-  file: AttachedFile;
+  file: CloudinaryFile;
 }
 export interface PageTopic extends BaseTopic {
   type: TopicType.PAGE;

@@ -1,4 +1,4 @@
-import { User } from "@/models/user";
+import { Role, User } from "@/models/user";
 
 export const fakeUser: User = {
   id: "1",
@@ -6,15 +6,17 @@ export const fakeUser: User = {
   email: "ptdat@gmail.com",
   password: "",
   image: "",
+  role: Role.TEACHER,
 };
 
-export const fakeUserList = [
+export const fakeUserList: User[] = [
   {
     id: "1",
     username: "Nguyen Van A",
     email: "nva@gmail.com",
     password: "",
     image: "",
+    role: Role.STUDENT,
   },
   {
     id: "2",
@@ -22,6 +24,7 @@ export const fakeUserList = [
     email: "nvb@gmail.com",
     password: "",
     image: "",
+    role: Role.STUDENT,
   },
   {
     id: "3",
@@ -29,6 +32,7 @@ export const fakeUserList = [
     email: "nvc@gmail.com",
     password: "",
     image: "",
+    role: Role.STUDENT,
   },
   {
     id: "4",
@@ -36,6 +40,7 @@ export const fakeUserList = [
     email: "nvd@gmail.com",
     password: "",
     image: "",
+    role: Role.STUDENT,
   },
   {
     id: "5",
@@ -43,6 +48,7 @@ export const fakeUserList = [
     email: "nve@gmail.com",
     password: "",
     image: "",
+    role: Role.STUDENT,
   },
   {
     id: "6",
@@ -50,5 +56,6 @@ export const fakeUserList = [
     email: "nvf@gmail.com",
     password: "",
     image: "",
+    role: Role.STUDENT,
   },
 ];

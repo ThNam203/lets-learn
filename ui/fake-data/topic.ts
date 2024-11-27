@@ -1,61 +1,56 @@
 import { Topic, TopicType } from "@/models/topic";
+import { fakeQuiz } from "./quiz";
+import { fakeAssignment } from "./assignment";
 
 export const fakeTopics: Topic[] = [
+  fakeQuiz,
+  fakeAssignment,
   {
-    id: "1",
-    sectionId: "1",
-    type: TopicType.LINK,
-    title: "Topic Link",
-  },
-  {
-    id: "2",
+    id: "3",
     sectionId: "1",
     type: TopicType.MEETING,
     title: "Topic Meeting",
   },
   {
-    id: "3",
-    sectionId: "1",
-    type: TopicType.ASSIGNMENT,
-    title: "Topic Assignment",
-  },
-  {
     id: "4",
     sectionId: "1",
-    type: TopicType.QUIZ,
-    title: "Topic Quiz",
+    type: TopicType.LINK,
+    title: "Topic Link",
   },
   {
-    id: "9",
+    id: "5",
     sectionId: "1",
     type: TopicType.FILE,
     title: "PMBOK book",
     file: {
-      data: new File([""], "PMBOK.pdf"),
-      cloudUrl: "https://cloud.com/file.txt",
+      name: "PMBOK book",
+      displayUrl:
+        "https://res.cloudinary.com/dggtc5ucv/image/upload/v1721188025/mfbsuoavvzmil8gud9a2.jpg",
+      downloadUrl:
+        "https://res.cloudinary.com/dggtc5ucv/image/upload/fl_attachment/v1721188025/mfbsuoavvzmil8gud9a2.jpg",
     },
   },
   {
-    id: "10",
+    id: "6",
     sectionId: "1",
     type: TopicType.PAGE,
     title: "Astronomy Page",
   },
   {
-    id: "5",
+    id: "7",
     sectionId: "2",
     type: TopicType.LINK,
     title: "Topic Link",
   },
 
   {
-    id: "6",
+    id: "8",
     sectionId: "2",
     type: TopicType.MEETING,
     title: "Topic Meeting",
   },
   {
-    id: "7",
+    id: "9",
     sectionId: "3",
     type: TopicType.LINK,
     title: "Topic Link",
