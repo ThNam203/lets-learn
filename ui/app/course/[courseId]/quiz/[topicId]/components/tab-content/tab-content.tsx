@@ -1,7 +1,7 @@
 import { fakeQuestions } from "@/fake-data/question";
 import { useTab } from "@/hooks/useTab";
 import { Question } from "@/models/question";
-import { QuizData, Test } from "@/models/test";
+import { QuizData, Test } from "@/models/quiz";
 import { StudentResponse } from "@/models/student-response";
 import { notFound } from "next/navigation";
 import { useState } from "react";

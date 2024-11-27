@@ -1,7 +1,7 @@
 import React from "react";
 import Part from "../part";
 import { StudentResponse } from "@/models/student-response";
-import { Test } from "@/models/test";
+import { Test } from "@/models/quiz";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import EditorDisplay from "@/lib/tinymce/editor-display";

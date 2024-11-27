@@ -8,7 +8,7 @@ import {
   GradingMethod,
   QuizData,
   Test,
-} from "@/models/test";
+} from "@/models/quiz";
 import {
   getQuizResponseMark,
   QuizResponseData,

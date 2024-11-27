@@ -1,7 +1,7 @@
 "use client";
 import { fakeQuizTest } from "@/fake-data/test";
 import { fakeUser } from "@/fake-data/user";
-import { QuizData, Test } from "@/models/test";
+import { QuizData, Test } from "@/models/quiz";
 import {
   QuizAnswer,
   QuizResponseData,

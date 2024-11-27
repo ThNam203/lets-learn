@@ -1,57 +1,16 @@
 import { Question } from "./question";
 
-export enum TestType {
-  QUIZ = "quiz",
-  ASSIGNMENT = "assignment",
-  CHOICE = "choice",
-}
-
-export interface Test {
-  description: string;
-  type: TestType;
-  open: {
-    enabled: boolean;
-    value: string;
-  };
-  close: {
-    enabled: boolean;
-    value: string;
-  };
-  data: QuizData | AssignmentData;
-}
-
 export type QuizData = {
-  timeLimit: {
-    enabled: boolean;
-    value: number;
-    unit: TimeLimitType;
-  };
+  description: string;
+  open: string | null;
+  close: string | null;
+  timeLimitValue: number | null;
+  timeLimitUnit: TimeLimitType;
   gradeToPass: number;
   gradingMethod: GradingMethod;
-  attemptAllowed: "Unlimited" | number;
+  attemptAllowed: "Unlimited" | string;
   questions: Question[];
 };
-
-export type AssignmentData = {
-  submissionType: SubmissionType[];
-  remindToGrade: {
-    enabled: boolean;
-    value: string;
-  };
-  wordLimit: {
-    enabled: boolean;
-    value: number;
-  };
-  maximumFile: {
-    enabled: boolean;
-    value: number;
-  };
-  maximumFileSize: {
-    enabled: boolean;
-    value: string;
-  };
-};
-
 export enum TimeLimitType {
   SECONDS = "Seconds",
   MINUTES = "Minutes",
@@ -90,11 +49,6 @@ export const getSecondFromTimeLimitType = (
   return second;
 };
 
-export enum SubmissionType {
-  ONLINE_TEXT = "Online text",
-  FILE_UPLOAD = "File upload",
-}
-
 export enum GradingMethod {
   HIGHEST_GRADE = "Highest Grade",
   AVERAGE_GRADE = "Average Grade",
@@ -114,16 +68,4 @@ export const attemptsAllowedOptions = [
   "8",
   "9",
   "10",
-];
-export const maximumFileSizeOptions = [
-  "1 MB",
-  "2 MB",
-  "3 MB",
-  "4 MB",
-  "5 MB",
-  "6 MB",
-  "7 MB",
-  "8 MB",
-  "9 MB",
-  "10 MB",
 ];

@@ -1,4 +1,4 @@
-import { GradingMethod, Test, TestType, TimeLimitType } from "@/models/test";
+import { GradingMethod, Test, TestType, TimeLimitType } from "@/models/quiz";
 import { Topic, TopicType } from "@/models/topic";
 
 const current = new Date();

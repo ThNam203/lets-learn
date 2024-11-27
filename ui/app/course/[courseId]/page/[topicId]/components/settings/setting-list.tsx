@@ -1,7 +1,7 @@
 "use client";
 import CollapsibleList from "@/app/course/[courseId]/components/collapsible/collapsible-list";
 import { Button } from "@/lib/shadcn/button";
-import { QuizData, Test } from "@/models/test";
+import { QuizData, Test } from "@/models/quiz";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";

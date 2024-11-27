@@ -2,7 +2,7 @@
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
 import { fakeQuizTest } from "@/fake-data/test";
-import { Test } from "@/models/test";
+import { Test } from "@/models/quiz";
 import { TabProvider } from "@/provider/tab-provider";
 import { useEffect, useState } from "react";
 import { Tab } from "./components/static-data";

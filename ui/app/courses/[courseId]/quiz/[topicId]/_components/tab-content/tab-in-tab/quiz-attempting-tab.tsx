@@ -7,7 +7,7 @@ import { Button } from "@/lib/shadcn/button";
 import { Card } from "@/lib/shadcn/card";
 import { cn, scrollTo } from "@/lib/utils";
 import { Question } from "@/models/question";
-import { QuizData, Test } from "@/models/test";
+import { QuizData, Test } from "@/models/quiz";
 import {
   QuizAnswer,
   QuizResponseData,

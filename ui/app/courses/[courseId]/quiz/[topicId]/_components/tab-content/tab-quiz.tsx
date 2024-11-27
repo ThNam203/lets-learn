@@ -2,7 +2,7 @@ import { fakeUser } from "@/fake-data/user";
 import { Button } from "@/lib/shadcn/button";
 import { Separator } from "@/lib/shadcn/separator";
 import { cn, getTextFromHtml, getTimeStringByDuration } from "@/lib/utils";
-import { QuizData, Test } from "@/models/test";
+import { QuizData, Test } from "@/models/quiz";
 import {
   getQuizResponseMark,
   QuizResponseData,

@@ -3,7 +3,7 @@ import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
 import { fakeAssignment } from "@/fake-data/test";
-import { Test } from "@/models/test";
+import { Test } from "@/models/quiz";
 import { iconMap } from "@/models/topic";
 import { TabProvider } from "@/provider/tab-provider";
 import { useAppDispatch } from "@/redux/hooks";

@@ -1,5 +1,5 @@
 import { useTab } from "@/hooks/useTab";
-import { AssignmentData, Test } from "@/models/test";
+import { AssignmentData, Test } from "@/models/quiz";
 import { notFound } from "next/navigation";
 import { Tab } from "../static-data";
 import TabAssignment from "./tab-assignment";

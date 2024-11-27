@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/lib/shadcn/button";
-import { GradingMethod, QuizData, Test, TimeLimitType } from "@/models/test";
+import { GradingMethod, QuizData, Test, TimeLimitType } from "@/models/quiz";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";

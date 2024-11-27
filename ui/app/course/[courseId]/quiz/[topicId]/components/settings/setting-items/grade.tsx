@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 import { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import { QuizSettingForm } from "../setting-list";
-import { attemptsAllowedOptions, GradingMethod } from "@/models/test";
+import { attemptsAllowedOptions, GradingMethod } from "@/models/quiz";
 
 export type GradeSettingForm = {
   gradeToPass: number;

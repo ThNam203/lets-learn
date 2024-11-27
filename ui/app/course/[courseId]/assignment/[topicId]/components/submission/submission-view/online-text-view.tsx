@@ -5,7 +5,7 @@ import {
   AssignmentResponseData,
   StudentResponse,
 } from "@/models/student-response";
-import { Test } from "@/models/test";
+import { Test } from "@/models/quiz";
 import React from "react";
 import Part from "../part";
 interface Props {

@@ -20,7 +20,7 @@ import {
   QuizData,
   Test,
   TimeLimitType,
-} from "@/models/test";
+} from "@/models/quiz";
 import {
   QuizAnswer,
   QuizResponseData,

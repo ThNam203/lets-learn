@@ -22,7 +22,9 @@ export const updateSection = (
   onSuccess: (data: Section) => void,
   onFail: (err?: any) => void
 ) => {
+  console.log("data", data);
   const { id, position, title, description, courseId, topics } = data;
+
   let reqData = {
     position,
     title,

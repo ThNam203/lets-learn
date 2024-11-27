@@ -4,7 +4,7 @@ import { Input } from "@/lib/shadcn/input";
 import { nanoid } from "@reduxjs/toolkit";
 import { useFormContext } from "react-hook-form";
 import { AssignmentSettingForm } from "../setting-list";
-import { maximumFileSizeOptions, SubmissionType } from "@/models/test";
+import { maximumFileSizeOptions, SubmissionType } from "@/models/quiz";
 import { cn } from "@/lib/utils";
 import { Combobox } from "@/components/ui/combobox";
 import { Button } from "@/lib/shadcn/button";

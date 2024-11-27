@@ -17,7 +17,7 @@ import TabQuestionBank from "./tab-question-bank";
 import TabQuiz from "./tab-quiz";
 import TabSetting from "./tab-setting";
 import { fakeQuestions } from "@/fake-data/question";
-import { QuizData, Test } from "@/models/test";
+import { QuizData, Test } from "@/models/quiz";
 
 interface Props {
   className?: string;

@@ -10,7 +10,7 @@ import { nanoid } from "@reduxjs/toolkit";
 import { ChevronDown } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { QuizSettingForm } from "../setting-list";
-import { TimeLimitType } from "@/models/test";
+import { TimeLimitType } from "@/models/quiz";
 
 export type TimingSettingForm = {
   open: {

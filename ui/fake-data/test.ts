@@ -3,7 +3,7 @@ import {
   TimeLimitType,
 } from "@/app/courses/[courseId]/quiz/[topicId]/_components/static-data";
 import { fakeQuestions } from "./question";
-import { SubmissionType, Test, TestType } from "@/models/test";
+import { SubmissionType, Test, TestType } from "@/models/quiz";
 
 export const fakeQuizTest: Test = {
   id: "1",

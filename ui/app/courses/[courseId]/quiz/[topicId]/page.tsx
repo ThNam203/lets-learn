@@ -4,7 +4,7 @@ import { fakeCourses } from "@/fake-data/course";
 import { fakeQuizTest } from "@/fake-data/test";
 import { fakeTopics } from "@/fake-data/topic";
 import { cn } from "@/lib/utils";
-import { Test } from "@/models/test";
+import { Test } from "@/models/quiz";
 import { TabProvider } from "@/provider/tab-provider";
 import Link from "next/link";
 import { notFound } from "next/navigation";

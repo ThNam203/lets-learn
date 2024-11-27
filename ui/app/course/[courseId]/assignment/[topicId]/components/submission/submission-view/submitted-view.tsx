@@ -3,7 +3,7 @@ import {
   AssignmentResponseData,
   StudentResponse,
 } from "@/models/student-response";
-import { AssignmentData, SubmissionType, Test } from "@/models/test";
+import { AssignmentData, SubmissionType, Test } from "@/models/quiz";
 import { format } from "date-fns";
 import React from "react";
 import { SubmissionStatus } from "../static-data";

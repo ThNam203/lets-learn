@@ -1,7 +1,7 @@
 import Banner from "@/components/ui/banner";
 import { cn } from "@/lib/utils";
 import { Question } from "@/models/question";
-import { QuizData, Test } from "@/models/test";
+import { QuizData, Test } from "@/models/quiz";
 import { StudentResponse } from "@/models/student-response";
 import { format } from "date-fns";
 import { useMemo } from "react";

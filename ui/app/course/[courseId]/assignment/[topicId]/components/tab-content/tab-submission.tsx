@@ -3,7 +3,7 @@ import { fakeUserList } from "@/fake-data/user";
 import { Input } from "@/lib/shadcn/input";
 import { cn } from "@/lib/utils";
 import { StudentResponse } from "@/models/student-response";
-import { Test } from "@/models/test";
+import { Test } from "@/models/quiz";
 import { User } from "@/models/user";
 import { useEffect, useRef, useState } from "react";
 import { submisisonFilterKeys } from "../static-data";

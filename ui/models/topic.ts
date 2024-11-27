@@ -1,5 +1,3 @@
-import { AttachedFile } from "./course";
-import { Test } from "./test";
 import {
   FileText,
   FileUp,
@@ -8,6 +6,9 @@ import {
   ScrollText,
   Video,
 } from "lucide-react";
+import { AttachedFile } from "./course";
+import { QuizData } from "./quiz";
+import { AssignmentData } from "./assignment";
 
 interface BaseTopic {
   id: string;
@@ -27,10 +28,11 @@ export enum TopicType {
 
 export interface QuizTopic extends BaseTopic {
   type: TopicType.QUIZ;
-  data: Test;
+  data: QuizData;
 }
 export interface AssignmentTopic extends BaseTopic {
   type: TopicType.ASSIGNMENT;
+  data: AssignmentData;
 }
 export interface MeetingTopic extends BaseTopic {
   type: TopicType.MEETING;

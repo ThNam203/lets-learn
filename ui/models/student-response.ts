@@ -1,6 +1,6 @@
 import { CloudinaryFile } from "./cloudinary-file";
 import { Question } from "./question";
-import { Test } from "./test";
+import { Test } from "./quiz";
 import { User } from "./user";
 
 export type StudentResponse = {

@@ -11,7 +11,7 @@ import {
 } from "@/models/question";
 import QuizAttemptingTab from "./quiz-attempting-tab";
 import { QuizAnswer, StudentResponse } from "@/models/student-response";
-import { Test } from "@/models/test";
+import { Test } from "@/models/quiz";
 
 interface BaseTabProps {
   tabInTabQuestion: Question | undefined;
