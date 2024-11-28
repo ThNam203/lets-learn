@@ -9,7 +9,7 @@ import { ChevronsUpDown, CirclePlus, Trash } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useEffect } from "react";
 import { ShortAnswerQuestionForm } from "./short-answer-question-ui";
-import { gradePercentOptions } from "../static-data";
+import { gradePercentOptions } from "../../_components/static-data";
 
 type ShortAnswer = {
   text: string;

@@ -1,13 +1,10 @@
 "use client";
-import { Button } from "@/lib/shadcn/button";
-import { Input } from "@/lib/shadcn/input";
-import TinyEditor from "@/lib/tinymce/editor";
-import { useForm, useFormContext } from "react-hook-form";
-import { nanoid } from "@reduxjs/toolkit";
 import { Combobox } from "@/components/ui/combobox";
-import { ChevronsUpDown } from "lucide-react";
+import { Button } from "@/lib/shadcn/button";
+import TinyEditor from "@/lib/tinymce/editor";
 import { cn } from "@/lib/utils";
-import { QuestionStatus } from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
+import { ChevronsUpDown } from "lucide-react";
+import { useFormContext } from "react-hook-form";
 import { TrueFalseQuestionForm } from "./true-false-question-ui";
 
 export type TrueFalseQuestionAnswerForm = {

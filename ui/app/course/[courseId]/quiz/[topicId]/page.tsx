@@ -76,7 +76,11 @@ export default function TopicQuiz({ params }: Props) {
         </div>
         <div className="z-10 mt-[150px] flex w-full default-scrollbar p-5">
           <div className="w-full min-h-full h-fit bg-white rounded-md p-5 shadow-md">
-            <TabContent quiz={quiz} onQuizChange={handleQuizChange} />
+            <TabContent
+              courseId={courseId}
+              quiz={quiz}
+              onQuizChange={handleQuizChange}
+            />
           </div>
         </div>
       </TabProvider>

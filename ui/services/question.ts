@@ -4,7 +4,7 @@ import {
   convertShortAnswerQuestionToRequestData,
   convertTrueFalseQuestionToRequestData,
 } from "./adapters/question";
-import { POST } from "@/lib/http-handle/http-handle";
+import { GET, POST } from "@/lib/http-handle/http-handle";
 
 export const createChoiceQuestion = async (
   question: Question,
@@ -34,4 +34,13 @@ export const createTrueFalseQuestion = async (
 ) => {
   const reqData = convertTrueFalseQuestionToRequestData(question, courseId);
   POST("/question", reqData, onSuccess, onFail);
+};
+
+export const getQuestionBank = async (
+  courseId: string,
+  onSuccess: (data: any) => void,
+  onFail: (err?: any) => void
+) => {
+  const url = `/question?courseId=${courseId}`;
+  GET(url, onSuccess, onFail);
 };

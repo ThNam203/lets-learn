@@ -5,34 +5,52 @@ import { QuizData } from "@/models/quiz";
 import { StudentResponse } from "@/models/student-response";
 import { QuizTopic } from "@/models/topic";
 import { notFound } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tab } from "../static-data";
 import TabQuestion from "./tab-question";
 import TabQuestionBank from "./tab-question-bank";
 import TabQuiz from "./tab-quiz";
 import TabResults from "./tab-results";
 import TabSetting from "./tab-setting";
+import { getQuestionBank } from "@/services/question";
+import { toast } from "react-toastify";
 
 interface Props {
   className?: string;
   quiz: QuizTopic;
+  courseId: string;
   onQuizChange?: (quiz: QuizTopic) => void;
 }
 
-const TabContent = ({ className, quiz, onQuizChange }: Props) => {
+const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
   const tabContext = useTab<string>();
   const { selectedTab } = tabContext;
   const { data } = quiz;
   const { questions } = data as QuizData;
-  const [questionsBank, setQuestionsBank] = useState<Question[]>(fakeQuestions);
+  const [questionsBank, setQuestionsBank] = useState<Question[]>([]);
 
   const [quizResponses, setQuizResponses] = useState<StudentResponse[]>([]);
   const [selectedQuizResponse, setSelectedQuizResponse] = useState<
     StudentResponse | undefined
   >();
+
   const handleQuestionBankChange = (questions: Question[]) => {
     setQuestionsBank(questions);
   };
+
+  const handleGetQuestionBankSuccess = (data: Question[]) => {
+    setQuestionsBank(data);
+  };
+  const handleGetQuestionFail = (error: any) => {
+    toast.error(error);
+  };
+  useEffect(() => {
+    getQuestionBank(
+      courseId,
+      handleGetQuestionBankSuccess,
+      handleGetQuestionFail
+    );
+  }, []);
 
   switch (selectedTab) {
     case Tab.QUIZ:
