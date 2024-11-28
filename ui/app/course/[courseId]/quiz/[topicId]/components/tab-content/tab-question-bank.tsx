@@ -33,11 +33,11 @@ const TabQuestionBank = ({ questions, onQuestionsChange }: Props) => {
   const handleAddQuestion = (type: QuestionType) => {
     const prefix = courseId ? `/course/${courseId}` : "";
     if (type === QuestionType.CHOICE)
-      router.push(prefix + "/question/choice/create");
+      router.push(`${prefix}/question/choice/create`);
     else if (type === QuestionType.SHORT_ANSWER)
-      router.push(prefix + "/question/short-answer/create");
+      router.push(`${prefix}/question/short-answer/create`);
     else if (type === QuestionType.TRUE_FALSE)
-      router.push(prefix + "/question/true-false/create");
+      router.push(`${prefix}/question/true-false/create`);
   };
 
   const handleEditQuestion = (id: string) => {
@@ -46,13 +46,14 @@ const TabQuestionBank = ({ questions, onQuestionsChange }: Props) => {
       toast.error("Question not found");
       return;
     }
+    const prefix = courseId ? `/course/${courseId}` : "";
     const { type } = question;
     if (type === QuestionType.CHOICE)
-      router.push(`/question/choice/edit/${question.id}`);
+      router.push(`${prefix}/question/choice/edit/${question.id}`);
     else if (type === QuestionType.SHORT_ANSWER)
-      router.push(`/question/short-answer/edit/${question.id}`);
+      router.push(`${prefix}/question/short-answer/edit/${question.id}`);
     else if (type === QuestionType.TRUE_FALSE)
-      router.push(`/question/true-false/edit/${question.id}`);
+      router.push(`${prefix}/question/true-false/edit/${question.id}`);
   };
 
   const handleConfirmDeleteQuestions = async (questions: Question[]) => {

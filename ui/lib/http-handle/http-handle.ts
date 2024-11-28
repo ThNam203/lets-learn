@@ -31,7 +31,7 @@ export const makeRequest = async (
     let res: Response = await fetchData();
 
     if (!res.ok) {
-      if (res.status === 401 || res.status === 403) {
+      if (res.status === 403) {
         // retry by refreshing token
         res = await handleUnauthorizedError(res, fetchData);
       } else {
@@ -52,8 +52,8 @@ export const makeRequest = async (
     } catch {
       handleParseDataError();
     }
-  } catch (err: any) {
-    handleFetchError(err);
+  } catch {
+    handleFetchError();
   }
 };
 

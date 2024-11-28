@@ -1,9 +1,9 @@
 "use client";
 import { Question } from "@/models/question";
-import { createTrueFalseQuestion } from "@/services/question";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import TrueFalseQuestionUI from "../_components/true-false-question-ui";
+import { createQuestion } from "@/services/question";
 
 interface Props {
   params: {
@@ -22,7 +22,7 @@ export default function TrueFalseQuestionCreatePage({ params }: Props) {
     toast.error(error);
   };
   const handleSubmitQuestion = (data: Question) => {
-    createTrueFalseQuestion(
+    createQuestion(
       data,
       courseId,
       handleCreateQuestionSuccess,

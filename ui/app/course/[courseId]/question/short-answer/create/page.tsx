@@ -1,9 +1,9 @@
 "use client";
 import { Question } from "@/models/question";
-import { createShortAnswerQuestion } from "@/services/question";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import ShortAnswerQuestionUI from "../_components/short-answer-question-ui";
+import { createQuestion } from "@/services/question";
 
 interface Props {
   params: {
@@ -22,7 +22,7 @@ export default function ShortAnswerQuestionCreatePage({ params }: Props) {
     toast.error(error);
   };
   const handleSubmitQuestion = (data: Question) => {
-    createShortAnswerQuestion(
+    createQuestion(
       data,
       courseId,
       handleCreateQuestionSuccess,

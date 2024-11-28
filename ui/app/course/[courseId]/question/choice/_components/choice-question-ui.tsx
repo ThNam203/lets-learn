@@ -108,7 +108,7 @@ const ChoiceQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       choices: data.answerSettingForm.choices,
     };
     const questionToCreate: Question = {
-      id: nanoid(),
+      id: nanoid(4),
       type: QuestionType.CHOICE,
       questionName: data.generalSettingForm.questionName,
       questionText: data.generalSettingForm.questionText,

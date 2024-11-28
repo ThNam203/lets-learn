@@ -8,7 +8,7 @@ import {
 
 export const convertChoiceQuestionToRequestData = (
   question: Question,
-  courseId: string
+  courseId?: string
 ) => {
   const {
     questionName,
@@ -33,7 +33,9 @@ export const convertChoiceQuestionToRequestData = (
     correctAnswer: false,
     multiple,
     choices,
-    courseId,
+    course: {
+      id: courseId,
+    },
     createdAt,
     updatedAt: null,
     deletedAt: null,
@@ -43,7 +45,7 @@ export const convertChoiceQuestionToRequestData = (
 
 export const convertShortAnswerQuestionToRequestData = (
   question: Question,
-  courseId: string
+  courseId?: string
 ) => {
   const {
     questionName,
@@ -68,7 +70,9 @@ export const convertShortAnswerQuestionToRequestData = (
     correctAnswer: false,
     multiple: null,
     choices,
-    courseId,
+    course: {
+      id: courseId,
+    },
     createdAt,
     updatedAt: null,
     deletedAt: null,
@@ -78,7 +82,7 @@ export const convertShortAnswerQuestionToRequestData = (
 
 export const convertTrueFalseQuestionToRequestData = (
   question: Question,
-  courseId: string
+  courseId?: string
 ) => {
   const {
     questionName,
@@ -104,10 +108,67 @@ export const convertTrueFalseQuestionToRequestData = (
     correctAnswer,
     multiple: null,
     choices: null,
-    courseId,
+    course: {
+      id: courseId,
+    },
     createdAt,
     updatedAt: null,
     deletedAt: null,
   };
   return reqData;
+};
+
+export const convertQuestionFromResponseData = (data: any): Question => {
+  let {
+    id,
+    questionName,
+    questionText,
+    status,
+    type,
+    defaultMark,
+    usage,
+    feedbackOfTrue,
+    feedbackOfFalse,
+    correctAnswer,
+    multiple,
+    choices,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  } = data;
+
+  const choiceQuestion: ChoiceQuestion = {
+    choices,
+    multiple,
+  };
+  const shortAnswerQuestion: ShortAnswerQuestion = {
+    choices,
+  };
+  const trueFalseQuestion: TrueFalseQuestion = {
+    correctAnswer,
+    feedbackOfTrue,
+    feedbackOfFalse,
+  };
+
+  const question: Question = {
+    id,
+    questionName,
+    questionText,
+    status,
+    type,
+    defaultMark,
+    usage,
+    data: choiceQuestion,
+    createdAt,
+    modifiedAt: updatedAt,
+    createdBy: "",
+    modifiedBy: "",
+  };
+
+  if (type === QuestionType.SHORT_ANSWER) {
+    question.data = shortAnswerQuestion;
+  } else if (type === QuestionType.TRUE_FALSE) {
+    question.data = trueFalseQuestion;
+  }
+  return question;
 };

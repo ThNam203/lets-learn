@@ -103,7 +103,7 @@ const ShortAnswerQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       choices: data.answerSettingForm.answers,
     };
     const questionToCreate: Question = {
-      id: nanoid(),
+      id: nanoid(4),
       type: QuestionType.SHORT_ANSWER,
       questionName: data.generalSettingForm.questionName,
       questionText: data.generalSettingForm.questionText,

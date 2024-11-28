@@ -101,7 +101,7 @@ const TrueFalseQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       feedbackOfFalse,
     };
     const questionToCreate: Question = {
-      id: nanoid(),
+      id: nanoid(4),
       type: QuestionType.TRUE_FALSE,
       questionName,
       questionText,

@@ -50,7 +50,7 @@ const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
       handleGetQuestionBankSuccess,
       handleGetQuestionFail
     );
-  }, []);
+  }, [courseId]);
 
   switch (selectedTab) {
     case Tab.QUIZ:

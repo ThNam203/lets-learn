@@ -1,9 +1,9 @@
 "use client";
 import { Question } from "@/models/question";
-import { createChoiceQuestion } from "@/services/question";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import ChoiceQuestionUI from "../_components/choice-question-ui";
+import { createQuestion } from "@/services/question";
 
 interface Props {
   params: {
@@ -22,7 +22,7 @@ export default function ChoiceQuestionCreatePage({ params }: Props) {
     toast.error(error);
   };
   const handleSubmitQuestion = (data: Question) => {
-    createChoiceQuestion(
+    createQuestion(
       data,
       courseId,
       handleCreateQuestionSuccess,

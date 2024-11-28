@@ -1,42 +1,59 @@
-import { ChoiceQuestion, Question } from "@/models/question";
+import { ChoiceQuestion, Question, QuestionType } from "@/models/question";
 import {
   convertChoiceQuestionToRequestData,
+  convertQuestionFromResponseData,
   convertShortAnswerQuestionToRequestData,
   convertTrueFalseQuestionToRequestData,
 } from "./adapters/question";
-import { GET, POST } from "@/lib/http-handle/http-handle";
+import { GET, POST, PUT } from "@/lib/http-handle/http-handle";
 
-export const createChoiceQuestion = async (
+export const createQuestion = (
   question: Question,
   courseId: string,
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  const reqData = convertChoiceQuestionToRequestData(question, courseId);
+  const { type } = question;
+  let reqData;
+  if (type === QuestionType.CHOICE)
+    reqData = convertChoiceQuestionToRequestData(question, courseId);
+  else if (type === QuestionType.SHORT_ANSWER)
+    reqData = convertShortAnswerQuestionToRequestData(question, courseId);
+  else if (type === QuestionType.TRUE_FALSE)
+    reqData = convertTrueFalseQuestionToRequestData(question, courseId);
   POST("/question", reqData, onSuccess, onFail);
 };
 
-export const createShortAnswerQuestion = async (
-  question: Question,
-  courseId: string,
+export const getQuestion = (
+  id: string,
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  const reqData = convertShortAnswerQuestionToRequestData(question, courseId);
-  POST("/question", reqData, onSuccess, onFail);
+  const url = `/question/${id}`;
+  const handleSuccess = (data: any) => {
+    const question = convertQuestionFromResponseData(data);
+    onSuccess(question);
+  };
+  GET(url, handleSuccess, onFail);
 };
 
-export const createTrueFalseQuestion = async (
+export const updateQuestion = (
   question: Question,
-  courseId: string,
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  const reqData = convertTrueFalseQuestionToRequestData(question, courseId);
-  POST("/question", reqData, onSuccess, onFail);
+  const { id, type } = question;
+  let reqData;
+  if (type === QuestionType.CHOICE)
+    reqData = convertChoiceQuestionToRequestData(question);
+  else if (type === QuestionType.SHORT_ANSWER)
+    reqData = convertShortAnswerQuestionToRequestData(question);
+  else if (type === QuestionType.TRUE_FALSE)
+    reqData = convertTrueFalseQuestionToRequestData(question);
+  console.log("reqData", reqData);
+  PUT(`/question/${id}`, reqData, onSuccess, onFail);
 };
-
-export const getQuestionBank = async (
+export const getQuestionBank = (
   courseId: string,
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void

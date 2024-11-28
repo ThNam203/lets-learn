@@ -1,8 +1,9 @@
 "use client";
-import { QuestionType } from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
-import { fakeQuestions } from "@/fake-data/question";
-import { notFound } from "next/navigation";
-import React, { useMemo } from "react";
+import { Question } from "@/models/question";
+import { getQuestion, updateQuestion } from "@/services/question";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 import ShortAnswerQuestionUI from "../../_components/short-answer-question-ui";
 
 interface Props {
@@ -12,12 +13,35 @@ interface Props {
 }
 export default function ShortAnswerQuestionEditPage({ params }: Props) {
   const { questionId } = params;
-  const [questions, setQuestions] = React.useState(fakeQuestions);
-  const question = useMemo(() => {
-    return questions.find(
-      (q) => q.id === questionId && q.type === QuestionType.SHORT_ANSWER
-    );
-  }, [questions, questionId]);
-  if (!question) return notFound();
-  return <ShortAnswerQuestionUI question={question} />;
+  console.log(questionId);
+  const router = useRouter();
+  const [question, setQuestion] = React.useState();
+  const handleGetQuestionSuccess = (data: any) => {
+    console.log(data);
+    setQuestion(data);
+  };
+  const handleGetQuestionFail = (error: any) => {
+    toast.error(error);
+  };
+  const handleUpdateQuestionSuccess = (data: any) => {
+    toast.success("Update question successfully");
+    router.back();
+  };
+  const handleUpdateQuestionFail = (error: any) => {
+    toast.error(error);
+  };
+  const handleSubmitQuestion = (data: Question) => {
+    updateQuestion(data, handleUpdateQuestionSuccess, handleUpdateQuestionFail);
+  };
+
+  useEffect(() => {
+    getQuestion(questionId, handleGetQuestionSuccess, handleGetQuestionFail);
+  }, [questionId]);
+  if (!question) return null;
+  return (
+    <ShortAnswerQuestionUI
+      question={question}
+      onSubmitQuestion={handleSubmitQuestion}
+    />
+  );
 }

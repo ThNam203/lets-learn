@@ -5,8 +5,8 @@ export const ErrorHandle = (onFail: (err?: any) => void) => {
     onFail(message);
   };
 
-  const handleFetchError = (err: any) => {
-    onFail(err || "Server error, please try again later");
+  const handleFetchError = () => {
+    onFail("Server error, please try again later");
   };
 
   const handleResponseError = (res: Response) => {

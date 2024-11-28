@@ -200,16 +200,16 @@ const TabQuiz = ({
     return getTimeStringByDuration(duration);
   }, [timeLimit, timeLimitUnit]);
 
-  const openTime = open
-    ? format(new Date(open), "EEEE, dd MMMM yyyy, h:mm a")
-    : null;
-  const closeTime = close
-    ? format(new Date(close), "EEEE, dd MMMM yyyy, h:mm a")
-    : null;
+  // const openTime = open
+  //   ? format(new Date(open), "EEEE, dd MMMM yyyy, h:mm a")
+  //   : null;
+  // const closeTime = close
+  //   ? format(new Date(close), "EEEE, dd MMMM yyyy, h:mm a")
+  //   : null;
 
   return (
     <div className={cn(className)}>
-      <div className="pb-4 space-y-2 border-b-[0.5px] border-gray-300 text-gray-700">
+      {/* <div className="pb-4 space-y-2 border-b-[0.5px] border-gray-300 text-gray-700">
         {openTime && (
           <p>
             <span className="font-bold">Open: </span>
@@ -222,7 +222,7 @@ const TabQuiz = ({
             <span className="text-gray-500">{closeTime}</span>
           </p>
         )}
-      </div>
+      </div> */}
       <EditorDisplay className="text-gray-500" htmlString={description} />
       <div className="space-y-4">
         {!hasLastReviewQuiz && (
