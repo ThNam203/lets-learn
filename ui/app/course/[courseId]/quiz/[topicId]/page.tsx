@@ -10,6 +10,8 @@ import { useAppDispatch } from "@/redux/hooks";
 import { setBreadcrumb } from "@/redux/slices/breadcrumb";
 import { iconMap, QuizTopic } from "@/models/topic";
 import { fakeQuiz } from "@/fake-data/quiz";
+import { getTopic } from "@/services/topic";
+import { toast } from "react-toastify";
 
 interface Props {
   params: {
@@ -19,7 +21,7 @@ interface Props {
 }
 export default function TopicQuiz({ params }: Props) {
   const { courseId, topicId } = params;
-  const [quiz, setQuiz] = useState<QuizTopic>(fakeQuiz);
+  const [quiz, setQuiz] = useState<QuizTopic>();
   const [initTab, setInitTab] = useState<string>(Tab.QUIZ);
   const dispatch = useAppDispatch();
 
@@ -46,6 +48,8 @@ export default function TopicQuiz({ params }: Props) {
     //this useEffect is used for updating tab based on local storage
     let storageTab = localStorage.getItem(topicId);
     if (storageTab) setInitTab(storageTab);
+
+    getTopic(topicId, handleGetTopicSuccess, handleGetTopicFail);
   }, [topicId]);
 
   const handleQuizChange = (data: QuizTopic) => {
@@ -55,9 +59,17 @@ export default function TopicQuiz({ params }: Props) {
     localStorage.setItem(topicId, tab);
   };
 
+  const handleGetTopicSuccess = (data: QuizTopic) => {
+    setQuiz(data);
+  };
+  const handleGetTopicFail = (error: any) => {
+    toast.error(error);
+  };
+
   const Icon = iconMap.quiz;
   const tabs = Object.values(Tab);
 
+  if (!quiz) return null;
   return (
     <PageLayout className="relative bg-pink-50 !overflow-y-hidden">
       <TabProvider initTab={initTab}>

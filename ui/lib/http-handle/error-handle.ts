@@ -1,10 +1,12 @@
+import { refreshToken } from "@/services/auth";
+
 export const ErrorHandle = (onFail: (err?: any) => void) => {
   const handleParseDataError = (message = "Failed to parse data") => {
     onFail(message);
   };
 
-  const handleFetchError = () => {
-    onFail("Server error, please try again later");
+  const handleFetchError = (err: any) => {
+    onFail(err || "Server error, please try again later");
   };
 
   const handleResponseError = (res: Response) => {
@@ -20,9 +22,32 @@ export const ErrorHandle = (onFail: (err?: any) => void) => {
     );
   };
 
+  const handleUnauthorizedError = async (
+    response: Response,
+    callback: () => Promise<Response>
+  ): Promise<Response> => {
+    return new Promise((resolve, reject) => {
+      const handleRefreshTokenSuccess = async () => {
+        try {
+          const res = await callback();
+          resolve(res);
+        } catch (err) {
+          reject(err);
+        }
+      };
+
+      const handleRefreshTokenFail = async () => {
+        reject(response);
+      };
+
+      refreshToken(handleRefreshTokenSuccess, handleRefreshTokenFail);
+    });
+  };
+
   return {
     handleParseDataError,
     handleFetchError,
     handleResponseError,
+    handleUnauthorizedError,
   };
 };

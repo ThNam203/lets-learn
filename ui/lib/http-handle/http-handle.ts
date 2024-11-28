@@ -8,24 +8,41 @@ const HEADER = {
 export const makeRequest = async (
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
   uri: string,
-  reqData: any | null,
   onSuccess: (data: any) => void,
-  onFail: (err?: any) => void
+  onFail: (err?: any) => void,
+  reqData?: any
 ) => {
-  const { handleFetchError, handleParseDataError, handleResponseError } =
-    ErrorHandle(onFail);
+  const {
+    handleFetchError,
+    handleParseDataError,
+    handleResponseError,
+    handleUnauthorizedError,
+  } = ErrorHandle(onFail);
 
   try {
-    const res: Response = await fetch(GLOBAL.API_URL + uri, {
-      headers: HEADER,
-      method,
-      body: reqData ? JSON.stringify(reqData) : undefined,
-      credentials: "include",
-    });
+    const fetchData = () => {
+      return fetch(GLOBAL.API_URL + uri, {
+        headers: HEADER,
+        method,
+        body: reqData ? JSON.stringify(reqData) : undefined,
+        credentials: "include",
+      });
+    };
+    let res: Response = await fetchData();
 
     if (!res.ok) {
-      console.log("res", res);
-      handleResponseError(res);
+      if (res.status === 401 || res.status === 403) {
+        // retry by refreshing token
+        res = await handleUnauthorizedError(res, fetchData);
+      } else {
+        handleResponseError(res);
+        return;
+      }
+    }
+
+    if (res.status === 204) {
+      // No content
+      onSuccess({});
       return;
     }
 
@@ -35,8 +52,8 @@ export const makeRequest = async (
     } catch {
       handleParseDataError();
     }
-  } catch {
-    handleFetchError();
+  } catch (err: any) {
+    handleFetchError(err);
   }
 };
 
@@ -45,7 +62,7 @@ export const GET = async (
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  makeRequest("GET", uri, null, onSuccess, onFail);
+  makeRequest("GET", uri, onSuccess, onFail);
 };
 
 export const POST = async (
@@ -54,7 +71,7 @@ export const POST = async (
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  makeRequest("POST", uri, reqData, onSuccess, onFail);
+  makeRequest("POST", uri, onSuccess, onFail, reqData);
 };
 
 export const PUT = async (
@@ -63,7 +80,7 @@ export const PUT = async (
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  makeRequest("PUT", uri, reqData, onSuccess, onFail);
+  makeRequest("PUT", uri, onSuccess, onFail, reqData);
 };
 
 export const DELETE = async (
@@ -71,5 +88,5 @@ export const DELETE = async (
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
-  makeRequest("DELETE", uri, null, onSuccess, onFail);
+  makeRequest("DELETE", uri, onSuccess, onFail);
 };

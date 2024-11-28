@@ -33,9 +33,7 @@ export const convertChoiceQuestionToRequestData = (
     correctAnswer: false,
     multiple,
     choices,
-    course: {
-      id: courseId,
-    },
+    courseId,
     createdAt,
     updatedAt: null,
     deletedAt: null,
@@ -70,9 +68,7 @@ export const convertShortAnswerQuestionToRequestData = (
     correctAnswer: false,
     multiple: null,
     choices,
-    course: {
-      id: courseId,
-    },
+    courseId,
     createdAt,
     updatedAt: null,
     deletedAt: null,
@@ -108,9 +104,7 @@ export const convertTrueFalseQuestionToRequestData = (
     correctAnswer,
     multiple: null,
     choices: null,
-    course: {
-      id: courseId,
-    },
+    courseId,
     createdAt,
     updatedAt: null,
     deletedAt: null,

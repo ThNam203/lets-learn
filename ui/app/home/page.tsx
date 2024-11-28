@@ -52,6 +52,7 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(setBreadcrumb(breadcrumbItems));
   }, []);
+
   return (
     <PageLayout>
       <div className="w-full h-fit grid grid-cols-3 gap-5 m-5">

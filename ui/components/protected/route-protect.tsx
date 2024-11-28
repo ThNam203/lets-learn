@@ -6,6 +6,7 @@ interface Props {
 }
 export default function RouteProtect({ children }: Props) {
   const cookie = cookies();
-  if (!cookie.get("ACCESS_TOKEN")) redirect("/login");
+  if (!cookie.get("ACCESS_TOKEN") && !cookie.get("REFRESH_TOKEN"))
+    redirect("/login");
   return children;
 }
