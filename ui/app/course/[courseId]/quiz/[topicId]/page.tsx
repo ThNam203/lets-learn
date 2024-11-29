@@ -1,17 +1,16 @@
 "use client";
+import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
+import { iconMap, QuizTopic } from "@/models/topic";
 import { TabProvider } from "@/provider/tab-provider";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setBreadcrumb } from "@/redux/slices/breadcrumb";
+import { getTopic } from "@/services/topic";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Tab } from "./components/static-data";
 import TabContent from "./components/tab-content/tab-content";
-import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
-import { useAppDispatch } from "@/redux/hooks";
-import { setBreadcrumb } from "@/redux/slices/breadcrumb";
-import { iconMap, QuizTopic } from "@/models/topic";
-import { fakeQuiz } from "@/fake-data/quiz";
-import { getTopic } from "@/services/topic";
-import { toast } from "react-toastify";
 
 interface Props {
   params: {
@@ -23,28 +22,24 @@ export default function TopicQuiz({ params }: Props) {
   const { courseId, topicId } = params;
   const [quiz, setQuiz] = useState<QuizTopic>();
   const [initTab, setInitTab] = useState<string>(Tab.QUIZ);
+  const currentBreadcrumb = useAppSelector((state) => state.breadcrumb.items);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (!quiz) return;
     //this useEffect is used for setting breadcrumb when the page is loaded
-    const breadcrumbItems: BreadcrumbItem[] = [
-      {
-        label: "Home",
-        href: "/home",
-      },
-      {
-        label: "Introduce to Astronomy",
-        href: `/course/${courseId}`,
-      },
-      {
-        label: "Quiz",
-        href: `/course/${courseId}/quiz/${topicId}`,
-      },
-    ];
-    dispatch(setBreadcrumb(breadcrumbItems));
-  }, []);
+    const breadcrumbItem: BreadcrumbItem = {
+      label: quiz.title,
+      href: `/course/${courseId}/quiz/${topicId}`,
+    };
+
+    const updatedBreadcrumbItems = [...currentBreadcrumb.slice(0, 2)];
+    updatedBreadcrumbItems.push(breadcrumbItem);
+    dispatch(setBreadcrumb(updatedBreadcrumbItems));
+  }, [quiz]);
 
   useEffect(() => {
+    console.log("useEffect");
     //this useEffect is used for updating tab based on local storage
     let storageTab = localStorage.getItem(topicId);
     if (storageTab) setInitTab(storageTab);
@@ -68,6 +63,7 @@ export default function TopicQuiz({ params }: Props) {
 
   const Icon = iconMap.quiz;
   const tabs = Object.values(Tab);
+  console.log("render");
 
   if (!quiz) return null;
   return (
