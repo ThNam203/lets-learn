@@ -8,12 +8,12 @@ import ChoiceQuestionUI from "../../_components/choice-question-ui";
 
 interface Props {
   params: {
+    courseId: string;
     questionId: string;
   };
 }
 export default function ChoiceQuestionEditPage({ params }: Props) {
-  const { questionId } = params;
-  console.log(questionId);
+  const { questionId, courseId } = params;
   const router = useRouter();
   const [question, setQuestion] = React.useState();
   const handleGetQuestionSuccess = (data: any) => {
@@ -23,15 +23,19 @@ export default function ChoiceQuestionEditPage({ params }: Props) {
     toast.error(error);
   };
   const handleUpdateQuestionSuccess = (data: any) => {
-    console.log(data);
     toast.success("Update question successfully");
-    // router.back();
+    router.back();
   };
   const handleUpdateQuestionFail = (error: any) => {
     toast.error(error);
   };
   const handleSubmitQuestion = (data: Question) => {
-    updateQuestion(data, handleUpdateQuestionSuccess, handleUpdateQuestionFail);
+    updateQuestion(
+      data,
+      courseId,
+      handleUpdateQuestionSuccess,
+      handleUpdateQuestionFail
+    );
   };
 
   useEffect(() => {

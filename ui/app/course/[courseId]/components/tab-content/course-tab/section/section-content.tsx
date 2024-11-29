@@ -27,7 +27,6 @@ export default function SectionContent({
   const { topics, description } = section;
   const [openCreateTopicDialog, setOpenCreateTopicDialog] = useState(false);
   const handleDeleteTopic = (id: string) => () => {
-    console.log("delete topic", id);
     if (onDeleteTopic) onDeleteTopic(id);
   };
 

@@ -8,16 +8,15 @@ import ShortAnswerQuestionUI from "../../_components/short-answer-question-ui";
 
 interface Props {
   params: {
+    courseId: string;
     questionId: string;
   };
 }
 export default function ShortAnswerQuestionEditPage({ params }: Props) {
-  const { questionId } = params;
-  console.log(questionId);
+  const { questionId, courseId } = params;
   const router = useRouter();
   const [question, setQuestion] = React.useState();
   const handleGetQuestionSuccess = (data: any) => {
-    console.log(data);
     setQuestion(data);
   };
   const handleGetQuestionFail = (error: any) => {
@@ -31,7 +30,12 @@ export default function ShortAnswerQuestionEditPage({ params }: Props) {
     toast.error(error);
   };
   const handleSubmitQuestion = (data: Question) => {
-    updateQuestion(data, handleUpdateQuestionSuccess, handleUpdateQuestionFail);
+    updateQuestion(
+      data,
+      courseId,
+      handleUpdateQuestionSuccess,
+      handleUpdateQuestionFail
+    );
   };
 
   useEffect(() => {

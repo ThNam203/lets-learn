@@ -107,10 +107,10 @@ const TrueFalseQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       questionText,
       status: questionStatus,
       defaultMark,
-      createdBy: thisUser.username,
+      createdBy: null,
       createdAt: new Date().toISOString(),
       modifiedAt: new Date().toISOString(),
-      modifiedBy: thisUser.username,
+      modifiedBy: null,
       usage: 0,
       data: questionData,
     };
@@ -138,7 +138,6 @@ const TrueFalseQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       status: questionStatus,
       defaultMark,
       modifiedAt: new Date().toISOString(),
-      modifiedBy: thisUser.username,
       data: questionData,
     };
     return questionToEdit;

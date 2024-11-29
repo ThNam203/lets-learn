@@ -2,9 +2,7 @@
 import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
-import { fakeAssignment } from "@/fake-data/quiz";
-import { Test } from "@/models/quiz";
-import { iconMap } from "@/models/topic";
+import { AssignmentTopic, iconMap } from "@/models/topic";
 import { TabProvider } from "@/provider/tab-provider";
 import { useAppDispatch } from "@/redux/hooks";
 import { setBreadcrumb } from "@/redux/slices/breadcrumb";
@@ -20,7 +18,7 @@ interface Props {
 }
 export default function TopicQuiz({ params }: Props) {
   const { courseId, topicId } = params;
-  const [assignment, setAssignment] = useState<Test>(fakeAssignment);
+  const [assignment, setAssignment] = useState<AssignmentTopic>();
   const [initTab, setInitTab] = useState<string>(Tab.ASSIGNMENT);
   const dispatch = useAppDispatch();
 
@@ -48,8 +46,7 @@ export default function TopicQuiz({ params }: Props) {
     let storageTab = localStorage.getItem(topicId);
     if (storageTab) setInitTab(storageTab);
   }, [topicId]);
-  const handleAssignmentChange = (data: Test) => {
-    console.log("change assignment", data);
+  const handleAssignmentChange = (data: AssignmentTopic) => {
     setAssignment(data);
   };
   const handleTabSelected = (tab: string) => {
@@ -59,9 +56,7 @@ export default function TopicQuiz({ params }: Props) {
   const Icon = iconMap["assignment"];
   const tabs = Object.values(Tab);
 
-  useEffect(() => {
-    console.log("assignment change", assignment);
-  }, [assignment]);
+  if (!assignment) return null;
 
   return (
     <PageLayout className="relative bg-purple-50 !overflow-y-hidden">

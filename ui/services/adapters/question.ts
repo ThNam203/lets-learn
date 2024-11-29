@@ -1,16 +1,32 @@
 import {
   ChoiceQuestion,
   Question,
+  QuestionChoice,
   QuestionType,
   ShortAnswerQuestion,
   TrueFalseQuestion,
 } from "@/models/question";
 
+export const convertChoicesInQuestionToRequestData = (
+  choices: QuestionChoice[]
+) => {
+  return choices.map((choice) => {
+    return {
+      id: choice.id.length === 4 ? null : choice.id,
+      text: choice.text,
+      gradePercent: choice.gradePercent,
+      feedback: choice.feedback,
+      questionId: choice.questionId.length === 4 ? null : choice.questionId,
+    };
+  });
+};
+
 export const convertChoiceQuestionToRequestData = (
   question: Question,
-  courseId?: string
+  courseId: string
 ) => {
   const {
+    id,
     questionName,
     questionText,
     status,
@@ -18,10 +34,13 @@ export const convertChoiceQuestionToRequestData = (
     defaultMark,
     usage,
     createdAt,
+    createdBy,
+    modifiedBy,
   } = question;
   const { choices, multiple } = question.data as ChoiceQuestion;
 
   let reqData = {
+    id: id.length === 4 ? null : id,
     questionName,
     questionText,
     status,
@@ -32,11 +51,13 @@ export const convertChoiceQuestionToRequestData = (
     feedbackOfFalse: null,
     correctAnswer: false,
     multiple,
-    choices,
+    choices: convertChoicesInQuestionToRequestData(choices),
     course: {
       id: courseId,
     },
     createdAt,
+    createdBy,
+    modifiedBy,
     updatedAt: null,
     deletedAt: null,
   };
@@ -45,9 +66,10 @@ export const convertChoiceQuestionToRequestData = (
 
 export const convertShortAnswerQuestionToRequestData = (
   question: Question,
-  courseId?: string
+  courseId: string
 ) => {
   const {
+    id,
     questionName,
     questionText,
     status,
@@ -55,10 +77,13 @@ export const convertShortAnswerQuestionToRequestData = (
     defaultMark,
     usage,
     createdAt,
+    createdBy,
+    modifiedBy,
   } = question;
   const { choices } = question.data as ShortAnswerQuestion;
 
   let reqData = {
+    id: id.length === 4 ? null : id,
     questionName,
     questionText,
     status,
@@ -68,12 +93,14 @@ export const convertShortAnswerQuestionToRequestData = (
     feedbackOfTrue: null,
     feedbackOfFalse: null,
     correctAnswer: false,
-    multiple: null,
-    choices,
+    multiple: false,
+    choices: convertChoicesInQuestionToRequestData(choices),
     course: {
       id: courseId,
     },
     createdAt,
+    createdBy,
+    modifiedBy,
     updatedAt: null,
     deletedAt: null,
   };
@@ -82,9 +109,10 @@ export const convertShortAnswerQuestionToRequestData = (
 
 export const convertTrueFalseQuestionToRequestData = (
   question: Question,
-  courseId?: string
+  courseId: string
 ) => {
   const {
+    id,
     questionName,
     questionText,
     status,
@@ -92,11 +120,14 @@ export const convertTrueFalseQuestionToRequestData = (
     defaultMark,
     usage,
     createdAt,
+    createdBy,
+    modifiedBy,
   } = question;
   const { correctAnswer, feedbackOfFalse, feedbackOfTrue } =
     question.data as TrueFalseQuestion;
 
   let reqData = {
+    id: id.length === 4 ? null : id,
     questionName,
     questionText,
     status,
@@ -106,12 +137,14 @@ export const convertTrueFalseQuestionToRequestData = (
     feedbackOfTrue,
     feedbackOfFalse,
     correctAnswer,
-    multiple: null,
-    choices: null,
+    multiple: false,
+    choices: [],
     course: {
       id: courseId,
     },
     createdAt,
+    createdBy,
+    modifiedBy,
     updatedAt: null,
     deletedAt: null,
   };
@@ -133,6 +166,8 @@ export const convertQuestionFromResponseData = (data: any): Question => {
     multiple,
     choices,
     createdAt,
+    createdBy,
+    modifiedBy,
     updatedAt,
     deletedAt,
   } = data;
@@ -161,8 +196,8 @@ export const convertQuestionFromResponseData = (data: any): Question => {
     data: choiceQuestion,
     createdAt,
     modifiedAt: updatedAt,
-    createdBy: "",
-    modifiedBy: "",
+    createdBy,
+    modifiedBy,
   };
 
   if (type === QuestionType.SHORT_ANSWER) {

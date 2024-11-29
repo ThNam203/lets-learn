@@ -21,6 +21,7 @@ export const createQuestion = (
     reqData = convertShortAnswerQuestionToRequestData(question, courseId);
   else if (type === QuestionType.TRUE_FALSE)
     reqData = convertTrueFalseQuestionToRequestData(question, courseId);
+  console.log("reqData", reqData);
   POST("/question", reqData, onSuccess, onFail);
 };
 
@@ -39,18 +40,18 @@ export const getQuestion = (
 
 export const updateQuestion = (
   question: Question,
+  courseId: string,
   onSuccess: (data: any) => void,
   onFail: (err?: any) => void
 ) => {
   const { id, type } = question;
   let reqData;
   if (type === QuestionType.CHOICE)
-    reqData = convertChoiceQuestionToRequestData(question);
+    reqData = convertChoiceQuestionToRequestData(question, courseId);
   else if (type === QuestionType.SHORT_ANSWER)
-    reqData = convertShortAnswerQuestionToRequestData(question);
+    reqData = convertShortAnswerQuestionToRequestData(question, courseId);
   else if (type === QuestionType.TRUE_FALSE)
-    reqData = convertTrueFalseQuestionToRequestData(question);
-  console.log("reqData", reqData);
+    reqData = convertTrueFalseQuestionToRequestData(question, courseId);
   PUT(`/question/${id}`, reqData, onSuccess, onFail);
 };
 export const getQuestionBank = (

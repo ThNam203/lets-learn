@@ -1,23 +1,51 @@
 "use client";
-import { QuestionType } from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
-import { fakeQuestions } from "@/fake-data/question";
-import { notFound } from "next/navigation";
-import React, { useMemo } from "react";
+import { Question } from "@/models/question";
+import { getQuestion, updateQuestion } from "@/services/question";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 import TrueFalseQuestionUI from "../../_components/true-false-question-ui";
 
 interface Props {
   params: {
+    courseId: string;
     questionId: string;
   };
 }
-export default function TrueFalseQuestionEditPage({ params }: Props) {
-  const { questionId } = params;
-  const [questions, setQuestions] = React.useState(fakeQuestions);
-  const question = useMemo(() => {
-    return questions.find(
-      (q) => q.id === questionId && q.type === QuestionType.TRUE_FALSE
+export default function ChoiceQuestionEditPage({ params }: Props) {
+  const { questionId, courseId } = params;
+  const router = useRouter();
+  const [question, setQuestion] = React.useState();
+  const handleGetQuestionSuccess = (data: any) => {
+    setQuestion(data);
+  };
+  const handleGetQuestionFail = (error: any) => {
+    toast.error(error);
+  };
+  const handleUpdateQuestionSuccess = (data: any) => {
+    toast.success("Update question successfully");
+    router.back();
+  };
+  const handleUpdateQuestionFail = (error: any) => {
+    toast.error(error);
+  };
+  const handleSubmitQuestion = (data: Question) => {
+    updateQuestion(
+      data,
+      courseId,
+      handleUpdateQuestionSuccess,
+      handleUpdateQuestionFail
     );
-  }, [questions, questionId]);
-  if (!question) return notFound();
-  return <TrueFalseQuestionUI question={question} />;
+  };
+
+  useEffect(() => {
+    getQuestion(questionId, handleGetQuestionSuccess, handleGetQuestionFail);
+  }, [questionId]);
+  if (!question) return null;
+  return (
+    <TrueFalseQuestionUI
+      question={question}
+      onSubmitQuestion={handleSubmitQuestion}
+    />
+  );
 }

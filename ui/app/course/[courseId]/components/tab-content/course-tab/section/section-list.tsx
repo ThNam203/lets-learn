@@ -107,7 +107,6 @@ const SectionList = ({
       ...section,
       topics: section.topics.filter((topic) => topic.id !== id),
     };
-    console.log("newSection", newSection);
     onSectionChange(newSection);
   };
 

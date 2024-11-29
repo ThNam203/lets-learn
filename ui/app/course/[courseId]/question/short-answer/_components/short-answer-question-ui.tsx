@@ -1,6 +1,11 @@
+import {
+  QuestionStatus,
+  QuestionType,
+} from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
 import CollapsibleList from "@/app/courses/[courseId]/_components/collapsible/collapsible-list";
 import { fakeUser } from "@/fake-data/user";
 import { Button } from "@/lib/shadcn/button";
+import { getTextFromHtml } from "@/lib/utils";
 import { Question, ShortAnswerQuestion } from "@/models/question";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { nanoid } from "@reduxjs/toolkit";
@@ -13,11 +18,6 @@ import ShortAnswerQuestionGeneralSetting, {
   ShortAnswerQuestionGeneralForm,
 } from "./general";
 import { dafaultGeneralSetting, defaultAnswerSetting } from "./static-data";
-import { getTextFromHtml } from "@/lib/utils";
-import {
-  QuestionStatus,
-  QuestionType,
-} from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
 
 const generalSettingSchema: ZodType<ShortAnswerQuestionGeneralForm> = z.object({
   questionName: z.string().min(1, "Required"),
@@ -29,6 +29,8 @@ const generalSettingSchema: ZodType<ShortAnswerQuestionGeneralForm> = z.object({
 const answerSettingSchema: ZodType<ShortAnswerQuestionAnswerForm> = z.object({
   answers: z.array(
     z.object({
+      id: z.string(),
+      questionId: z.string(),
       text: z.string().refine((data) => getTextFromHtml(data).length > 0, {
         message: "Required",
       }),
@@ -110,9 +112,9 @@ const ShortAnswerQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       status: data.generalSettingForm.questionStatus,
       defaultMark: data.generalSettingForm.defaultMark,
       createdAt: new Date().toISOString(),
-      createdBy: thisUser.username,
+      createdBy: null,
       modifiedAt: new Date().toISOString(),
-      modifiedBy: thisUser.username,
+      modifiedBy: null,
       usage: 0,
       data: questionData,
     };
@@ -133,7 +135,6 @@ const ShortAnswerQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       status: data.generalSettingForm.questionStatus,
       defaultMark: data.generalSettingForm.defaultMark,
       modifiedAt: new Date().toISOString(),
-      modifiedBy: thisUser.username,
       data: questionData,
     };
     return questionToEdit;

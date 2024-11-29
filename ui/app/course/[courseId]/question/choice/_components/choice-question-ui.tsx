@@ -1,4 +1,8 @@
-import { fakeUser } from "@/fake-data/user";
+import CollapsibleList from "@/app/course/[courseId]/components/collapsible/collapsible-list";
+import {
+  QuestionStatus,
+  QuestionType,
+} from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
 import { Button } from "@/lib/shadcn/button";
 import { getTextFromHtml } from "@/lib/utils";
 import { ChoiceQuestion, Question } from "@/models/question";
@@ -13,11 +17,6 @@ import ChoiceQuestionGeneralSetting, {
   ChoiceQuestionGeneralForm,
 } from "./general";
 import { defaultAnswerSetting, defaultGeneralSetting } from "./static-data";
-import {
-  QuestionStatus,
-  QuestionType,
-} from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
-import CollapsibleList from "@/app/course/[courseId]/components/collapsible/collapsible-list";
 
 // Child form schemas
 const generalSettingSchema: ZodType<ChoiceQuestionGeneralForm> = z.object({
@@ -31,11 +30,13 @@ const generalSettingSchema: ZodType<ChoiceQuestionGeneralForm> = z.object({
 const answerSettingSchema: ZodType<ChoiceQuestionAnswerForm> = z.object({
   choices: z.array(
     z.object({
+      id: z.string(),
       text: z.string().refine((data) => getTextFromHtml(data).length > 0, {
         message: "Required",
       }),
       gradePercent: z.number(),
       feedback: z.string(),
+      questionId: z.string(),
     })
   ),
 });
@@ -56,7 +57,6 @@ interface Props {
   onSubmitQuestion?: (data: Question) => void;
 }
 const ChoiceQuestionUI = ({ question, onSubmitQuestion }: Props) => {
-  const thisUser = fakeUser;
   const handleGetGeneralSetting = (question: Question) => {
     const { data } = question;
     const { multiple } = data as ChoiceQuestion;
@@ -94,6 +94,8 @@ const ChoiceQuestionUI = ({ question, onSubmitQuestion }: Props) => {
   });
   const { setValue, watch } = form;
 
+  const { errors } = form.formState;
+
   const handleGeneralSettingChange = (data: ChoiceQuestionGeneralForm) => {
     setValue("generalSettingForm", data);
   };
@@ -115,9 +117,9 @@ const ChoiceQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       status: data.generalSettingForm.questionStatus,
       defaultMark: data.generalSettingForm.defaultMark,
       createdAt: new Date().toISOString(),
-      createdBy: thisUser.username,
+      createdBy: null,
       modifiedAt: new Date().toISOString(),
-      modifiedBy: thisUser.username,
+      modifiedBy: null,
       usage: 0,
       data: questionData,
     };
@@ -136,7 +138,6 @@ const ChoiceQuestionUI = ({ question, onSubmitQuestion }: Props) => {
       status: data.generalSettingForm.questionStatus,
       defaultMark: data.generalSettingForm.defaultMark,
       modifiedAt: new Date().toISOString(),
-      modifiedBy: thisUser.username,
       data: questionData,
     };
     return questionToEdit;

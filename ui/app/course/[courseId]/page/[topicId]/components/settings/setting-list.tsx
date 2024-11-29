@@ -1,18 +1,15 @@
 "use client";
 import CollapsibleList from "@/app/course/[courseId]/components/collapsible/collapsible-list";
 import { Button } from "@/lib/shadcn/button";
-import { QuizData, Test } from "@/models/quiz";
+import { Page } from "@/models/page";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z, ZodType } from "zod";
-import GradeSetting, { ContentSettingForm } from "./setting-items/content";
+import ContentSetting, { ContentSettingForm } from "./setting-items/content";
 import GeneralSetting, { GeneralSettingForm } from "./setting-items/general";
-import { Page } from "@/models/page";
 import { defaultContentSetting, defaultGeneralSetting } from "./static-data";
-import { Touchpad } from "lucide-react";
-import ContentSetting from "./setting-items/content";
 
 const generalSettingSchema: ZodType<GeneralSettingForm> = z.object({
   name: z.string().min(1, "Name is required"),
@@ -105,7 +102,6 @@ const SettingList = ({ page, onSubmitPageSetting }: Props) => {
       toast.info("No changes to submit");
       return;
     }
-    console.log("toSubmit", toSubmit);
     if (onSubmitPageSetting) onSubmitPageSetting(toSubmit);
   };
 

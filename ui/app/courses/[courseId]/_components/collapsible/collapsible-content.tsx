@@ -42,6 +42,7 @@ const CollapsibleContent = ({
               icon={<ChevronRight />}
               size="sm"
               className={cn(showContent.includes(value) && "rotate-90")}
+              variant="indigo"
               onClick={handleTrigger}
             />
             <h5 className="text-indigo-800">{title}</h5>

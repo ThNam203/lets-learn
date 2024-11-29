@@ -5,10 +5,10 @@ export type Question = {
   status: QuestionStatus;
   type: QuestionType;
   defaultMark: number;
-  createdBy: string;
-  createdAt: string;
-  modifiedAt: string;
-  modifiedBy: string;
+  createdBy: any;
+  createdAt: any;
+  modifiedAt: any;
+  modifiedBy: any;
   usage: number;
   data: TrueFalseQuestion | ChoiceQuestion | ShortAnswerQuestion;
 };
@@ -32,6 +32,8 @@ export type TrueFalseQuestion = {
 };
 
 export type QuestionChoice = {
+  id: string;
+  questionId: string;
   text: string;
   gradePercent: number;
   feedback: string;

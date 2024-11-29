@@ -10,15 +10,10 @@ import { useFormContext } from "react-hook-form";
 import { useEffect } from "react";
 import { ShortAnswerQuestionForm } from "./short-answer-question-ui";
 import { gradePercentOptions } from "../../_components/static-data";
-
-type ShortAnswer = {
-  text: string;
-  gradePercent: number;
-  feedback: string;
-};
+import { QuestionChoice } from "@/models/question";
 
 export type ShortAnswerQuestionAnswerForm = {
-  answers: ShortAnswer[];
+  answers: QuestionChoice[];
 };
 
 interface Props {
@@ -36,7 +31,7 @@ const ShortAnswerQuestionAnswerSetting = ({ formData, onChange }: Props) => {
     if (onChange) onChange(data);
   };
 
-  const handleAnswerChange = (index: number, answer: ShortAnswer) => {
+  const handleAnswerChange = (index: number, answer: QuestionChoice) => {
     const newAnswers = [...answers];
     newAnswers[index] = answer;
     handleSettingChange({ ...formData, answers: newAnswers });
@@ -45,7 +40,13 @@ const ShortAnswerQuestionAnswerSetting = ({ formData, onChange }: Props) => {
   const handleAddAnswer = () => {
     const newAnswers = [
       ...answers,
-      { text: "", gradePercent: 100, feedback: "" },
+      {
+        id: nanoid(),
+        questionId: nanoid(4),
+        text: "",
+        gradePercent: 100,
+        feedback: "",
+      },
     ];
     handleSettingChange({ ...formData, answers: newAnswers });
   };
@@ -136,9 +137,9 @@ const RowSetting = ({
 interface AnswerRowProps {
   rowIndex: number;
   className?: string;
-  shortAnswer: ShortAnswer;
+  shortAnswer: QuestionChoice;
   textError?: string;
-  onAnswerChange?: (index: number, answer: ShortAnswer) => void;
+  onAnswerChange?: (index: number, answer: QuestionChoice) => void;
   errorMessage?: string;
 }
 const AnswerRowSetting = ({

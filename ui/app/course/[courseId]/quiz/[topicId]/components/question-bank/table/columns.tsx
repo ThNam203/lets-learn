@@ -143,6 +143,27 @@ const questionStatusColumn = (
   return col;
 };
 
+const questionCreateByColumn = (
+  accessorKey: string,
+  title: string
+): ColumnDef<Question> => {
+  const col: ColumnDef<Question> = {
+    accessorKey: accessorKey,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title={title} />
+    ),
+    cell: ({ row }) => {
+      let createBy: any = row.getValue(accessorKey);
+
+      return (
+        <div className="w-[50px] px-2">{createBy.username || "not found"}</div>
+      );
+    },
+    enableSorting: true,
+  };
+  return col;
+};
+
 interface ActionColumnProps {
   onEdit?: (questionId: string) => void;
   onDelete?: (questionId: string) => void;
@@ -226,6 +247,8 @@ const questionTableColumns = ({
         questionColumnTitles[key],
         onStatusChange
       );
+    else if (key === "createdBy" || key === "modifiedBy")
+      col = questionCreateByColumn(key, questionColumnTitles[key]);
     else col = defaultColumn<Question>(key, questionColumnTitles);
     columns.push(col);
   }

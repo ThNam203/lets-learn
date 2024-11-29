@@ -23,7 +23,6 @@ const GeneralSetting = ({ formData, onChange }: GeneralSettingProps) => {
     errors: { generalSettingForm: errors },
   } = form.formState;
   const { name, category, level, price } = formData;
-  console.log("GeneralSetting -> formData", formData);
 
   const handleSettingChange = (data: GeneralSettingForm) => {
     if (onChange) onChange(data);
