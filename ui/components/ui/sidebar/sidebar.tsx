@@ -69,7 +69,7 @@ const Group = ({ children, className, hasBorder = true }: GroupProps) => {
   return (
     <div
       className={cn(
-        "pr-5 py-3",
+        "w-full pr-5 py-3",
         hasBorder && "border-b-[0.5px] border-gray-400",
         className
       )}

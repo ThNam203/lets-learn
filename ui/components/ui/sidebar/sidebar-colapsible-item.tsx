@@ -18,10 +18,10 @@ export default function SidebarCollapsibleItem({ trigger, children }: Props) {
     setIsOpen(!isOpen);
   };
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
         <AccordionTrigger
-          className="py-0 hover:no-underline text-gray-500"
+          className="w-full py-0 hover:no-underline text-gray-500"
           onClick={toggleTrigger}
         >
           <ChevronRight className="absolute left-2 transition-all duration-200" />

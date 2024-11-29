@@ -55,6 +55,7 @@ const TabQuiz = ({
     timeLimitUnit,
   } = data;
   data as QuizData;
+  console.log("quiz", quiz);
 
   const handlePreviewQuiz = () => {
     router.push(`/quiz-attempting/${quiz.id}`);

@@ -73,7 +73,7 @@ export default function TopicQuiz({ params }: Props) {
           <div className="w-full space-y-8">
             <div className="w-full px-5 flex flex-row gap-4">
               <Icon size={32} />
-              <h3>Quiz</h3>
+              <h3>{quiz.title}</h3>
             </div>
             <TabList
               tabs={tabs}

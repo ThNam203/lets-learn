@@ -15,7 +15,7 @@ const TinyEditor = ({ initValue, onChange }: Props) => {
 
   return (
     // <Editor
-    //   apiKey="p7z81chejai65m6tmap8bd0q4g4hxf5qbipdja5vvwqzeyb0"
+    // apiKey={process.env.TINYMCE_API_KEY}
     //   init={{
     //     plugins: [
     //       // Core editing features
