@@ -29,5 +29,6 @@ export const updateTopic = (
     const res = convertTopicFromResponseData(data);
     onSuccess(res);
   };
+  console.log("reqData", reqData);
   PUT(`/topic/${id}`, reqData, handleSuccess, onFail);
 };

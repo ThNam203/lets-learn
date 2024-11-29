@@ -6,7 +6,7 @@ import { QuestionType } from "../static-data";
 import QuestionAddButton from "./question-add-button";
 import QuestionRow from "./question-row";
 import GetQuestionFromBankDialog from "../question-bank/dialog/get-question-from-bank-dialog";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 
 interface Props {
   questions: Question[];
@@ -49,21 +49,25 @@ const QuestionList = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <DraggableContainer
-        data={questions}
-        onReordered={onReorderedQuestion}
-        itemClassName="bg-cyan-100 shadow"
-        renderItem={(question, index) => (
-          <QuestionRow
-            key={index}
-            data={question}
-            rowIndex={index}
-            canRemove={canAddOrRemoveQuestion}
-            onEdit={handleEdit}
-            onRemove={onRemoveQuestion}
-          />
-        )}
-      />
+      {questions.length === 0 && <div>No question here</div>}
+      {questions.length > 0 && (
+        <DraggableContainer
+          data={questions}
+          onReordered={onReorderedQuestion}
+          itemClassName="bg-cyan-100 shadow"
+          renderItem={(question, index) => (
+            <QuestionRow
+              key={index}
+              data={question}
+              rowIndex={index}
+              canRemove={canAddOrRemoveQuestion}
+              onEdit={handleEdit}
+              onRemove={onRemoveQuestion}
+            />
+          )}
+        />
+      )}
+
       {canAddOrRemoveQuestion && (
         <div className="ml-auto">
           <QuestionAddButton

@@ -16,14 +16,12 @@ interface Props {
   quizResponses: StudentResponse[];
   onReorderedQuestion?: (data: Question[]) => void;
   onRemoveQuestion?: (index: number) => void;
-  onTabInTabChange?: (tab: TabInTab) => void;
   onAddQuestionsFromBank?: (question: Question[]) => void;
 }
 const TabQuestion = ({
   quiz,
   questionsBank,
   quizResponses,
-  onTabInTabChange,
   onRemoveQuestion,
   onReorderedQuestion,
   onAddQuestionsFromBank,

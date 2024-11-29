@@ -14,6 +14,7 @@ import TabResults from "./tab-results";
 import TabSetting from "./tab-setting";
 import { getQuestionBank } from "@/services/question";
 import { toast } from "react-toastify";
+import { updateTopic } from "@/services/topic";
 
 interface Props {
   className?: string;
@@ -52,6 +53,22 @@ const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
     );
   }, [courseId]);
 
+  const handleUpdateQuizSuccess = (updatedQuiz: QuizTopic) => {
+    if (onQuizChange) onQuizChange(updatedQuiz);
+  };
+  const handleUpdateQuizFail = (error: any) => {
+    toast.error(error);
+  };
+
+  const handleAddQuestionFromBank = (questions: Question[]) => {
+    const newQuestions = [...questions, ...questionsBank];
+    const updatedQuiz = {
+      ...quiz,
+      data: { ...quiz.data, questions: newQuestions },
+    };
+    updateTopic(updatedQuiz, handleUpdateQuizSuccess, handleUpdateQuizFail);
+  };
+
   switch (selectedTab) {
     case Tab.QUIZ:
       return (
@@ -69,8 +86,9 @@ const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
       return (
         <TabQuestion
           quiz={quiz}
-          questionsBank={questions}
+          questionsBank={questionsBank}
           quizResponses={quizResponses}
+          onAddQuestionsFromBank={handleAddQuestionFromBank}
         />
       );
     case Tab.QUESTION_BANK:

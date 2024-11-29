@@ -14,7 +14,7 @@ const EditorDisplay = ({ htmlString, className }: Props) => {
         className
       )}
     >
-      <Editor
+      {/* <Editor
         apiKey={process.env.TINYMCE_API_KEY}
         init={{
           plugins: ["autoresize"],
@@ -29,6 +29,10 @@ const EditorDisplay = ({ htmlString, className }: Props) => {
         }}
         disabled={true}
         initialValue={htmlString}
+      /> */}
+      <div
+        className="w-full h-full overflow-y-auto"
+        dangerouslySetInnerHTML={{ __html: htmlString }}
       />
     </div>
   );

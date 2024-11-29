@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Tab } from "./components/static-data";
 import TabContent from "./components/tab-content/tab-content";
+import { getCourse } from "@/services/course";
+import { Course } from "@/models/course";
 
 interface Props {
   params: {
@@ -20,26 +22,37 @@ interface Props {
 }
 export default function TopicQuiz({ params }: Props) {
   const { courseId, topicId } = params;
+  const [course, setCourse] = useState<Course>();
   const [quiz, setQuiz] = useState<QuizTopic>();
   const [initTab, setInitTab] = useState<string>(Tab.QUIZ);
-  const currentBreadcrumb = useAppSelector((state) => state.breadcrumb.items);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!quiz) return;
+    if (!quiz || !course) return;
     //this useEffect is used for setting breadcrumb when the page is loaded
-    const breadcrumbItem: BreadcrumbItem = {
-      label: quiz.title,
-      href: `/course/${courseId}/quiz/${topicId}`,
-    };
+    const breadcrumbItems: BreadcrumbItem[] = [
+      {
+        label: "Home",
+        href: `/home`,
+      },
+      {
+        label: course.title,
+        href: `/course/${courseId}`,
+      },
+      {
+        label: quiz.title,
+        href: `/course/${courseId}/quiz/${topicId}`,
+      },
+    ];
 
-    const updatedBreadcrumbItems = [...currentBreadcrumb.slice(0, 2)];
-    updatedBreadcrumbItems.push(breadcrumbItem);
-    dispatch(setBreadcrumb(updatedBreadcrumbItems));
-  }, [quiz]);
+    dispatch(setBreadcrumb(breadcrumbItems));
+  }, [course, quiz]);
 
   useEffect(() => {
-    console.log("useEffect");
+    getCourse(courseId, handleGetCourseSuccess, handleGetCourseFail);
+  }, [courseId]);
+
+  useEffect(() => {
     //this useEffect is used for updating tab based on local storage
     let storageTab = localStorage.getItem(topicId);
     if (storageTab) setInitTab(storageTab);
@@ -61,9 +74,15 @@ export default function TopicQuiz({ params }: Props) {
     toast.error(error);
   };
 
+  const handleGetCourseSuccess = (data: Course) => {
+    setCourse(data);
+  };
+  const handleGetCourseFail = (error: any) => {
+    toast.error(error);
+  };
+
   const Icon = iconMap.quiz;
   const tabs = Object.values(Tab);
-  console.log("render");
 
   if (!quiz) return null;
   return (
