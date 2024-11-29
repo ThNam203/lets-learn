@@ -4,12 +4,12 @@ import { Accordion } from "@/lib/shadcn/accordion";
 import { Button } from "@/lib/shadcn/button";
 import { cn } from "@/lib/utils";
 import { Section } from "@/models/course";
-import { QuizTopic, Topic, TopicType } from "@/models/topic";
+import { AssignmentTopic, QuizTopic, Topic, TopicType } from "@/models/topic";
 import { nanoid } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import SectionContent from "./section-content";
 import SectionLayout from "./section-layout";
-import { initQuiz } from "./static/init-quiz-topic";
+import { initAssignment, initQuiz } from "./static/init-topic";
 
 interface Props {
   initShowContent?: string[];
@@ -66,6 +66,7 @@ const SectionList = ({
   const handleRefreshSection = (sectionId: string) => () => {
     const toRefresh = sectionToRefresh.find((s) => s.id === sectionId);
     if (toRefresh) onSectionChange(toRefresh);
+    toggleEdit(sectionId);
   };
   const handleCreateTopic = (section: Section) => (type: TopicType) => {
     switch (type) {
@@ -82,11 +83,21 @@ const SectionList = ({
         onSectionChange(newSection);
         break;
       }
-
+      case TopicType.ASSIGNMENT:
+        const newAssignment: AssignmentTopic = {
+          ...initAssignment,
+          id: nanoid(4), // generate temp id to use in client and it will be removed in service folder when saving to db
+          sectionId: section.id,
+        };
+        const newSection: Section = {
+          ...section,
+          topics: [...section.topics, newAssignment],
+        };
+        onSectionChange(newSection);
+        break;
       case TopicType.MEETING:
         break;
-      case TopicType.ASSIGNMENT:
-        break;
+
       case TopicType.FILE:
         break;
       default:

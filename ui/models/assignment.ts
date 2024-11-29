@@ -3,7 +3,19 @@ export type AssignmentData = {
   open: string | null;
   close: string | null;
   remindToGrade: string | null;
-  wordLimit: number | null;
   maximumFile: number | null;
-  maximumFileSize: string | null;
+  maximumFileSize: FileSizeOption | null;
 };
+
+export enum FileSizeOption {
+  "1MB" = "1 MB",
+  "2MB" = "2 MB",
+  "3MB" = "3 MB",
+  "4MB" = "4 MB",
+  "5MB" = "5 MB",
+  "6MB" = "6 MB",
+  "7MB" = "7 MB",
+  "8MB" = "8 MB",
+  "9MB" = "9 MB",
+  "10MB" = "10 MB",
+}

@@ -1,7 +1,6 @@
 "use client";
 import CollapsibleList from "@/app/course/[courseId]/components/collapsible/collapsible-list";
 import { Button } from "@/lib/shadcn/button";
-import { AssignmentData, SubmissionType, Test } from "@/models/quiz";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -20,9 +19,11 @@ import {
   defaultSubmissionSetting,
 } from "./static-data";
 import { useDebouce, useDebounceFunction } from "@/hooks/useDebounce";
+import { AssignmentTopic } from "@/models/topic";
+import { FileSizeOption } from "@/models/assignment";
 
 const generalSettingSchema: ZodType<GeneralSettingForm> = z.object({
-  name: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Name is required"),
   description: z.string(),
 });
 
@@ -42,7 +43,6 @@ const availabilitySettingSchema: ZodType<AvailabilitySettingForm> = z.object({
 });
 
 const submissionSettingSchema: ZodType<SubmissionSettingForm> = z.object({
-  submissionType: z.array(z.nativeEnum(SubmissionType)),
   wordLimit: z.object({
     enabled: z.boolean(),
     value: z.number(),
@@ -53,7 +53,7 @@ const submissionSettingSchema: ZodType<SubmissionSettingForm> = z.object({
   }),
   maximumFileSize: z.object({
     enabled: z.boolean(),
-    value: z.string(),
+    value: z.nativeEnum(FileSizeOption),
   }),
 });
 
@@ -71,55 +71,49 @@ const schema: ZodType<AssignmentSettingForm> = z.object({
 });
 
 interface Props {
-  assignment: Test;
-  onSubmitAssignmentSetting?: (data: Test) => void;
+  assignment: AssignmentTopic;
+  onSubmitAssignmentSetting?: (data: AssignmentTopic) => void;
 }
 const SettingList = ({ assignment, onSubmitAssignmentSetting }: Props) => {
-  const handleGetGeneralSetting = (assignment: Test) => {
-    const { name, description } = assignment;
+  const handleGetGeneralSetting = (assignment: AssignmentTopic) => {
+    const { title } = assignment;
+    const { description } = assignment.data;
     const generalSetting: GeneralSettingForm = {
-      name,
+      title,
       description,
     };
     return generalSetting;
   };
 
-  const handleGetAvailabilitySetting = (assignment: Test) => {
-    const { open, close } = assignment;
-    const { remindToGrade } = assignment.data as AssignmentData;
+  const handleGetAvailabilitySetting = (assignment: AssignmentTopic) => {
+    const { remindToGrade, open, close } = assignment.data;
     const availabilitySetting: AvailabilitySettingForm = {
       open: {
-        enabled: open.enabled,
-        value: open.value,
+        enabled: open !== null,
+        value: open || "",
       },
       close: {
-        enabled: close.enabled,
-        value: close.value,
+        enabled: close !== null,
+        value: close || "",
       },
       remindToGrade: {
-        enabled: remindToGrade.enabled,
-        value: remindToGrade.value,
+        enabled: remindToGrade !== null,
+        value: remindToGrade || "",
       },
     };
     return availabilitySetting;
   };
 
-  const handleGetSubmisisonSetting = (assignment: Test) => {
-    const { wordLimit, maximumFile, maximumFileSize } =
-      assignment.data as AssignmentData;
+  const handleGetSubmisisonSetting = (assignment: AssignmentTopic) => {
+    const { maximumFile, maximumFileSize } = assignment.data;
     const submissionSetting: SubmissionSettingForm = {
-      submissionType: [],
-      wordLimit: {
-        enabled: wordLimit.enabled,
-        value: wordLimit.value,
-      },
       maximumFile: {
-        enabled: maximumFile.enabled,
-        value: maximumFile.value,
+        enabled: maximumFile !== null,
+        value: maximumFile || 5,
       },
       maximumFileSize: {
-        enabled: maximumFileSize.enabled,
-        value: maximumFileSize.value,
+        enabled: maximumFileSize !== null,
+        value: maximumFileSize || FileSizeOption["5MB"],
       },
     };
     return submissionSetting;
@@ -170,30 +164,30 @@ const SettingList = ({ assignment, onSubmitAssignmentSetting }: Props) => {
       availabilitySettingForm,
       submissionSettingForm,
     } = form;
-    const { name, description } = generalSettingForm;
+    const { title, description } = generalSettingForm;
     const { open, close, remindToGrade } = availabilitySettingForm;
-    const { wordLimit, maximumFile, maximumFileSize, submissionType } =
-      submissionSettingForm;
-    const assignmentToUpdate: Test = {
+    const { maximumFile, maximumFileSize } = submissionSettingForm;
+    const assignmentToUpdate: AssignmentTopic = {
       ...assignment,
-      name,
-      description,
-      open,
-      close,
+      title,
       data: {
         ...assignment.data,
-        submissionType,
-        remindToGrade,
-        wordLimit,
-        maximumFile,
-        maximumFileSize,
+        description,
+        open: open.enabled ? open.value : null,
+        close: close.enabled ? close.value : null,
+        remindToGrade: remindToGrade.enabled ? remindToGrade.value : null,
+        maximumFile: maximumFile.enabled ? maximumFile.value : null,
+        maximumFileSize: maximumFileSize.enabled ? maximumFileSize.value : null,
       },
     };
 
     return assignmentToUpdate;
   };
 
-  const compareAssignment = (assignment1: Test, assignment2: Test) => {
+  const compareAssignment = (
+    assignment1: AssignmentTopic,
+    assignment2: AssignmentTopic
+  ) => {
     const assignment1JSON = JSON.stringify(assignment1);
     const assignment2JSON = JSON.stringify(assignment2);
     return assignment1JSON === assignment2JSON;

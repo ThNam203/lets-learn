@@ -9,7 +9,8 @@ export const ErrorHandle = (onFail: (err?: any) => void) => {
     onFail("Server error, please try again later");
   };
 
-  const handleResponseError = (res: Response) => {
+  const handleResponseError = async (res: Response) => {
+    const resData = await res.json();
     const errorMessages: Record<number, string> = {
       400: "Bad request",
       401: "Unauthorized",
@@ -18,7 +19,10 @@ export const ErrorHandle = (onFail: (err?: any) => void) => {
       500: "Internal server error",
     };
     onFail(
-      errorMessages[res.status] || res.statusText || "Something went wrong"
+      res.statusText ||
+        resData.message ||
+        errorMessages[res.status] ||
+        "Something went wrong"
     );
   };
 

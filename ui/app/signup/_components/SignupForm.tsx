@@ -8,11 +8,20 @@ import { IconUserOutline } from "@/components/icons/user";
 import { Checkbox } from "@/lib/shadcn/checkbox";
 import { signup } from "@/services/auth";
 import { Spinner } from "@nextui-org/spinner";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
+type SignupError = {
+  email: string | undefined;
+  username: string | undefined;
+  password: string | undefined;
+  confirmPassword: string | undefined;
+};
+
 export default function SignUpForm() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -22,58 +31,65 @@ export default function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [hidingConfirmPassword, setHidingConfirmPassword] = useState(true);
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    username: "",
+  const [errors, setErrors] = useState<SignupError>({
+    email: undefined,
+    password: undefined,
+    confirmPassword: undefined,
+    username: undefined,
   });
 
   const validate = () => {
-    const newErrors = {
-      email: "",
-      password: "",
-      confirmPassword: "",
-      username: "",
-    };
-
+    let newErrors = { ...errors };
     if (!email) {
-      newErrors.email = "Email is required";
+      newErrors = { ...errors, email: "Email is required" };
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Email is invalid";
+      newErrors = { ...newErrors, email: "Email is invalid" };
+    } else {
+      newErrors = { ...newErrors, email: undefined };
     }
 
-    if (!username) {
-      newErrors.username = "Username is required";
-    } else if (username.length < 6) {
-      newErrors.username = "Username must be at least 6 characters";
+    if (username.length < 6) {
+      newErrors = {
+        ...newErrors,
+        username: "Username must be at least 6 characters",
+      };
     } else if (username.length > 20) {
-      newErrors.username = "Username must be less than 20 characters";
+      newErrors = {
+        ...newErrors,
+        username: "Username must be less than 20 characters",
+      };
+    } else {
+      newErrors = { ...newErrors, username: undefined };
     }
 
-    if (!password) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
+    if (password.length < 8) {
+      newErrors = {
+        ...newErrors,
+        password: "Password must be at least 8 characters",
+      };
+    } else {
+      newErrors = { ...newErrors, password: undefined };
     }
 
-    if (!confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
-    } else if (confirmPassword !== password) {
-      newErrors.confirmPassword = "Passwords do not match";
+    if (confirmPassword !== password) {
+      newErrors = {
+        ...newErrors,
+        confirmPassword: "Confirm password does not match",
+      };
+    } else {
+      newErrors = { ...newErrors, confirmPassword: undefined };
     }
 
     setErrors(newErrors);
 
     // If there are no errors, return true, else false
-    return (
-      !newErrors.email && !newErrors.password && !newErrors.confirmPassword
-    );
+    return Object.values(newErrors).some((err) => err !== undefined);
   };
 
   const handleSuccess = (data: any) => {
     toast.success(data.message);
     setIsLoading(false);
+    router.push("/home");
   };
   const handleFail = (err: any) => {
     toast.error(err);
@@ -84,7 +100,7 @@ export default function SignUpForm() {
     e.preventDefault();
     e.stopPropagation();
 
-    if (validate()) {
+    if (!validate()) {
       // TODO: create a universal function to call api
       let reqData = {
         email,

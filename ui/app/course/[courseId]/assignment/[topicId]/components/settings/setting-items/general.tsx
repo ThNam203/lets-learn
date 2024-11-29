@@ -6,7 +6,7 @@ import { AssignmentSettingForm } from "../setting-list";
 import { nanoid } from "@reduxjs/toolkit";
 
 export type GeneralSettingForm = {
-  name: string;
+  title: string;
   description: string;
 };
 
@@ -24,7 +24,7 @@ export default function GeneralSetting({
   const {
     errors: { generalSettingForm: errors },
   } = form.formState;
-  const { name, description } = formData;
+  const { title, description } = formData;
 
   const handleSettingChange = (data: GeneralSettingForm) => {
     if (onChange) onChange(data);
@@ -45,13 +45,13 @@ export default function GeneralSetting({
           id={generalSettingNameHtmlfor}
           className="flex-1 focus:outline-none"
           placeholder="Enter a name"
-          defaultValue={name !== "" ? name : undefined}
-          {...register("generalSettingForm.name")}
-          onChange={(e) => handleInputChange("name", e.target.value)}
+          defaultValue={title !== "" ? title : undefined}
+          {...register("generalSettingForm.title")}
+          onChange={(e) => handleInputChange("title", e.target.value)}
         />
-        {errors?.name && (
+        {errors?.title && (
           <p className="absolute top-full text-red-500 text-xs font-semibold">
-            {errors.name.message}
+            {errors.title.message}
           </p>
         )}
       </RowSetting>

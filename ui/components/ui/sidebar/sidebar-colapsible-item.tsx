@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/lib/shadcn/accordion";
+import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import React from "react";
 
@@ -21,10 +22,15 @@ export default function SidebarCollapsibleItem({ trigger, children }: Props) {
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
         <AccordionTrigger
-          className="w-full py-0 hover:no-underline text-gray-500"
+          className="w-full py-0 hover:no-underline text-gray-500 hover:bg-blue-50 hover:text-blue-700 rounded-r-full transition-all duration-200"
           onClick={toggleTrigger}
         >
-          <ChevronRight className="absolute left-2 transition-all duration-200" />
+          <ChevronRight
+            className={cn(
+              "absolute left-2 z-10 transition-transform duration-200",
+              isOpen && "rotate-90"
+            )}
+          />
           {trigger}
         </AccordionTrigger>
         <AccordionContent>{children}</AccordionContent>

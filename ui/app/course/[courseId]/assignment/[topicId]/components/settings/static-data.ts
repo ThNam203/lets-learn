@@ -1,10 +1,11 @@
+import { FileSizeOption } from "@/models/assignment";
 import { AvailabilitySettingForm } from "./setting-items/availability";
 import { GeneralSettingForm } from "./setting-items/general";
 import { SubmissionSettingForm } from "./setting-items/submission";
 
 export const defaultGeneralSetting: GeneralSettingForm = {
-  name: "Quiz 1",
-  description: "This is a quiz",
+  title: "Assignment",
+  description: "This is a assignment description",
 };
 
 export const defaultAvailabilitySetting: AvailabilitySettingForm = {
@@ -23,17 +24,12 @@ export const defaultAvailabilitySetting: AvailabilitySettingForm = {
 };
 
 export const defaultSubmissionSetting: SubmissionSettingForm = {
-  submissionType: ["file"],
-  wordLimit: {
-    enabled: false,
-    value: 0,
-  },
   maximumFile: {
     enabled: false,
     value: 0,
   },
   maximumFileSize: {
     enabled: false,
-    value: "1 MB",
+    value: FileSizeOption["5MB"],
   },
 };

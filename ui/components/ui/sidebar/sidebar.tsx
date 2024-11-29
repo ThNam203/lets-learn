@@ -1,17 +1,10 @@
-import React from "react";
-import SidebarItem from "./sidebar-item";
-import {
-  Calendar,
-  ClipboardList,
-  Home,
-  Settings,
-  Settings2,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
-import SidebarCollapsibleItem from "./sidebar-colapsible-item";
-import IconPeople from "@/components/icons/people";
-import SidebarCourseItem from "./sidebar-course-item";
+import { Calendar, ClipboardList, Home, Settings, Users } from "lucide-react";
 import Image from "next/image";
+import React from "react";
+import SidebarCollapsibleItem from "./sidebar-colapsible-item";
+import SidebarCourseItem from "./sidebar-course-item";
+import SidebarItem from "./sidebar-item";
 
 interface Props {
   className?: string;
@@ -25,17 +18,12 @@ export default function Sidebar({ className }: Props) {
       )}
     >
       <Group>
-        <SidebarItem title="Home" icon={<Home />} />
+        <SidebarItem title="Home" icon={<Home />} href="/home" />
         <SidebarItem title="Calendar" icon={<Calendar />} />
       </Group>
       <Group>
         <SidebarCollapsibleItem
-          trigger={
-            <SidebarItem
-              title="Teaching"
-              icon={<IconPeople color="#6b7280" />}
-            />
-          }
+          trigger={<SidebarItem title="Teaching" icon={<Users />} />}
         >
           <SidebarItem title="To review" icon={<ClipboardList />} />
           <SidebarCourseItem

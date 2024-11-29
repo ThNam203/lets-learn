@@ -1,3 +1,4 @@
+import { FileSizeOption } from "@/models/assignment";
 import { AssignmentTopic, TopicType } from "@/models/topic";
 
 export const fakeAssignment: AssignmentTopic = {
@@ -12,7 +13,6 @@ export const fakeAssignment: AssignmentTopic = {
       "Write a minimum of 500 words on what you would need to take into consideration if you were to spend a night in the Alps. Justify your choices.",
     remindToGrade: new Date(2024, 11, 10, 10, 30, 0, 0).toISOString(),
     maximumFile: 1,
-    maximumFileSize: "5MB",
-    wordLimit: 500,
+    maximumFileSize: FileSizeOption["5MB"],
   },
 };

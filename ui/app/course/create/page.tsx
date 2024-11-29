@@ -1,3 +1,4 @@
+"use client";
 import PageLayout from "@/components/ui/util-layout/page-layout";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";

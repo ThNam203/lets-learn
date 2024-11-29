@@ -1,29 +1,23 @@
 "use client";
-import { Checkbox } from "@/lib/shadcn/checkbox";
-import { Input } from "@/lib/shadcn/input";
-import { nanoid } from "@reduxjs/toolkit";
-import { useFormContext } from "react-hook-form";
-import { AssignmentSettingForm } from "../setting-list";
-import { maximumFileSizeOptions, SubmissionType } from "@/models/quiz";
-import { cn } from "@/lib/utils";
 import { Combobox } from "@/components/ui/combobox";
 import { Button } from "@/lib/shadcn/button";
+import { Checkbox } from "@/lib/shadcn/checkbox";
+import { Input } from "@/lib/shadcn/input";
+import { cn } from "@/lib/utils";
+import { FileSizeOption } from "@/models/assignment";
+import { nanoid } from "@reduxjs/toolkit";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { AssignmentSettingForm } from "../setting-list";
 
 export type SubmissionSettingForm = {
-  submissionType: SubmissionType[];
-  wordLimit: {
-    enabled: boolean;
-    value: number;
-  };
   maximumFile: {
     enabled: boolean;
     value: number;
   };
   maximumFileSize: {
     enabled: boolean;
-    value: string;
+    value: FileSizeOption;
   };
 };
 
@@ -38,7 +32,7 @@ export default function SubmissionSetting({ formData, onChange }: Props) {
   const {
     errors: { submissionSettingForm: errors },
   } = form.formState;
-  const { submissionType, maximumFile, maximumFileSize, wordLimit } = formData;
+  const { maximumFile, maximumFileSize } = formData;
   const handleSettingChange = (data: SubmissionSettingForm) => {
     if (onChange) onChange(data);
   };
@@ -65,103 +59,42 @@ export default function SubmissionSetting({ formData, onChange }: Props) {
       handleSettingChange({ ...formData, [key]: { ...formData[key], value } });
     };
 
-  const handleSubmissionTypeChange = (value: SubmissionType) => () => {
-    const newSetting = { ...formData };
-    const { submissionType } = newSetting;
-    if (submissionType.includes(value)) {
-      newSetting.submissionType = submissionType.filter(
-        (type) => type !== value
-      );
-    } else {
-      newSetting.submissionType = [...submissionType, value];
-    }
-    handleSettingChange(newSetting);
-  };
-
-  const onlineTextHtmlFor = nanoid();
-  const fileUploadHtmlFor = nanoid();
+  const fileSizeOptions = Object.values(FileSizeOption);
   return (
     <div className="w-full flex flex-col p-4 gap-8">
-      <RowSetting
-        title="Submission types"
-        childrenClassName="flex flex-row gap-4"
+      <RowSettingWithCheckbox
+        title="Maximum number of uploaded files"
+        enabled={maximumFile.enabled}
+        handleEnableChange={handleEnableChange("maximumFile")}
       >
-        <div className="flex flex-row items-center gap-2">
-          <Checkbox
-            id={onlineTextHtmlFor}
-            defaultChecked={submissionType.includes(SubmissionType.ONLINE_TEXT)}
-            onCheckedChange={handleSubmissionTypeChange(
-              SubmissionType.ONLINE_TEXT
-            )}
-          />
-          <label htmlFor={onlineTextHtmlFor} className="cursor-pointer">
-            {SubmissionType.ONLINE_TEXT}
-          </label>
-        </div>
-        <div className="flex flex-row items-center gap-2">
-          <Checkbox
-            id={fileUploadHtmlFor}
-            defaultChecked={submissionType.includes(SubmissionType.FILE_UPLOAD)}
-            onCheckedChange={handleSubmissionTypeChange(
-              SubmissionType.FILE_UPLOAD
-            )}
-          />
-          <label htmlFor={fileUploadHtmlFor} className="cursor-pointer">
-            {SubmissionType.FILE_UPLOAD}
-          </label>
-        </div>
-      </RowSetting>
-      {submissionType.includes(SubmissionType.ONLINE_TEXT) && (
-        <RowSettingWithCheckbox
-          title="Word limit"
-          enabled={wordLimit.enabled}
-          handleEnableChange={handleEnableChange("wordLimit")}
+        <Input
+          type="number"
+          defaultValue={maximumFile.value}
+          disabled={!maximumFile.enabled}
+          onChange={handleNumberInputChange("maximumFile")}
+        />
+      </RowSettingWithCheckbox>
+      <RowSettingWithCheckbox
+        title="Maximum submission size"
+        enabled={maximumFileSize.enabled}
+        handleEnableChange={handleEnableChange("maximumFileSize")}
+      >
+        <Combobox
+          showSearch={false}
+          options={fileSizeOptions}
+          initialValue={maximumFileSize.value}
+          onChange={handleComboboxChange("maximumFileSize")}
+          popoverClassName="w-[150px]"
         >
-          <Input
-            type="number"
-            defaultValue={wordLimit.value}
-            disabled={!wordLimit.enabled}
-            onChange={handleNumberInputChange("wordLimit")}
-          />
-        </RowSettingWithCheckbox>
-      )}
-      {submissionType.includes(SubmissionType.FILE_UPLOAD) && (
-        <RowSettingWithCheckbox
-          title="Maximum number of uploaded files"
-          enabled={maximumFile.enabled}
-          handleEnableChange={handleEnableChange("maximumFile")}
-        >
-          <Input
-            type="number"
-            defaultValue={maximumFile.value}
-            disabled={!maximumFile.enabled}
-            onChange={handleNumberInputChange("maximumFile")}
-          />
-        </RowSettingWithCheckbox>
-      )}
-      {submissionType.includes(SubmissionType.FILE_UPLOAD) && (
-        <RowSettingWithCheckbox
-          title="Maximum submission size"
-          enabled={maximumFileSize.enabled}
-          handleEnableChange={handleEnableChange("maximumFileSize")}
-        >
-          <Combobox
-            showSearch={false}
-            options={maximumFileSizeOptions}
-            initialValue={maximumFileSize.value}
-            onChange={handleComboboxChange("maximumFileSize")}
-            popoverClassName="w-[150px]"
+          <Button
+            variant="outline"
+            className="w-[150px] justify-between text-black border border-gray-300 hover:border-gray-400 hover:bg-gray-50 data-[state=open]:border-blue-500"
           >
-            <Button
-              variant="outline"
-              className="w-[150px] justify-between text-black border border-gray-300 hover:border-gray-400 hover:bg-gray-50 data-[state=open]:border-blue-500"
-            >
-              {maximumFileSize.value}
-              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
-          </Combobox>
-        </RowSettingWithCheckbox>
-      )}
+            {maximumFileSize.value}
+            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </Combobox>
+      </RowSettingWithCheckbox>
     </div>
   );
 }
