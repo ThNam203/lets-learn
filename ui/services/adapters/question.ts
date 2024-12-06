@@ -23,10 +23,11 @@ export const convertChoicesInQuestionToRequestData = (
 
 export const convertChoiceQuestionToRequestData = (
   question: Question,
-  courseId: string
+  courseId?: string
 ) => {
   const {
     id,
+    topicQuizId,
     questionName,
     questionText,
     status,
@@ -37,10 +38,12 @@ export const convertChoiceQuestionToRequestData = (
     createdBy,
     modifiedBy,
   } = question;
+  console.log("question", question);
   const { choices, multiple } = question.data as ChoiceQuestion;
 
   let reqData = {
     id: id.length === 4 ? null : id,
+    topicQuizId: topicQuizId ?? null,
     questionName,
     questionText,
     status,
@@ -66,10 +69,11 @@ export const convertChoiceQuestionToRequestData = (
 
 export const convertShortAnswerQuestionToRequestData = (
   question: Question,
-  courseId: string
+  courseId?: string
 ) => {
   const {
     id,
+    topicQuizId,
     questionName,
     questionText,
     status,
@@ -84,6 +88,7 @@ export const convertShortAnswerQuestionToRequestData = (
 
   let reqData = {
     id: id.length === 4 ? null : id,
+    topicQuizId: topicQuizId ?? null,
     questionName,
     questionText,
     status,
@@ -109,10 +114,11 @@ export const convertShortAnswerQuestionToRequestData = (
 
 export const convertTrueFalseQuestionToRequestData = (
   question: Question,
-  courseId: string
+  courseId?: string
 ) => {
   const {
     id,
+    topicQuizId,
     questionName,
     questionText,
     status,
@@ -128,6 +134,7 @@ export const convertTrueFalseQuestionToRequestData = (
 
   let reqData = {
     id: id.length === 4 ? null : id,
+    topicQuizId: topicQuizId ?? null,
     questionName,
     questionText,
     status,
@@ -154,6 +161,7 @@ export const convertTrueFalseQuestionToRequestData = (
 export const convertQuestionFromResponseData = (data: any): Question => {
   let {
     id,
+    topicQuizId,
     questionName,
     questionText,
     status,
@@ -187,6 +195,7 @@ export const convertQuestionFromResponseData = (data: any): Question => {
 
   const question: Question = {
     id,
+    topicQuizId,
     questionName,
     questionText,
     status,

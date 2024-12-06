@@ -1,5 +1,6 @@
 export type Question = {
   id: string;
+  topicQuizId?: string;
   questionName: string;
   questionText: string;
   status: QuestionStatus;

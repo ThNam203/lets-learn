@@ -18,6 +18,7 @@ interface Props<T> {
   containerClassName?: string;
   itemClassName?: string;
   controlButtonClassName?: string;
+  draggable?: boolean;
 }
 
 interface Identifiable {
@@ -32,6 +33,7 @@ export default function DraggableContainer<T extends Identifiable>({
   containerClassName,
   controlButtonClassName,
   itemClassName,
+  draggable = true,
 }: Props<T>) {
   const handleDragEnd = (result: DropResult) => {
     const dragIndex = result.source.index;
@@ -61,6 +63,7 @@ export default function DraggableContainer<T extends Identifiable>({
                         className={itemClassName}
                         controlButtonClassName={controlButtonClassName}
                         moveIcon={moveIcon}
+                        draggable={draggable}
                       >
                         {renderItem(item, index)}
                       </DraggableItem>

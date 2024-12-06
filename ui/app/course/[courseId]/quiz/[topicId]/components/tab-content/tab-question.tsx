@@ -1,32 +1,54 @@
+"use client";
 import Banner from "@/components/ui/banner";
 import { cn } from "@/lib/utils";
 import { Question } from "@/models/question";
-import { QuizData } from "@/models/quiz";
 import { StudentResponse } from "@/models/student-response";
-import { format } from "date-fns";
-import { useMemo, useState } from "react";
-import QuestionList from "../question/question-list";
-import { QuestionType, TabInTab } from "../static-data";
-import { QuizOpenCloseState } from "./_components/static-data";
 import { QuizTopic } from "@/models/topic";
+import { format } from "date-fns";
+import { useEffect, useMemo, useState } from "react";
+import QuestionList from "../question/question-list";
+import { QuizOpenCloseState } from "./_components/static-data";
 
 interface Props {
   quiz: QuizTopic;
   questionsBank: Question[];
   quizResponses: StudentResponse[];
+  onQuizChange?: (quiz: QuizTopic) => void;
   onReorderedQuestion?: (data: Question[]) => void;
   onRemoveQuestion?: (index: number) => void;
   onAddQuestionsFromBank?: (question: Question[]) => void;
+  onSave?: () => void;
 }
 const TabQuestion = ({
   quiz,
   questionsBank,
   quizResponses,
+  onQuizChange,
   onRemoveQuestion,
   onReorderedQuestion,
   onAddQuestionsFromBank,
+  onSave,
 }: Props) => {
   const { questions, close, open } = quiz.data;
+  const [quizQuestionToRefresh, setQuizQuestionToRefresh] = useState<
+    Question[]
+  >([]);
+
+  useEffect(() => {
+    setQuizQuestionToRefresh(questions);
+  }, []);
+
+  const handleCancelQuestionChange = () => {
+    if (onQuizChange) {
+      onQuizChange({
+        ...quiz,
+        data: {
+          ...quiz.data,
+          questions: quizQuestionToRefresh,
+        },
+      });
+    }
+  };
 
   const quizOpenCloseState: QuizOpenCloseState = useMemo(() => {
     const timeOpen = open ? Math.floor(new Date(open).getTime() / 1000) : null;
@@ -104,10 +126,12 @@ const TabQuestion = ({
       <QuestionList
         questions={questions}
         questionsBank={questionsBank}
-        canAddOrRemoveQuestion={attempts === 0}
+        canEdit={attempts === 0}
         onRemoveQuestion={onRemoveQuestion}
         onReorderedQuestion={onReorderedQuestion}
         onAddQuestionsFromBank={onAddQuestionsFromBank}
+        onSave={onSave}
+        onCancel={handleCancelQuestionChange}
       />
     </div>
   );

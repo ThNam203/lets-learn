@@ -30,12 +30,8 @@ const GetQuestionFromBankDialog = ({
 }: Props) => {
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
   const questionToShowInBankList = useMemo(() => {
-    return questionsBank.filter(
-      (q) =>
-        !questions.some((question) => question.id === q.id) &&
-        q.status === QuestionStatus.READY
-    );
-  }, [questions, questionsBank]);
+    return questionsBank.filter((q) => q.status === QuestionStatus.READY);
+  }, [questionsBank]);
 
   const handleAddQuestion = () => {
     if (onAddQuestionsFromBank) onAddQuestionsFromBank(selectedQuestions);

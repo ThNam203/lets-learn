@@ -9,6 +9,7 @@ interface Props {
   className?: string;
   controlButtonClassName?: string;
   children?: React.ReactNode;
+  draggable?: boolean;
 }
 const DraggableItem = ({
   provided,
@@ -16,26 +17,28 @@ const DraggableItem = ({
   className,
   children,
   controlButtonClassName,
+  draggable = true,
 }: Props) => {
   return (
     <div
       className={cn(
-        "w-full flex flex-row items-center overflow-hidden",
+        "w-full flex flex-row items-center overflow-hidden rounded-md",
         className
       )}
       ref={provided.innerRef}
       {...provided.draggableProps}
     >
-      <div
-        {...provided.dragHandleProps}
-        className={cn("p-2", controlButtonClassName)}
-      >
-        <div className="cursor-pointer">
-          {moveIcon ? moveIcon : <ChevronsUpDown size={20} />}
+      {draggable && (
+        <div
+          {...provided.dragHandleProps}
+          className={cn("p-2", controlButtonClassName)}
+        >
+          <div className="cursor-pointer">
+            {moveIcon ? moveIcon : <ChevronsUpDown size={20} />}
+          </div>
         </div>
-      </div>
-
-      {children}
+      )}
+      <div className="w-full py-2 px-4">{children}</div>
     </div>
   );
 };

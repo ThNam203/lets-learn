@@ -60,5 +60,11 @@ export const getQuestionBank = (
   onFail: (err?: any) => void
 ) => {
   const url = `/question?courseId=${courseId}`;
-  GET(url, onSuccess, onFail);
+  const handleSuccess = (data: any) => {
+    const questions = data.map((question: any) =>
+      convertQuestionFromResponseData(question)
+    );
+    onSuccess(questions);
+  };
+  GET(url, handleSuccess, onFail);
 };

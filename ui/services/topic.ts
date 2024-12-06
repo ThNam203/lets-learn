@@ -2,7 +2,7 @@ import { Topic } from "@/models/topic";
 import {
   convertTopicFromResponseData,
   convertTopicToRequestData,
-} from "./adapters/topic";
+} from "./adapters/topic/topic";
 import { GET, PUT } from "@/lib/http-handle/http-handle";
 
 export const getTopic = (
@@ -29,6 +29,5 @@ export const updateTopic = (
     const res = convertTopicFromResponseData(data);
     onSuccess(res);
   };
-  console.log("reqData", reqData);
   PUT(`/topic/${id}`, reqData, handleSuccess, onFail);
 };

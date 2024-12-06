@@ -7,14 +7,14 @@ import { questionIconMap } from "../static-data";
 interface Props {
   rowIndex: number;
   data: Question;
-  canRemove?: boolean;
+  isEditting?: boolean;
   onEdit?: (question: Question) => void;
   onRemove?: (index: number) => void;
 }
 const QuestionRow = ({
   data,
   rowIndex,
-  canRemove,
+  isEditting,
   onRemove,
   onEdit,
 }: Props) => {
@@ -26,7 +26,7 @@ const QuestionRow = ({
     if (onRemove) onRemove(rowIndex);
   };
   return (
-    <div className="flex-1 px-2">
+    <div className="flex-1">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-4">
           <p className="text-sm">{rowIndex + 1}</p>
@@ -39,7 +39,7 @@ const QuestionRow = ({
             {questionName}
           </Button>
         </div>
-        {canRemove && (
+        {isEditting && (
           <div className="flex flex-row items-center">
             <Trash2
               size={20}

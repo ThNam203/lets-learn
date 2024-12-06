@@ -15,6 +15,7 @@ import TabSetting from "./tab-setting";
 import { getQuestionBank } from "@/services/question";
 import { toast } from "react-toastify";
 import { updateTopic } from "@/services/topic";
+import { nanoid } from "@reduxjs/toolkit";
 
 interface Props {
   className?: string;
@@ -53,20 +54,48 @@ const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
     );
   }, [courseId]);
 
+  const handleAddQuestionFromBank = (questions: Question[]) => {
+    const questionsToAdd = questions.map((question) => ({
+      ...question,
+      id: nanoid(4),
+    }));
+    const oldQuestions = quiz.data.questions;
+    const updatedQuiz = {
+      ...quiz,
+      data: { ...quiz.data, questions: [...oldQuestions, ...questionsToAdd] },
+    };
+    console.log("updatedQuiz", updatedQuiz);
+    if (onQuizChange) onQuizChange(updatedQuiz);
+  };
+
+  const handleReorderedQuestion = (newQuestions: Question[]) => {
+    const updatedQuiz = {
+      ...quiz,
+      data: { ...quiz.data, questions: newQuestions },
+    };
+    if (onQuizChange) onQuizChange(updatedQuiz);
+  };
+
+  const handleRemoveQuestion = (index: number) => {
+    const newQuestions = [...questions];
+    newQuestions.splice(index, 1);
+    const updatedQuiz = {
+      ...quiz,
+      data: { ...quiz.data, questions: newQuestions },
+    };
+    if (onQuizChange) onQuizChange(updatedQuiz);
+  };
+
   const handleUpdateQuizSuccess = (updatedQuiz: QuizTopic) => {
     if (onQuizChange) onQuizChange(updatedQuiz);
+    toast.success("Quiz updated successfully");
   };
   const handleUpdateQuizFail = (error: any) => {
     toast.error(error);
   };
 
-  const handleAddQuestionFromBank = (questions: Question[]) => {
-    const newQuestions = [...questions, ...questionsBank];
-    const updatedQuiz = {
-      ...quiz,
-      data: { ...quiz.data, questions: newQuestions },
-    };
-    updateTopic(updatedQuiz, handleUpdateQuizSuccess, handleUpdateQuizFail);
+  const handleUpdateQuizQuestions = () => {
+    updateTopic(quiz, handleUpdateQuizSuccess, handleUpdateQuizFail);
   };
 
   switch (selectedTab) {
@@ -88,7 +117,11 @@ const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
           quiz={quiz}
           questionsBank={questionsBank}
           quizResponses={quizResponses}
+          onQuizChange={onQuizChange}
           onAddQuestionsFromBank={handleAddQuestionFromBank}
+          onReorderedQuestion={handleReorderedQuestion}
+          onRemoveQuestion={handleRemoveQuestion}
+          onSave={handleUpdateQuizQuestions}
         />
       );
     case Tab.QUESTION_BANK:

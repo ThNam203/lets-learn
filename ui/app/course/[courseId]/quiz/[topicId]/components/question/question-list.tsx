@@ -7,29 +7,36 @@ import QuestionAddButton from "./question-add-button";
 import QuestionRow from "./question-row";
 import GetQuestionFromBankDialog from "../question-bank/dialog/get-question-from-bank-dialog";
 import { notFound, useRouter } from "next/navigation";
+import { Button } from "@/lib/shadcn/button";
 
 interface Props {
   questions: Question[];
   questionsBank: Question[];
-  canAddOrRemoveQuestion?: boolean;
+  canEdit?: boolean;
   onReorderedQuestion?: (data: Question[]) => void;
   onAddQuestionsFromBank?: (question: Question[]) => void;
   onRemoveQuestion?: (index: number) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 const QuestionList = ({
   questions,
   questionsBank,
-  canAddOrRemoveQuestion = true,
+  canEdit = true,
   onAddQuestionsFromBank,
   onRemoveQuestion,
   onReorderedQuestion,
+  onSave,
+  onCancel,
 }: Props) => {
   const router = useRouter();
+
+  const [isEditing, setIsEditing] = useState(false);
   const [openAddNewQuestionDialog, setOpenAddNewQuestionDialog] =
     useState(false);
-
   const [openAddQuestionFromBankDialog, setOpenAddQuestionFromBankDialog] =
     useState(false);
+
   const handleEdit = (question: Question) => {
     const { type, id } = question;
     if (type === QuestionType.CHOICE)
@@ -39,12 +46,23 @@ const QuestionList = ({
     else if (type === QuestionType.TRUE_FALSE)
       router.push(`/question/true-false/edit/${id}`);
   };
+  const toggleEdit = () => setIsEditing(!isEditing);
   const handleAddNewQuestion = (type: QuestionType) => {
     if (type === QuestionType.CHOICE) router.push("/question/choice/create");
     else if (type === QuestionType.SHORT_ANSWER)
       router.push("/question/short-answer/create");
     else if (type === QuestionType.TRUE_FALSE)
       router.push("/question/true-false/create");
+  };
+
+  const handleSave = () => {
+    toggleEdit();
+    if (onSave) onSave();
+  };
+
+  const handleCancel = () => {
+    toggleEdit();
+    if (onCancel) onCancel();
   };
 
   return (
@@ -55,25 +73,56 @@ const QuestionList = ({
           data={questions}
           onReordered={onReorderedQuestion}
           itemClassName="bg-cyan-100 shadow"
+          draggable={isEditing}
           renderItem={(question, index) => (
             <QuestionRow
               key={index}
               data={question}
               rowIndex={index}
-              canRemove={canAddOrRemoveQuestion}
+              isEditting={isEditing}
               onEdit={handleEdit}
               onRemove={onRemoveQuestion}
             />
           )}
         />
       )}
-
-      {canAddOrRemoveQuestion && (
-        <div className="ml-auto">
-          <QuestionAddButton
-            onAddNewQuestion={() => setOpenAddNewQuestionDialog(true)}
-            onAddQuestionFromBank={() => setOpenAddQuestionFromBankDialog(true)}
-          />
+      {canEdit && (
+        <div className="ml-auto space-x-2">
+          {!isEditing && (
+            <Button
+              variant="link"
+              className="h-fit text-cyan-700 p-0 space-x-1"
+              onClick={toggleEdit}
+            >
+              Edit
+            </Button>
+          )}
+          {isEditing && (
+            <Button
+              variant="link"
+              className="h-fit text-green-500 p-0 space-x-1"
+              onClick={handleSave}
+            >
+              Save
+            </Button>
+          )}
+          {isEditing && (
+            <Button
+              variant="link"
+              className="h-fit text-red-500 p-0 space-x-1"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+          )}
+          {isEditing && (
+            <QuestionAddButton
+              onAddNewQuestion={() => setOpenAddNewQuestionDialog(true)}
+              onAddQuestionFromBank={() =>
+                setOpenAddQuestionFromBankDialog(true)
+              }
+            />
+          )}
           <CreateQuestionDialog
             open={openAddNewQuestionDialog}
             onOpenChange={setOpenAddNewQuestionDialog}

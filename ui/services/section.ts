@@ -1,6 +1,6 @@
 import { POST, PUT } from "@/lib/http-handle/http-handle";
 import { Section } from "@/models/course";
-import { convertTopicToRequestData } from "./adapters/topic";
+import { convertTopicToRequestData } from "./adapters/topic/topic";
 
 export const createSection = (
   data: any,
