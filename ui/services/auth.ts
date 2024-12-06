@@ -1,4 +1,4 @@
-import { GET, makeRequest, POST } from "@/lib/http-handle/http-handle";
+import { makeRequest, POST } from "@/lib/http-handle/http-handle";
 
 export const signup = (
   reqData: any,

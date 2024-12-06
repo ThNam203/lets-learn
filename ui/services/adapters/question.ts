@@ -23,7 +23,7 @@ export const convertChoicesInQuestionToRequestData = (
 
 export const convertChoiceQuestionToRequestData = (
   question: Question,
-  courseId?: string
+  courseId?: string // just need when CRUD with question bank
 ) => {
   const {
     id,
@@ -69,7 +69,7 @@ export const convertChoiceQuestionToRequestData = (
 
 export const convertShortAnswerQuestionToRequestData = (
   question: Question,
-  courseId?: string
+  courseId?: string // just need when CRUD with question bank
 ) => {
   const {
     id,
@@ -114,7 +114,7 @@ export const convertShortAnswerQuestionToRequestData = (
 
 export const convertTrueFalseQuestionToRequestData = (
   question: Question,
-  courseId?: string
+  courseId?: string // just need when CRUD with question bank
 ) => {
   const {
     id,

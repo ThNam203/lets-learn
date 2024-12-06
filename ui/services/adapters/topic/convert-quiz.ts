@@ -13,11 +13,11 @@ export const convertQuizToRequestData = (quiz: QuizTopic) => {
   const removeTempIdInQuestions = (questions: Question[]) => {
     return questions.map((question) => {
       if (question.type === QuestionType.CHOICE)
-        return convertChoiceQuestionToRequestData(question || []);
+        return convertChoiceQuestionToRequestData(question);
       else if (question.type === QuestionType.SHORT_ANSWER)
-        return convertShortAnswerQuestionToRequestData(question || []);
+        return convertShortAnswerQuestionToRequestData(question);
       else if (question.type === QuestionType.TRUE_FALSE)
-        return convertTrueFalseQuestionToRequestData(question || []);
+        return convertTrueFalseQuestionToRequestData(question);
       return question;
     });
   };

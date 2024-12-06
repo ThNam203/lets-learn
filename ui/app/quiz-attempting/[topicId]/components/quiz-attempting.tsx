@@ -1,5 +1,8 @@
 "use client";
-import { QuestionResult } from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
+import {
+  getQuizResultFromMark,
+  QuestionResult,
+} from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
 import ColorAnnotation from "@/app/course/[courseId]/quiz/[topicId]/components/tab-content/_components/quiz-attempting-tab/color-annotation";
 import QuizAttemptResult from "@/app/course/[courseId]/quiz/[topicId]/components/tab-content/_components/quiz-attempting-tab/quiz-attempt-result";
 import QuizCountdown from "@/app/course/[courseId]/quiz/[topicId]/components/tab-content/_components/quiz-attempting-tab/quiz-countdown";
@@ -27,6 +30,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import QuestionDisplay from "./question-display/question-display";
 import QuestionBlock from "./question-navigation-box/question-block";
+import { createQuizResponse } from "@/services/quiz-response";
+import { toast } from "react-toastify";
 
 interface Props {
   className?: string;
@@ -43,11 +48,16 @@ const QuizAttempting = ({
   onQuizAnswerChange,
 }: Props) => {
   const router = useRouter();
-  const { startTimer, stopTimer, timer, status: timerStatus } = useTimer({});
   const quizResponseData = quizResponse.data as QuizResponseData;
-  const { answers: studentAnswers } = quizResponseData;
+  const { answers: studentAnswers, status } = quizResponseData;
   const { questions, timeLimit, timeLimitUnit } = quiz.data;
   const totalQuestions = questions.length;
+  const {
+    startTimer,
+    stopTimer,
+    timerValue: timer,
+    status: timerStatus,
+  } = useTimer({});
   const {
     status: countdownStatus,
     countdownTimer,
@@ -61,7 +71,7 @@ const QuizAttempting = ({
   });
 
   const [showCorrectAnswer, setShowCorrectAnswer] = useState(
-    quizResponseData.status === QuizStatus.FINISHED
+    status === QuizStatus.FINISHED
   );
   const [flags, setFlags] = useState<boolean[]>(questions.map(() => false));
 
@@ -69,37 +79,32 @@ const QuizAttempting = ({
   const [hasAnswers, setHasAnswers] = useState<boolean[]>(
     questions.map(() => false)
   );
-  const [questionResults, setQuestionResults] = useState(
+  const [questionResults, setQuestionResults] = useState<QuestionResult[]>(
     questions.map(() => QuestionResult.NOT_SHOW)
   );
-
-  useEffect(() => {
-    if (countdownTimer <= 0) stopCountdown(handleCountdownEnd);
-  }, [countdownTimer]);
 
   useEffect(() => {
     if (quizResponseData.status === QuizStatus.NOT_STARTED) startQuiz();
   }, []);
 
   useEffect(() => {
-    let newResults;
-    if (showCorrectAnswer) {
-      const getResultByMark = (index: number, mark: number) => {
-        let result = QuestionResult.NOT_SHOW;
-        const defaultMark = questions[index].defaultMark;
-        if (mark === defaultMark) result = QuestionResult.FULL_MARK;
-        else if (mark === 0) result = QuestionResult.ZERO_MARK;
-        else result = QuestionResult.PARTIAL_MARK;
+    if (!showCorrectAnswer) {
+      setQuestionResults(questions.map(() => QuestionResult.NOT_SHOW));
+    } else handleShowCorrectAnswer();
+  }, [showCorrectAnswer, studentAnswers]);
 
-        return result;
-      };
-      newResults = studentAnswers.map((ans, index) =>
-        getResultByMark(index, ans.mark)
-      );
-    } else newResults = questions.map(() => QuestionResult.NOT_SHOW);
+  const handleShowCorrectAnswer = () => {
+    let results = studentAnswers.map((ans, index) => {
+      const defaultMark = questions[index].defaultMark;
+      return getQuizResultFromMark(ans.mark, defaultMark);
+    });
 
-    setQuestionResults(newResults);
-  }, [showCorrectAnswer, studentAnswers, questions]);
+    setQuestionResults(results);
+  };
+
+  useEffect(() => {
+    if (countdownTimer <= 0) stopCountdown(handleCountdownEnd);
+  }, [countdownTimer]);
 
   const handleCountdownEnd = () => {
     setShowCorrectAnswer(true);
@@ -117,15 +122,14 @@ const QuizAttempting = ({
   };
 
   const startQuiz = () => {
-    const data = quizResponse.data as QuizResponseData;
-    if (data.status !== QuizStatus.NOT_STARTED) return;
-    const startTime = new Date().toISOString();
+    if (status !== QuizStatus.NOT_STARTED) return;
 
     const startQuizResponseData: QuizResponseData = {
-      ...data,
+      ...quizResponseData,
       status: QuizStatus.NOT_FINISHED,
-      startedAt: startTime,
+      startedAt: new Date().toISOString(),
     };
+
     const startQuizResponse: StudentResponse = {
       ...quizResponse,
       data: startQuizResponseData,
@@ -139,11 +143,11 @@ const QuizAttempting = ({
   };
 
   const handleFinishQuizResponse = () => {
-    const completedTime = new Date().toISOString();
+    const completedTime = new Date();
     const finishQuizResponseData: QuizResponseData = {
       ...quizResponseData,
       status: QuizStatus.FINISHED,
-      completedAt: completedTime,
+      completedAt: completedTime.toISOString(),
     };
 
     const finishedQuizResponse: StudentResponse = {
@@ -152,10 +156,28 @@ const QuizAttempting = ({
     };
 
     if (onQuizResponseChange) onQuizResponseChange(finishedQuizResponse);
+    saveQuizResponse(finishedQuizResponse);
 
     // Stop timer
     if (timeLimit) stopCountdown();
-    else stopTimer(new Date(completedTime));
+    else stopTimer(completedTime);
+  };
+
+  const handleCreateQuizResponseSuccess = (data: any) => {
+    console.log("data", data);
+    toast.success("Your quiz result has been saved successfully");
+  };
+  const handleCreateQuizResponseFail = (error: any) => {
+    toast.error(error);
+  };
+
+  const saveQuizResponse = (quizResponse: StudentResponse) => {
+    createQuizResponse(
+      quiz.id,
+      quizResponse,
+      handleCreateQuizResponseSuccess,
+      handleCreateQuizResponseFail
+    );
   };
 
   const handleFinishReview = () => {

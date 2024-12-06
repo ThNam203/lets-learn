@@ -11,6 +11,7 @@ export const getTopic = (
   onFail: (err?: any) => void
 ) => {
   const handleSuccess = (data: any) => {
+    console.log("data in get", data);
     const res = convertTopicFromResponseData(data);
     onSuccess(res);
   };

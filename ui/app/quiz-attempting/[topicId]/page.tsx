@@ -7,16 +7,27 @@ import {
   QuizStatus,
   StudentResponse,
 } from "@/models/student-response";
-import { nanoid } from "@reduxjs/toolkit";
-import { useState } from "react";
-import QuizAttempting from "./components/quiz-attempting";
 import { QuizTopic } from "@/models/topic";
-import { fakeQuiz } from "@/fake-data/quiz";
+import { getTopic } from "@/services/topic";
+import { nanoid } from "@reduxjs/toolkit";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import QuizAttempting from "./components/quiz-attempting";
+import { defaultQuizResponse } from "./components/static-data";
 
-export default function QuizAttemptingPage() {
+interface Props {
+  params: {
+    topicId: string;
+  };
+}
+export default function QuizAttemptingPage({ params }: Props) {
+  const { topicId } = params;
   const thisUser = fakeUser;
-  const [quiz, setQuiz] = useState<QuizTopic>(fakeQuiz);
-  const getNewQuizResponse = () => {
+  const [quiz, setQuiz] = useState<QuizTopic>();
+  const [selectedQuizResponse, setSelectedQuizResponse] =
+    useState<StudentResponse>(defaultQuizResponse);
+
+  const getQuizResponse = (quiz: QuizTopic) => {
     const startTime = new Date().toISOString();
     const { questions } = quiz.data as QuizData;
 
@@ -30,16 +41,14 @@ export default function QuizAttemptingPage() {
         mark: 0,
       })),
     };
-    const newQuizResponse: StudentResponse = {
-      id: nanoid(),
+    const quizResponse: StudentResponse = {
+      id: nanoid(4),
       student: thisUser,
       topicId: quiz.id,
       data: quizResponseData,
     };
-    return newQuizResponse;
+    return quizResponse;
   };
-  const [selectedQuizResponse, setSelectedQuizResponse] =
-    useState<StudentResponse>(getNewQuizResponse());
 
   const handleQuizResponseChange = (quizResponse: StudentResponse) => {
     setSelectedQuizResponse(quizResponse);
@@ -62,11 +71,25 @@ export default function QuizAttemptingPage() {
     handleQuizResponseChange(newQuizResponse);
   };
 
+  const handleGetTopicSuccess = (data: QuizTopic) => {
+    setQuiz(data);
+    const quizResponse = getQuizResponse(data);
+    setSelectedQuizResponse(quizResponse);
+  };
+  const handleGetTopicFail = (error: any) => {
+    toast.error(error);
+  };
+  useEffect(() => {
+    getTopic(topicId, handleGetTopicSuccess, handleGetTopicFail);
+  }, [topicId]);
+
+  if (!quiz) return null;
+
   return (
     <div className="p-5 pb-48">
       <QuizAttempting
         quiz={quiz}
-        quizResponse={selectedQuizResponse!}
+        quizResponse={selectedQuizResponse}
         onQuizResponseChange={handleQuizResponseChange}
         onQuizAnswerChange={handleQuizAnswerChange}
       />

@@ -7,16 +7,17 @@ interface Props {
 const useTimer = ({ step = 1 }: Props) => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
-  const [timer, setTimer] = useState<number>(0);
+  const timer = useRef<number>(0);
+  const timerValue = timer.current;
 
   const [status, setStatus] = useState<TimerStatus>(TimerStatus.STOPPED);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const startTimer = (startTime?: Date) => {
-    if (timerRef.current) return;
+    if (timerValue > 0) return;
     if (startTime) setStartTime(startTime);
     const interval = setInterval(() => {
-      setTimer((prev) => prev + step);
+      timer.current += step;
     }, 1000);
     setStatus(TimerStatus.RUNNING);
     timerRef.current = interval;
@@ -36,11 +37,15 @@ const useTimer = ({ step = 1 }: Props) => {
       const duration =
         Math.floor(endTime.getTime() / 1000) -
         Math.floor(startTime.getTime() / 1000);
-      setTimer(duration);
+      timer.current = duration;
     }
   }, [status]);
 
-  return { timer, setTimer, startTimer, stopTimer, status };
+  const setTimer = (time: number) => {
+    timer.current = time;
+  };
+
+  return { timerValue, setTimer, startTimer, stopTimer, status };
 };
 
 export default useTimer;

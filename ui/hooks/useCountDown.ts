@@ -1,5 +1,4 @@
 import { CountdownStatus } from "@/app/courses/[courseId]/quiz/[topicId]/_components/tab-content/_components/quiz-attempting-tab/quiz-countdown";
-import { TimerStatus } from "@/app/courses/[courseId]/quiz/[topicId]/_components/tab-content/_components/quiz-attempting-tab/quiz-timer";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
@@ -7,15 +6,16 @@ interface Props {
   countdown: number;
 }
 const useCountdown = ({ step = 1, countdown }: Props) => {
-  const [countdownTimer, setCountdownTimer] = useState<number>(countdown);
+  const [countdownTimer, setCountdownTimer] = useState(countdown);
+
+  const countDownRef = useRef<NodeJS.Timeout | null>(null);
 
   const [status, setStatus] = useState<CountdownStatus>(
     CountdownStatus.STOPPED
   );
-  const countDownRef = useRef<NodeJS.Timeout | null>(null);
 
   const startCountdown = () => {
-    if (countDownRef.current) return;
+    if (countdownTimer < countdown) return;
     const interval = setInterval(() => {
       setCountdownTimer((prev) => prev - step / 100);
     }, 10);
