@@ -107,6 +107,7 @@ const QuizAttempting = ({
   }, [countdownTimer]);
 
   const handleCountdownEnd = () => {
+    if (showCorrectAnswer) return;
     setShowCorrectAnswer(true);
     handleFinishQuizResponse();
   };

@@ -16,6 +16,7 @@ import { getQuestionBank } from "@/services/question";
 import { toast } from "react-toastify";
 import { updateTopic } from "@/services/topic";
 import { nanoid } from "@reduxjs/toolkit";
+import { getQuizResponses } from "@/services/quiz-response";
 
 interface Props {
   className?: string;
@@ -53,6 +54,13 @@ const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
       handleGetQuestionFail
     );
   }, [courseId]);
+  useEffect(() => {
+    getQuizResponses(
+      quiz.id,
+      handleGetQuizResponsesSuccess,
+      handleGetQuizResponsesFail
+    );
+  }, []);
 
   const handleAddQuestionFromBank = (questions: Question[]) => {
     const questionsToAdd = questions.map((question) => ({
@@ -96,6 +104,13 @@ const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
 
   const handleUpdateQuizQuestions = () => {
     updateTopic(quiz, handleUpdateQuizSuccess, handleUpdateQuizFail);
+  };
+
+  const handleGetQuizResponsesSuccess = (responses: StudentResponse[]) => {
+    setQuizResponses(responses);
+  };
+  const handleGetQuizResponsesFail = (error: any) => {
+    toast.error(error);
   };
 
   switch (selectedTab) {
