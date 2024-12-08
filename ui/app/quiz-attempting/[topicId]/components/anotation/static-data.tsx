@@ -1,6 +1,6 @@
 import { Circle, CircleCheckBig } from "lucide-react";
 import { ReactNode } from "react";
-import { FlagIcon } from "./icons";
+import { FlagIcon } from "../../../../course/[courseId]/quiz/[topicId]/components/tab-content/_components/icons";
 
 type SymbolAnnotation = {
   symbol: ReactNode;

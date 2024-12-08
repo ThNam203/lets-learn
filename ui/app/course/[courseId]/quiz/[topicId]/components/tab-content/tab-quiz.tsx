@@ -15,29 +15,26 @@ import {
   sortQuizResponsesByCompletedDate,
   StudentResponse,
 } from "@/models/student-response";
+import { QuizTopic } from "@/models/topic";
 import { nanoid } from "@reduxjs/toolkit";
 import { format } from "date-fns";
 import { SearchCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { toast } from "react-toastify";
-import { TabInTab } from "../static-data";
-import QuizAttemptResult from "./_components/quiz-attempting-tab/quiz-attempt-result";
-import { QuizTopic } from "@/models/topic";
+import QuizAttemptResult from "../quiz/quiz-attempt-result";
 
 interface Props {
   quiz: QuizTopic;
   quizResponses: StudentResponse[];
   onSelectQuizResponse?: (quizResponse: StudentResponse) => void;
   onQuizResponsesChange?: (quizResponses: StudentResponse[]) => void;
-  onTabInTabChange?: (tab: TabInTab) => void;
   className?: string;
 }
 const TabQuiz = ({
   className,
   quiz,
   quizResponses,
-  onTabInTabChange,
   onQuizResponsesChange,
   onSelectQuizResponse,
 }: Props) => {
@@ -66,13 +63,13 @@ const TabQuiz = ({
     const lastIndex = quizResponses.length - 1;
     const lastQuizResponse = quizResponses[lastIndex];
     if (onSelectQuizResponse) onSelectQuizResponse(lastQuizResponse);
-    if (onTabInTabChange) onTabInTabChange(TabInTab.QUIZ_ATTEMPTING_TAB);
+    router.push(`/quiz-attempting/${quiz.id}`);
   };
 
   const handleReviewQuiz = (index: number) => {
     const quizToReview = quizResponses[index];
     if (onSelectQuizResponse) onSelectQuizResponse(quizToReview);
-    if (onTabInTabChange) onTabInTabChange(TabInTab.QUIZ_ATTEMPTING_TAB);
+    router.push(`/quiz-attempting/${quiz.id}/review/${quizToReview.id}`);
   };
 
   const handleRemoveQuizResponse = (index: number) => {

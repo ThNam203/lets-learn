@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import React, { useEffect, useRef } from "react";
-import styles from "./quiz-timer.module.css";
+import styles from "./timer.module.css";
 
 export enum CountdownStatus {
   RUNNING = "running",
@@ -14,7 +14,7 @@ interface Props {
   className?: string;
   countdown: number;
 }
-const QuizCountdown = ({
+const Countdown = ({
   status = CountdownStatus.STOPPED,
   className,
   countdown,
@@ -76,4 +76,4 @@ const QuizCountdown = ({
   );
 };
 
-export default QuizCountdown;
+export default Countdown;

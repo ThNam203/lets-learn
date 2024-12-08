@@ -5,6 +5,7 @@ interface Props {
   studentResponses: StudentResponse[];
 }
 const TabResults = ({ studentResponses }: Props) => {
+  console.log("studentResponses", studentResponses);
   return (
     <div className="w-full flex flex-col gap-8">
       <div className="space-y-2">

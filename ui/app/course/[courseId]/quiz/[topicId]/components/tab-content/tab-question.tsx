@@ -7,7 +7,7 @@ import { QuizTopic } from "@/models/topic";
 import { format } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import QuestionList from "../question/question-list";
-import { QuizOpenCloseState } from "./_components/static-data";
+import { QuizOpenCloseState } from "../../../../../../quiz-attempting/[topicId]/components/anotation/static-data";
 
 interface Props {
   quiz: QuizTopic;

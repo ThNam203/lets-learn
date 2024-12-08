@@ -56,14 +56,19 @@ const imageColumn = (title: string): ColumnDef<StudentResponse> => {
     ),
     cell: ({ row }) => {
       const student: User = row.getValue("student");
-      const imageUrl = student.image;
+      let imageUrl = "/default-user.webp";
+      if (student && student.image) imageUrl = student.image;
 
       return (
-        <Image
-          className="w-[50px] object-fill rounded-full px-2"
-          src={imageUrl}
-          alt="User avatar"
-        />
+        <div className="px-2">
+          <Image
+            className="w-[30px] h-[30px] object-cover rounded-full"
+            src={imageUrl}
+            width={100}
+            height={100}
+            alt="User avatar"
+          />
+        </div>
       );
     },
     enableSorting: false,
@@ -79,7 +84,8 @@ const studentNameColumn = (title: string): ColumnDef<StudentResponse> => {
     ),
     cell: ({ row }) => {
       const student: User = row.getValue("student");
-      const name = student.username;
+      let name = "Anonymous";
+      if (student && student.username) name = student.username;
 
       return <p className="px-2 w-[150px]">{name}</p>;
     },
@@ -95,7 +101,8 @@ const emailColumn = (title: string): ColumnDef<StudentResponse> => {
     ),
     cell: ({ row }) => {
       const student: User = row.getValue("student");
-      const email = student.email;
+      let email = "anonymous@gmail.com";
+      if (student && student.email) email = student.email;
 
       return <p className="px-2">{email}</p>;
     },
@@ -112,7 +119,9 @@ const statusColumn = (title: string): ColumnDef<StudentResponse> => {
     ),
     cell: ({ row }) => {
       const quizResponseData = row.getValue("data") as QuizResponseData;
-      const status: string = quizResponseData.status;
+      let status = "Error";
+      if (quizResponseData && quizResponseData.status)
+        status = quizResponseData.status;
 
       return <p className="px-2">{status}</p>;
     },
@@ -128,9 +137,12 @@ const durationColumn = (title: string): ColumnDef<StudentResponse> => {
     ),
     cell: ({ row }) => {
       const quizResponseData = row.getValue("data") as QuizResponseData;
-      const startedAt: string = quizResponseData.startedAt;
-      const completedAt: string = quizResponseData.completedAt;
-      const duration = getDurationText(startedAt, completedAt);
+      let duration = "Error";
+      if (quizResponseData) {
+        const startedAt: string = quizResponseData.startedAt;
+        const completedAt: string = quizResponseData.completedAt;
+        duration = getDurationText(startedAt, completedAt);
+      }
 
       return <p className="px-2">{duration}</p>;
     },

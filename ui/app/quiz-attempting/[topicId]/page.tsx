@@ -86,7 +86,7 @@ export default function QuizAttemptingPage({ params }: Props) {
   if (!quiz) return null;
 
   return (
-    <div className="p-5 pb-48">
+    <div className="p-5">
       <QuizAttempting
         quiz={quiz}
         quizResponse={selectedQuizResponse}

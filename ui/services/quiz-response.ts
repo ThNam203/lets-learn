@@ -21,8 +21,27 @@ export const getQuizResponses = (
   onFail: (err?: any) => void
 ) => {
   const handleSuccess = (data: any) => {
+    console.log("data get", data);
     const quizResponses = data.map(convertQuizResponseFromResponseData);
+    console.log("quizResponses", quizResponses);
     onSuccess(quizResponses);
   };
   GET(`/topic/${topicId}/quiz-response`, handleSuccess, onFail);
+};
+
+export const getQuizResponse = (
+  topicId: string,
+  quizResponseId: string,
+  onSuccess: (data: StudentResponse) => void,
+  onFail: (err?: any) => void
+) => {
+  const handleSuccess = (data: any) => {
+    const quizResponse = convertQuizResponseFromResponseData(data);
+    onSuccess(quizResponse);
+  };
+  GET(
+    `/topic/${topicId}/quiz-response/${quizResponseId}`,
+    handleSuccess,
+    onFail
+  );
 };

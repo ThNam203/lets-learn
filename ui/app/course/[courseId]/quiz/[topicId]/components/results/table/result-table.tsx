@@ -39,6 +39,7 @@ const ResultTable = ({
   const router = useRouter();
   const [filteredData, setFilteredData] = useState<StudentResponse[]>([]);
   const filterOptionKeys = Object.keys(resultColumnTitles).map((key) => key);
+  console.log("data", data);
 
   useEffect(() => {
     if (error) toast.error(error);

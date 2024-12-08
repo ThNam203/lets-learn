@@ -1,8 +1,7 @@
 "use client";
-import { format } from "date-fns";
-import React, { useEffect, useRef } from "react";
-import styles from "./quiz-timer.module.css";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import styles from "./timer.module.css";
 
 export enum TimerStatus {
   RUNNING = "running",
@@ -14,11 +13,7 @@ interface Props {
   status?: TimerStatus;
   className?: string;
 }
-const QuizTimer = ({
-  timer,
-  status = TimerStatus.STOPPED,
-  className,
-}: Props) => {
+const Timer = ({ timer, status = TimerStatus.STOPPED, className }: Props) => {
   const hours = Math.floor(timer / 3600);
   const minutes = Math.floor((timer % 3600) / 60);
   const seconds = timer % 60;
@@ -55,4 +50,4 @@ const QuizTimer = ({
   );
 };
 
-export default QuizTimer;
+export default Timer;

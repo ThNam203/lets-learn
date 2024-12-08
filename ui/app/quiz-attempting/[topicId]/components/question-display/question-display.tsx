@@ -1,32 +1,32 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { ChoiceQuestion, Question } from "@/models/question";
-import ChoicesDisplay from "../choice-answer/choices-display";
-import ShortAnswerDisplay from "../short-answer/short-answer-display";
-import { questionDescription } from "../static-data";
-import TrueFalseChoiceDisplay from "../true-false-answer/true-fale-choice-display";
-import QuestionFancyButton from "./question-fancy-button";
-import { Button } from "@/lib/shadcn/button";
-import { Pen, Settings2 } from "lucide-react";
-import useBubbleAnimation from "@/hooks/useBubbleAnimation/useBubbleAnimation";
-import EditorDisplay from "@/lib/tinymce/editor-display";
-import { QuizAnswer } from "@/models/student-response";
 import {
   QuestionResult,
   QuestionType,
 } from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
 import { FlagIcon } from "@/components/icons/flag";
+import useBubbleAnimation from "@/hooks/useBubbleAnimation/useBubbleAnimation";
+import { Button } from "@/lib/shadcn/button";
+import EditorDisplay from "@/lib/tinymce/editor-display";
+import { cn } from "@/lib/utils";
+import { ChoiceQuestion, Question } from "@/models/question";
+import { QuizAnswer } from "@/models/student-response";
+import { Settings2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import ChoicesDisplay from "../choice-answer/choices-display";
+import ShortAnswerDisplay from "../short-answer/short-answer-display";
+import { questionDescription } from "../static-data";
+import TrueFalseChoiceDisplay from "../true-false-answer/true-fale-choice-display";
+import QuestionFancyButton from "./question-fancy-button";
 
 interface Props {
   questionIndex: number;
   totalQuestions: number;
   question: Question;
   description?: string;
-  showCorrectAnswer?: boolean;
   isFlagged?: boolean;
   result?: QuestionResult;
   studentAnswer: QuizAnswer;
+  showCorrectAnswer?: boolean;
   editMode?: boolean;
   onFlagChange?: () => void;
   onQuizAnswerChange?: (quizAnswer: QuizAnswer) => void;
@@ -37,16 +37,16 @@ const QuestionDisplay = ({
   totalQuestions,
   question,
   description,
-  showCorrectAnswer,
   isFlagged,
   studentAnswer,
+  showCorrectAnswer = false,
   result = QuestionResult.NOT_SHOW,
   editMode = false,
   onFlagChange,
   onQuizAnswerChange,
 }: Props) => {
   const { type, defaultMark, data, id } = question;
-  const { mark, answer } = studentAnswer;
+  const { answer } = studentAnswer;
   const router = useRouter();
 
   const { bubbleClassName, handleMouseEnter, handleMouseOut } =
@@ -114,7 +114,7 @@ const QuestionDisplay = ({
           )}
         </div>
         {/* Question mark here */}
-        {showCorrectAnswer && (
+        {showCorrectAnswer && studentAnswer && (
           <div className="absolute right-5 -top-5 flex flex-row items-center gap-1 text-slate-600 font-semibold">
             <QuestionFancyButton
               className={cn(
@@ -126,7 +126,7 @@ const QuestionDisplay = ({
                   "bg-gradient-to-br from-orange-500 to-yellow-500"
               )}
             >
-              <span>{`Mark: ${mark} / ${defaultMark}`}</span>
+              <span>{`Mark: ${studentAnswer.mark} / ${defaultMark}`}</span>
             </QuestionFancyButton>
           </div>
         )}

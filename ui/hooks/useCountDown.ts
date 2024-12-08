@@ -7,7 +7,6 @@ interface Props {
 }
 const useCountdown = ({ step = 1, countdown }: Props) => {
   const [countdownTimer, setCountdownTimer] = useState(countdown);
-
   const countDownRef = useRef<NodeJS.Timeout | null>(null);
 
   const [status, setStatus] = useState<CountdownStatus>(
