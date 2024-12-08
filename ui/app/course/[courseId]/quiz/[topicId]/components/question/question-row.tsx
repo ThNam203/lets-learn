@@ -3,6 +3,7 @@ import { Button } from "@/lib/shadcn/button";
 import { Question } from "@/models/question";
 import { Trash2 } from "lucide-react";
 import { questionIconMap } from "../static-data";
+import { cn } from "@/lib/utils";
 
 interface Props {
   rowIndex: number;
@@ -10,6 +11,7 @@ interface Props {
   isEditting?: boolean;
   onEdit?: (question: Question) => void;
   onRemove?: (index: number) => void;
+  className?: string;
 }
 const QuestionRow = ({
   data,
@@ -17,6 +19,7 @@ const QuestionRow = ({
   isEditting,
   onRemove,
   onEdit,
+  className,
 }: Props) => {
   const { type, questionName } = data;
   const handleEdit = () => {
@@ -26,7 +29,7 @@ const QuestionRow = ({
     if (onRemove) onRemove(rowIndex);
   };
   return (
-    <div className="flex-1">
+    <div className={cn("flex-1", className)}>
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-4">
           <p className="text-sm">{rowIndex + 1}</p>
@@ -43,7 +46,7 @@ const QuestionRow = ({
           <div className="flex flex-row items-center">
             <Trash2
               size={20}
-              className="cursor-pointer hover:text-red-500 transition-all duration-200"
+              className="cursor-pointer hover:text-red-500 text-gray-500 transition-all duration-200 delay-100 group-hover:delay-0 opacity-0 group-hover:opacity-100"
               onClick={handleRemove}
             />
           </div>

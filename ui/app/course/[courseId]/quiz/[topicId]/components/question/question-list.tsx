@@ -65,18 +65,20 @@ const QuestionList = ({
     if (onCancel) onCancel();
   };
 
+  console.log("questions", questions);
+
   return (
     <div className="flex flex-col gap-2">
       {questions.length === 0 && <div>No question here</div>}
-      {questions.length > 0 && (
+      {questions.length > 0 && isEditing && (
         <DraggableContainer
           data={questions}
           onReordered={onReorderedQuestion}
-          itemClassName="bg-cyan-100 shadow"
+          itemClassName="bg-cyan-100 shadow group"
           draggable={isEditing}
           renderItem={(question, index) => (
             <QuestionRow
-              key={index}
+              key={question.id}
               data={question}
               rowIndex={index}
               isEditting={isEditing}
@@ -86,6 +88,19 @@ const QuestionList = ({
           )}
         />
       )}
+      {questions.length > 0 &&
+        !isEditing &&
+        questions.map((question, index) => (
+          <QuestionRow
+            key={question.id}
+            data={question}
+            rowIndex={index}
+            isEditting={isEditing}
+            onEdit={handleEdit}
+            onRemove={onRemoveQuestion}
+            className="bg-cyan-100 shadow group rounded-md py-2 pl-4 pr-3"
+          />
+        ))}
       {canEdit && (
         <div className="ml-auto space-x-2">
           {!isEditing && (

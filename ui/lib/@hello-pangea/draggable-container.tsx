@@ -5,19 +5,16 @@ import {
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import React, { ReactNode, useEffect, useState } from "react";
-import DraggableItem from "./draggable-item";
-import { nanoid } from "@reduxjs/toolkit";
+import { ReactNode } from "react";
 import { cn } from "../utils";
+import DraggableItem from "./draggable-item";
 
 interface Props<T> {
   data: T[];
   onReordered?: (newData: T[]) => void;
   renderItem: (item: T, index: number) => ReactNode;
-  moveIcon?: ReactNode;
   containerClassName?: string;
   itemClassName?: string;
-  controlButtonClassName?: string;
   draggable?: boolean;
 }
 
@@ -29,9 +26,7 @@ export default function DraggableContainer<T extends Identifiable>({
   data,
   onReordered,
   renderItem,
-  moveIcon,
   containerClassName,
-  controlButtonClassName,
   itemClassName,
   draggable = true,
 }: Props<T>) {
@@ -47,29 +42,33 @@ export default function DraggableContainer<T extends Identifiable>({
     if (onReordered) onReordered(newData);
   };
 
-  const droppableId = nanoid();
   return (
     <div className={cn(containerClassName)}>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId={droppableId}>
+        <Droppable droppableId="droppable">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               <div className="flex flex-col gap-2">
-                {data.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided) => (
-                      <DraggableItem
-                        provided={provided}
-                        className={itemClassName}
-                        controlButtonClassName={controlButtonClassName}
-                        moveIcon={moveIcon}
-                        draggable={draggable}
-                      >
-                        {renderItem(item, index)}
-                      </DraggableItem>
-                    )}
-                  </Draggable>
-                ))}
+                {data.map((item, index) => {
+                  console.log("item: ", item);
+                  return (
+                    <Draggable
+                      key={item.id}
+                      draggableId={item.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <DraggableItem
+                          provided={provided}
+                          className={itemClassName}
+                          draggable={draggable}
+                        >
+                          {renderItem(item, index)}
+                        </DraggableItem>
+                      )}
+                    </Draggable>
+                  );
+                })}
                 {provided.placeholder}
               </div>
             </div>

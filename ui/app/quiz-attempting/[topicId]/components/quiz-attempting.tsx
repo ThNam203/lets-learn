@@ -165,7 +165,6 @@ const QuizAttempting = ({
   };
 
   const handleCreateQuizResponseSuccess = (data: any) => {
-    console.log("data", data);
     toast.success("Your quiz result has been saved successfully");
   };
   const handleCreateQuizResponseFail = (error: any) => {

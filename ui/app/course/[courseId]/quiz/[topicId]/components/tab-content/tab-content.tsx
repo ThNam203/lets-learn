@@ -14,9 +14,10 @@ import TabResults from "./tab-results";
 import TabSetting from "./tab-setting";
 import { getQuestionBank } from "@/services/question";
 import { toast } from "react-toastify";
-import { updateTopic } from "@/services/topic";
+import { getTopic, updateTopic } from "@/services/topic";
 import { nanoid } from "@reduxjs/toolkit";
 import { getQuizResponses } from "@/services/quiz-response";
+import { error } from "console";
 
 interface Props {
   className?: string;
@@ -95,7 +96,13 @@ const TabContent = ({ className, quiz, courseId, onQuizChange }: Props) => {
   };
 
   const handleUpdateQuizSuccess = (updatedQuiz: QuizTopic) => {
-    if (onQuizChange) onQuizChange(updatedQuiz);
+    //can not use this updatedQuiz because it got error
+    if (onQuizChange) {
+      //reload quiz
+      getTopic(quiz.id, onQuizChange, (error: any) => {
+        toast.error(error);
+      });
+    }
     toast.success("Quiz updated successfully");
   };
   const handleUpdateQuizFail = (error: any) => {
