@@ -1,5 +1,4 @@
 "use client";
-import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import PageLayout from "@/components/ui/util-layout/page-layout";
 import { Course } from "@/models/course";
 import { Topic, TopicType } from "@/models/topic";
@@ -8,14 +7,8 @@ import { setBreadcrumb } from "@/redux/slices/breadcrumb";
 import { getTeacherCourses } from "@/services/course";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { toReviewBreadcrumb } from "./_components/static-data";
 import ToReview from "./_components/to-review";
-
-const breadcrumbItems: BreadcrumbItem[] = [
-  {
-    label: "To Review",
-    href: "/to-review",
-  },
-];
 
 const ToReviewPage = () => {
   const dispatch = useAppDispatch();
@@ -64,7 +57,7 @@ const ToReviewPage = () => {
     );
   }, [user]);
   useEffect(() => {
-    dispatch(setBreadcrumb(breadcrumbItems));
+    dispatch(setBreadcrumb(toReviewBreadcrumb));
   }, []);
 
   const topics = useMemo(() => {

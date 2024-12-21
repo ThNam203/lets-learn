@@ -22,7 +22,7 @@ import { User } from "@/models/user";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Pen, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { getGradeColor } from "../../static-data";
+import { getGradeColor } from "../../utils";
 
 const resultColumnTitles = {
   id: "ID",

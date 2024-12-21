@@ -10,7 +10,7 @@ interface Props {
 const TabSetting = ({ meeting, onMeetingChange }: Props) => {
   const handleUpdateTopicSuccess = (data: MeetingTopic) => {
     if (onMeetingChange) onMeetingChange(data);
-    toast.success("Update topic successfully");
+    toast.success("Update successfully");
   };
   const handleUpdateTopicFail = (error: any) => {
     toast.error(error);

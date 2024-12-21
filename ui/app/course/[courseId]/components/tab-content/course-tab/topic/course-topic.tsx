@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/lib/shadcn/button";
 import { cn } from "@/lib/utils";
-
 import { Input } from "@/lib/shadcn/input";
 import { Topic, TopicMap, TopicType } from "@/models/topic";
 import { Trash2 } from "lucide-react";
@@ -10,12 +9,14 @@ import TopicFileExtension from "./topic-file-extension";
 import { colorMap, iconMap, isValidType } from "@/models/topic";
 import { useAppSelector } from "@/redux/hooks";
 import { Role } from "@/models/user";
+import { FileTopicData } from "@/models/file-topic";
 
 interface Props {
   topic: Topic;
   isEditing?: boolean;
   onDelete?: () => void;
   onTitleChange?: (value: string) => void;
+  className?: string;
 }
 
 const CourseTopic = ({
@@ -23,6 +24,7 @@ const CourseTopic = ({
   isEditing = false,
   onDelete,
   onTitleChange,
+  className,
 }: Props) => {
   const router = useRouter();
   const path = usePathname();
@@ -51,10 +53,11 @@ const CourseTopic = ({
 
   const handleFileAction = () => {
     //download file
-    if (topic.type !== TopicType.FILE) return;
     if (!user) return;
     if (user.role === Role.STUDENT) {
-      const downloadUrl = topic.file.downloadUrl;
+      const { file } = topic.data as FileTopicData;
+      if (!file) return;
+      const downloadUrl = file.downloadUrl;
       router.push(downloadUrl);
     } else {
       router.push(`${path}/file/${topic.id}`);
@@ -90,19 +93,15 @@ const CourseTopic = ({
   const Icon = getTopicIcon(type);
   const color = getTopicColor(type);
 
-  //check if the title is empty -> show the file name with extension at the end of the title
-  //else show the title
-  let topicTitle = title;
-  if (type === "file" && title === "") topicTitle = topic.file.name;
-
   if (!isValidType(type)) return null;
 
   return (
     <div
       className={cn(
-        "w-full flex items-center justify-between px-4 py-6 border-t-[0.5px] duration-200",
+        "w-full flex items-center justify-between px-4 py-6 border-t-[0.5px] transition-all duration-200",
         isEditing && "border-transparent",
-        !isEditing && "border-gray-300"
+        !isEditing && "border-gray-300",
+        className
       )}
     >
       <div className="w-full flex flex-row items-center gap-4 pr-4">
@@ -113,10 +112,10 @@ const CourseTopic = ({
             className={cn("h-fit p-0 text-cyan-500 gap-0")}
             onClick={handleTopicClick}
           >
-            {topicTitle}
-            {type === "file" && (
+            {title}
+            {type === TopicType.FILE && topic.data.file && (
               <TopicFileExtension
-                fileName={topic.file.name}
+                fileName={topic.data.file.name}
                 className="no-underline"
               />
             )}
@@ -127,8 +126,8 @@ const CourseTopic = ({
           <Input
             variant="no-border"
             placeholder="Topic title here"
-            defaultValue={topicTitle}
-            className="w-full text-cyan-500"
+            defaultValue={title}
+            className="w-full text-cyan-500 bg-transparent"
             onChange={handleTopicTitleChange}
           />
         )}

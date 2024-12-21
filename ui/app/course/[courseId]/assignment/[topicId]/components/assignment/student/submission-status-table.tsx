@@ -4,18 +4,24 @@ import {
   AssignmentResponseData,
   StudentResponse,
 } from "@/models/student-response";
-import { getDurationText } from "@/lib/utils";
+import { cn, getDurationText } from "@/lib/utils";
 import { AssignmentTopic } from "@/models/topic";
 import { format } from "date-fns";
 import { CloudinaryFile } from "@/models/cloudinary-file";
 import { SubmissionStatus } from "../../submission/static-data";
 import { BackgroundColor, GradingStatus, TextColor } from "./static-data";
+import { getGradeColor } from "@/app/course/[courseId]/quiz/[topicId]/components/utils";
 
 interface Props {
   assignment: AssignmentTopic;
   assignmentResponse: StudentResponse | undefined;
+  maxGrade?: number;
 }
-const SubmissionStatusTable = ({ assignment, assignmentResponse }: Props) => {
+const SubmissionStatusTable = ({
+  assignment,
+  assignmentResponse,
+  maxGrade = 100,
+}: Props) => {
   const { data } = assignment;
   const { close } = data;
   let submissionStatus = SubmissionStatus.NOT_SUBMITTED;
@@ -25,6 +31,7 @@ const SubmissionStatusTable = ({ assignment, assignmentResponse }: Props) => {
   let fileSubmitted: any = "No file submitted";
   let submissionStatusTextColor = "";
   let submissionStatusBackgroundColor = "";
+  let markNumber = 0;
   let timeRemainingTextColor = "";
   let timeRemainingBackgroundColor = "";
 
@@ -96,7 +103,10 @@ const SubmissionStatusTable = ({ assignment, assignmentResponse }: Props) => {
     submissionStatus = handleGetSubmissionStatus(close, submittedAt);
 
     // grading status
-    if (mark) gradingStatus = GradingStatus.GRADED;
+    if (mark) {
+      gradingStatus = GradingStatus.GRADED;
+      markNumber = mark;
+    }
 
     // time remaining
     timeRemaining = handleGetTimeRemaining(close, submittedAt);
@@ -122,7 +132,18 @@ const SubmissionStatusTable = ({ assignment, assignmentResponse }: Props) => {
       >
         <span className={submissionStatusTextColor}>{submissionStatus}</span>
       </MiniTableRow>
-      <MiniTableRow title="Grading status">{gradingStatus}</MiniTableRow>
+      <MiniTableRow title="Grading status">
+        {gradingStatus === GradingStatus.NOT_GRADED && (
+          <span>{gradingStatus}</span>
+        )}
+        {gradingStatus === GradingStatus.GRADED && (
+          <span
+            className={cn("font-semibold", getGradeColor(markNumber, maxGrade))}
+          >
+            {`${markNumber}/${maxGrade}`}
+          </span>
+        )}
+      </MiniTableRow>
       <MiniTableRow title="Time remaining" color={timeRemainingBackgroundColor}>
         <span className={timeRemainingTextColor}>{timeRemaining}</span>
       </MiniTableRow>

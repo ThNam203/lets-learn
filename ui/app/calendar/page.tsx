@@ -11,6 +11,9 @@ import { toast } from "react-toastify";
 import Calendar from "./_components/calendar/calendar";
 import { CalendarRange } from "./_components/calendar/static-data";
 import { getDateAfterNDays } from "@/lib/utils";
+import { useAppDispatch } from "@/redux/hooks";
+import { setBreadcrumb } from "@/redux/slices/breadcrumb";
+import { calendarBreadcrumb } from "./_components/static-data";
 
 type Option = {
   key: string;
@@ -18,6 +21,7 @@ type Option = {
 };
 
 export default function CalendarPage() {
+  const dispatch = useAppDispatch();
   const [workOfUser, setWorkOfUser] = useState<Topic[]>([]);
   const options: Option[] = useMemo(() => {
     let init = [{ key: "all", value: "All courses" }];
@@ -73,6 +77,7 @@ export default function CalendarPage() {
   };
 
   useEffect(() => {
+    dispatch(setBreadcrumb(calendarBreadcrumb));
     getAllWorkOfUser(handleGetAllWorkOfUserSuccess, handleGetAllWorkOfUserFail);
   }, []);
 

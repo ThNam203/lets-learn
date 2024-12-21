@@ -1,9 +1,8 @@
 "use client";
 import QuizAttemptResult from "@/app/course/[courseId]/quiz/[topicId]/components/quiz/quiz-attempt-result";
-import {
-  getQuizResultFromMark,
-  QuestionResult,
-} from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
+import { QuestionResult } from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
+import { getQuizResultFromMark } from "@/app/course/[courseId]/quiz/[topicId]/components/utils";
+
 import { Button } from "@/lib/shadcn/button";
 import { cn, scrollTo } from "@/lib/utils";
 import { QuizResponseData, StudentResponse } from "@/models/student-response";

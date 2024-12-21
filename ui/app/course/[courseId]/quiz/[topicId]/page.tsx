@@ -1,18 +1,18 @@
 "use client";
-import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
+import { Course } from "@/models/course";
 import { iconMap, QuizTopic } from "@/models/topic";
 import { TabProvider } from "@/provider/tab-provider";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { setBreadcrumb } from "@/redux/slices/breadcrumb";
+import { getCourse } from "@/services/course";
 import { getTopic } from "@/services/topic";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Tab } from "./components/static-data";
 import TabContent from "./components/tab-content/tab-content";
-import { getCourse } from "@/services/course";
-import { Course } from "@/models/course";
+import { getQuizBreadcrumb } from "./components/utils";
 import Loading from "./loading";
 
 interface Props {
@@ -30,23 +30,7 @@ export default function QuizPage({ params }: Props) {
 
   useEffect(() => {
     if (!quiz || !course) return;
-    //this useEffect is used for setting breadcrumb when the page is loaded
-    const breadcrumbItems: BreadcrumbItem[] = [
-      {
-        label: "Home",
-        href: `/home`,
-      },
-      {
-        label: course.title,
-        href: `/course/${courseId}`,
-      },
-      {
-        label: quiz.title,
-        href: `/course/${courseId}/quiz/${topicId}`,
-      },
-    ];
-
-    dispatch(setBreadcrumb(breadcrumbItems));
+    dispatch(setBreadcrumb(getQuizBreadcrumb(course, quiz)));
   }, [course, quiz]);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 "use client";
-import { getGradeColor } from "@/app/course/[courseId]/quiz/[topicId]/components/static-data";
+import { getGradeColor } from "@/app/course/[courseId]/quiz/[topicId]/components/utils";
 import Avatar from "@/components/ui/simple/avatar";
 import { Input } from "@/lib/shadcn/input";
 import { cn } from "@/lib/utils";
@@ -8,6 +8,7 @@ import {
   StudentResponse,
 } from "@/models/student-response";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   assignmentResponse: StudentResponse;
@@ -29,19 +30,22 @@ export default function SubmissionItem({
     const { mark } = assignmentResponse.data as AssignmentResponseData;
     return !!mark;
   }, [assignmentResponse]);
-  const [isEditting, setIsEditting] = useState(!hasMark);
-  const { student } = assignmentResponse;
   const { mark } = assignmentResponse.data as AssignmentResponseData;
+  const [isEditting, setIsEditting] = useState(!hasMark);
+  const [input, setInput] = useState<string>(mark?.toString() || "");
+  const { student } = assignmentResponse;
   const totalMark = 100;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
+    if (value > totalMark || value < 0) return;
+    setInput(e.target.value);
     if (onInputChange) onInputChange(value);
   };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (onEnter) onEnter();
-      setIsEditting(false);
     }
   };
 
@@ -78,8 +82,8 @@ export default function SubmissionItem({
                 max={totalMark}
                 min={0}
                 step={1}
-                maxLength={totalMark.toString().length}
-                defaultValue={mark || ""}
+                type="number"
+                value={input}
                 className="h-fit w-[40px] bg-transparent border-0 border-b-[0.5px] rounded-none py-0 px-1 text-center"
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}

@@ -14,6 +14,7 @@ interface Props<T> {
   onReordered?: (newData: T[]) => void;
   renderItem: (item: T, index: number) => ReactNode;
   containerClassName?: string;
+  listItemClassName?: string;
   itemClassName?: string;
   draggable?: boolean;
 }
@@ -27,6 +28,7 @@ export default function DraggableContainer<T extends Identifiable>({
   onReordered,
   renderItem,
   containerClassName,
+  listItemClassName,
   itemClassName,
   draggable = true,
 }: Props<T>) {
@@ -48,27 +50,20 @@ export default function DraggableContainer<T extends Identifiable>({
         <Droppable droppableId="droppable">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              <div className="flex flex-col gap-2">
-                {data.map((item, index) => {
-                  console.log("item: ", item);
-                  return (
-                    <Draggable
-                      key={item.id}
-                      draggableId={item.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <DraggableItem
-                          provided={provided}
-                          className={itemClassName}
-                          draggable={draggable}
-                        >
-                          {renderItem(item, index)}
-                        </DraggableItem>
-                      )}
-                    </Draggable>
-                  );
-                })}
+              <div className={cn("flex flex-col gap-2", listItemClassName)}>
+                {data.map((item, index) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided) => (
+                      <DraggableItem
+                        provided={provided}
+                        className={itemClassName}
+                        draggable={draggable}
+                      >
+                        {renderItem(item, index)}
+                      </DraggableItem>
+                    )}
+                  </Draggable>
+                ))}
                 {provided.placeholder}
               </div>
             </div>

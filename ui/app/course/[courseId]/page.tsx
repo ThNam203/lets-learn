@@ -12,6 +12,7 @@ import CoursePageSkeleton from "./components/skeletons/course-page";
 import { Tab } from "./components/static/tabs";
 import TabContent from "./components/tab-content/tab-content";
 import Loading from "./loading";
+import { getCourseBreadcrumb } from "./components/utils";
 
 interface Props {
   params: {
@@ -23,34 +24,20 @@ export default function CoursePage({ params }: Props) {
   const dispatch = useAppDispatch();
   const [course, setCourse] = useState<Course>();
 
-  const breadcrumbItems: BreadcrumbItem[] = [
-    {
-      label: "Home",
-      href: "/home",
-    },
-  ];
-  useEffect(() => {
-    // fetch course data
-    getCourse(courseId, handleGetCourseSuccess, handleGetCourseFail);
-  }, [courseId]);
-
   const handleCourseChange = (course: Course) => {
     setCourse(course);
   };
 
-  const handleGetCourseSuccess = (data: any) => {
+  const handleGetCourseSuccess = (data: Course) => {
     setCourse(data);
-    const updatedBreadcrumbItems = [...breadcrumbItems];
-    updatedBreadcrumbItems.push({
-      label: data.title,
-      href: `/course/${data.id}`,
-    });
-    dispatch(setBreadcrumb(updatedBreadcrumbItems));
+    dispatch(setBreadcrumb(getCourseBreadcrumb(data)));
   };
   const handleGetCourseFail = (error: any) => {
     toast.error(error || "Failed to get course info");
   };
-
+  useEffect(() => {
+    getCourse(courseId, handleGetCourseSuccess, handleGetCourseFail);
+  }, [courseId]);
   const tabs = Object.values(Tab);
 
   if (!course) return <Loading />;

@@ -1,9 +1,9 @@
 "use client";
-import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
 import { Course } from "@/models/course";
 import { AssignmentTopic, iconMap } from "@/models/topic";
+import { Role } from "@/models/user";
 import { TabProvider } from "@/provider/tab-provider";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setBreadcrumb } from "@/redux/slices/breadcrumb";
@@ -13,8 +13,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Tab } from "./components/static-data";
 import TabContent from "./components/tab-content/tab-content";
-import { Role } from "@/models/user";
-import TopicSkeleton from "../../components/skeletons/topic-skeleton";
+import { getAssignmentBreadcrumb } from "./components/utils";
 import Loading from "./loading";
 
 interface Props {
@@ -40,22 +39,7 @@ export default function AssignmentPage({ params }: Props) {
 
   useEffect(() => {
     if (!assignment || !course) return;
-    //this useEffect is used for setting breadcrumb when the page is loaded
-    const breadcrumbItems: BreadcrumbItem[] = [
-      {
-        label: "Home",
-        href: "/home",
-      },
-      {
-        label: course.title,
-        href: `/course/${courseId}`,
-      },
-      {
-        label: assignment.title,
-        href: `/course/${courseId}/assignment/${topicId}`,
-      },
-    ];
-    dispatch(setBreadcrumb(breadcrumbItems));
+    dispatch(setBreadcrumb(getAssignmentBreadcrumb(course, assignment)));
   }, [course, assignment]);
 
   useEffect(() => {

@@ -56,6 +56,10 @@ const SectionList = ({
     if (initShowContent) setShowContent(initShowContent);
   }, []);
 
+  useEffect(() => {
+    console.log("show content ", showContent);
+  }, [showContent]);
+
   const toggleEdit = (id: string) => {
     if (sectionEditting.includes(id)) {
       setSectionEditting(sectionEditting.filter((item) => item !== id));
@@ -187,13 +191,13 @@ const SectionList = ({
         type="multiple"
         className={cn("w-full flex flex-col gap-4", className)}
       >
-        {sections.map((section, index) => {
-          const { title, id, description, topics } = section;
-          const isEditting = sectionEditting.includes(section.id);
+        {sections.map((section) => {
+          const { id } = section;
+          const isEditting = sectionEditting.includes(id);
 
           return (
             <SectionLayout
-              key={index}
+              key={id}
               section={section}
               isEditing={isEditting}
               showContent={showContent}

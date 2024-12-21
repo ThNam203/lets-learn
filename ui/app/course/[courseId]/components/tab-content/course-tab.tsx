@@ -84,6 +84,7 @@ export default function CourseTab({ course, onCourseChange }: Props) {
         onSectionChange={handleSectionChange}
         onSave={handleSaveSection}
         canEdit={user?.id === creator.id}
+        initShowContent={sections.map((section) => section.id)}
       />
       <div className="mt-4 w-full flex flex-row items-center justify-center gap-2">
         <Button

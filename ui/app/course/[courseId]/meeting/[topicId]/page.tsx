@@ -1,19 +1,18 @@
 "use client";
-import { BreadcrumbItem } from "@/components/ui/simple/breadcrumb";
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
-import { iconMap, MeetingTopic, QuizTopic } from "@/models/topic";
+import { Course } from "@/models/course";
+import { iconMap, MeetingTopic } from "@/models/topic";
 import { TabProvider } from "@/provider/tab-provider";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { setBreadcrumb } from "@/redux/slices/breadcrumb";
+import { getCourse } from "@/services/course";
 import { getTopic } from "@/services/topic";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { getCourse } from "@/services/course";
-import { Course } from "@/models/course";
 import { Tab } from "./_components/static-data";
 import TabContent from "./_components/tab-content/tab-content";
-import { fakeMeeting } from "@/fake-data/meeting";
+import { getMeetingBreadcrumb } from "./_components/utils";
 import Loading from "./loading";
 
 interface Props {
@@ -31,23 +30,7 @@ export default function MeetingPage({ params }: Props) {
 
   useEffect(() => {
     if (!meeting || !course) return;
-    //this useEffect is used for setting breadcrumb when the page is loaded
-    const breadcrumbItems: BreadcrumbItem[] = [
-      {
-        label: "Home",
-        href: `/home`,
-      },
-      {
-        label: course.title,
-        href: `/course/${courseId}`,
-      },
-      {
-        label: meeting.title,
-        href: `/course/${courseId}/meeting/${topicId}`,
-      },
-    ];
-
-    dispatch(setBreadcrumb(breadcrumbItems));
+    dispatch(setBreadcrumb(getMeetingBreadcrumb(course, meeting)));
   }, [course, meeting]);
 
   useEffect(() => {
@@ -104,7 +87,7 @@ export default function MeetingPage({ params }: Props) {
         </div>
         <div className="z-10 mt-[150px] flex w-full default-scrollbar p-5">
           <div className="w-full min-h-full h-fit bg-white rounded-md p-5 shadow-md">
-            <TabContent meeting={meeting} />
+            <TabContent meeting={meeting} onMeetingChange={setMeeting} />
           </div>
         </div>
       </TabProvider>

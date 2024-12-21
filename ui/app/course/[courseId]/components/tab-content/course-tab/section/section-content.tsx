@@ -55,6 +55,7 @@ export default function SectionContent({
           <DraggableContainer
             data={topics || []}
             onReordered={onReorderedTopic}
+            listItemClassName="gap-0"
             renderItem={(topic, index) => (
               <CourseTopic
                 key={index}
@@ -62,6 +63,7 @@ export default function SectionContent({
                 isEditing={isEditting}
                 onDelete={handleDeleteTopic(topic.id)}
                 onTitleChange={handleTopicTitleChange(topic)}
+                className="hover:bg-gray-50"
               />
             )}
           />

@@ -2,12 +2,18 @@
 import TabList from "@/components/ui/tab-list";
 import PageLayout from "@/components/ui/util-layout/page-layout";
 import { fakePage } from "@/fake-data/page";
-import { Page } from "@/models/page";
-import { iconMap } from "@/models/topic";
+import { Course } from "@/models/course";
+import { iconMap, PageTopic } from "@/models/topic";
 import { TabProvider } from "@/provider/tab-provider";
+import { useAppDispatch } from "@/redux/hooks";
+import { setBreadcrumb } from "@/redux/slices/breadcrumb";
+import { getCourse } from "@/services/course";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Tab } from "./components/static-data";
 import TabContent from "./components/tab-content/tab-content";
+import { getPageBreadcrumb } from "./components/utils";
+import Loading from "./loading";
 
 interface Props {
   params: {
@@ -17,9 +23,11 @@ interface Props {
 }
 export default function PagePage({ params }: Props) {
   const { courseId, topicId } = params;
-  const [page, setPage] = useState<Page>(fakePage);
+  const dispatch = useAppDispatch();
+  const [course, setCourse] = useState<Course>();
+  const [page, setPage] = useState<PageTopic>(fakePage);
   const [initTab, setInitTab] = useState<string>(Tab.PAGE);
-  const handlePageChange = (data: Page) => {
+  const handlePageChange = (data: PageTopic) => {
     setPage(data);
   };
 
@@ -27,13 +35,34 @@ export default function PagePage({ params }: Props) {
     localStorage.setItem(`page-${topicId}`, tab);
   };
 
+  const handleGetCourseSuccess = (data: Course) => {
+    setCourse(data);
+  };
+  const handleFail = (error: any) => {
+    toast.error(error);
+  };
+  const handleGetPageSuccess = (data: PageTopic) => {
+    setPage(data);
+  };
+
+  useEffect(() => {
+    getCourse(courseId, handleGetCourseSuccess, handleFail);
+  }, [courseId]);
+
+  useEffect(() => {
+    if (!page || !course) return;
+    dispatch(setBreadcrumb(getPageBreadcrumb(course, page)));
+  }, [course, page]);
+
   useEffect(() => {
     let storageTab = localStorage.getItem(`page-${topicId}`);
     if (storageTab) setInitTab(storageTab);
-  }, []);
+    // getTopic(topicId, handleGetPageSuccess, handleFail);
+  }, [topicId]);
 
   const tabs = Object.values(Tab);
   const Icon = iconMap.page;
+  if (!page) return <Loading />;
   return (
     <PageLayout className="relative bg-fuchsia-50">
       <TabProvider initTab={initTab}>

@@ -101,18 +101,3 @@ export enum QuestionResult {
   PARTIAL_MARK = "Partial mark",
   ZERO_MARK = "Zero mark",
 }
-
-export const getQuizResultFromMark = (
-  mark: number,
-  defaultMark: number
-): QuestionResult => {
-  if (mark === defaultMark) return QuestionResult.FULL_MARK;
-  if (mark === 0) return QuestionResult.ZERO_MARK;
-  return QuestionResult.PARTIAL_MARK;
-};
-
-export const getGradeColor = (grade: number, maxGrade: number) => {
-  if (grade >= maxGrade * 0.8) return "text-green-500";
-  if (grade >= maxGrade * 0.5) return "text-orange-500";
-  return "text-red-500";
-};

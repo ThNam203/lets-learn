@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 import { Tab } from "./_components/static-data";
 import TabContent from "./_components/tab-content/tab-content";
 import Loading from "./loading";
+import { getLinkBreadcrumb } from "./_components/utils";
+import { getCourse } from "@/services/course";
 
 interface Props {
   params: {
@@ -37,33 +39,17 @@ export default function LinkPage({ params }: Props) {
 
   useEffect(() => {
     if (!topic || !course) return;
-    //this useEffect is used for setting breadcrumb when the page is loaded
-    const breadcrumbItems: BreadcrumbItem[] = [
-      {
-        label: "Home",
-        href: "/home",
-      },
-      {
-        label: course.title,
-        href: `/course/${courseId}`,
-      },
-      {
-        label: topic.title,
-        href: `/course/${courseId}/link/${topicId}`,
-      },
-    ];
-    dispatch(setBreadcrumb(breadcrumbItems));
+    dispatch(setBreadcrumb(getLinkBreadcrumb(course, topic)));
   }, [course, topic]);
 
   useEffect(() => {
-    //this useEffect is used for updating tab based on local storage
     let storageTab = localStorage.getItem(`link-${topicId}`);
     if (storageTab) setInitTab(storageTab);
     // getTopic(topicId, handleGetLinkTopicSuccess, handleGetLinkTopicFail);
   }, [topicId]);
 
   useEffect(() => {
-    // getCourse(courseId, handleGetCourseSuccess, handleGetCourseFail);
+    getCourse(courseId, handleGetCourseSuccess, handleGetCourseFail);
   }, [courseId]);
 
   const handleGetLinkTopicSuccess = (data: LinkTopic) => {
